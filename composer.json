@@ -1,0 +1,43 @@
+{
+    "name": "cfxmarkets/php-cfx-public-models",
+    "description": "This package provides all of CFX's public data objects.",
+    "keywords": [ "cfx", "api", "brokerage", "exchange", "framework", "data objects" ],
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "CFX and contributors",
+            "homepage": "https://github.com/cfxmarkets/php-api-service/graphs/contributors"
+        }
+    ],
+    "require" : {
+        "php" : ">=5.4.0 <7",
+        "cfxmarkets/php-cfx-framework": "dev-master"
+    },
+    "require-dev" : {
+        "phpunit/phpunit" : "~4.8.0",
+        "guzzlehttp/guzzle": "~5.0"
+    },
+    "autoload" : {
+        "psr-4" : {
+            "CFX\\" : "src/"
+        },
+        "files": [
+            "src/Exceptions.php"
+        ]
+    },
+    "repositories" : [
+        {
+            "type": "git",
+            "url": "https://github.com/cfxmarkets/php-jsonapi-objects.git"
+        },
+        {
+            "type": "git",
+            "url": "https://github.com/cfxmarkets/php-jsonapi-transport.git"
+        },
+        {
+            "type": "git",
+            "url": "https://github.com/kael-shipman/psr7.git"
+        }
+    ]
+}
+
