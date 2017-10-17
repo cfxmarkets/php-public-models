@@ -25,7 +25,6 @@
             "CFX\\" : "src/"
         },
         "files": [
-            "src/Exceptions.php"
         ]
     },
     "repositories" : [
