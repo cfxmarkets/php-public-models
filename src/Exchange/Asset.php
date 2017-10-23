@@ -1,7 +1,7 @@
 <?php
-namespace CFX;
+namespace CFX\Exchange;
 
-class Asset extends BaseResource implements AssetInterface {
+class Asset extends \CFX\JsonApi\AbstractResource implements AssetInterface {
     protected $resourceType = 'assets';
     protected $attributes = [
         'issuer' => null,
@@ -12,21 +12,6 @@ class Asset extends BaseResource implements AssetInterface {
         'description' => null
     ];
     protected $relationships = [];
-
-    public static function fromV1(FactoryInterface $f, $asset) {
-        $data = [
-            'id' => $asset['asset_symbol'],
-            'attributes' => [
-                'issuer' => $asset['issuer_ident'],
-                'name' => $asset['asset_name'],
-                'type' => $asset['asset_type'],
-                'statusCode' => $asset['asset_status'],
-                'statusText' => $asset['asset_status_text'],
-                'description' => $asset['asset_description'],
-            ]
-        ];
-        return new static($f, $data);
-    }
 
     public function getIssuer() { return $this->attributes['issuer']; }
     public function getName() { return $this->attributes['name']; }
