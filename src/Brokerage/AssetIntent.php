@@ -1,7 +1,7 @@
 <?php
 namespace CFX\Brokerage;
 
-class AssetIntent extends \KS\JsonApi\BaseResource implements AssetIntentInterface {
+class AssetIntent extends \CFX\JsonApi\AbstractResource implements AssetIntentInterface {
     protected $resourceType = 'asset-intents';
     protected $attributes = [
         'symbol' => null,
@@ -21,8 +21,7 @@ class AssetIntent extends \KS\JsonApi\BaseResource implements AssetIntentInterfa
         'comments' => null,
         'status' => null,
     ];
-    protected $relationships = ['asset' ];
-    protected $privateRelationships = [];
+    protected $relationships = ['asset' => null ];
 
 
 
@@ -45,7 +44,6 @@ class AssetIntent extends \KS\JsonApi\BaseResource implements AssetIntentInterfa
     public function getComments() { return $this->attributes['comments']; }
     public function getStatus() { return $this->attributes['status']; }
     public function getAsset() { return $this->relationships['asset']->getData(); }
-    public function getPartner() { return array_key_exists('partner', $this->privateRelationships) ? $this->privateRelationships['partner']->getData() : null; }
 
 
 
@@ -62,7 +60,7 @@ class AssetIntent extends \KS\JsonApi\BaseResource implements AssetIntentInterfa
         $this->attributes['name'] = $val;
 
         if (!$val) {
-            $this->setError('name', 'required', $this->f->newJsonApiError([
+            $this->setError('name', 'required', $this->getFactory()->newError([
                 "status" => 400,
                 "title" => "Required Attribute `name` Missing",
                 "detail" => "You must provide a name for the asset you're intending to create."
@@ -102,7 +100,7 @@ class AssetIntent extends \KS\JsonApi\BaseResource implements AssetIntentInterfa
         $this->attributes['sharesOutstanding'] = $val;
 
         if ($val && !is_int($val)) {
-            $this->setError('sharesOutstanding', 'integer', $this->f->newJsonApiError([
+            $this->setError('sharesOutstanding', 'integer', $this->getFactory()->newError([
                 "status" => 400,
                 "title" => "Invalid Attribute Value for `sharesOutstanding`",
                 "detail" => "`sharesOutstanding` must be an integer or null."
@@ -118,7 +116,7 @@ class AssetIntent extends \KS\JsonApi\BaseResource implements AssetIntentInterfa
         $this->attributes['offerAmount'] = $val;
 
         if ($val && !is_int($val)) {
-            $this->setError('offerAmount', 'integer', $this->f->newJsonApiError([
+            $this->setError('offerAmount', 'integer', $this->getFactory()->newError([
                 "status" => 400,
                 "title" => "Invalid Attribute Value for `offerAmount`",
                 "detail" => "`offerAmount` must be an integer or null."
@@ -134,7 +132,7 @@ class AssetIntent extends \KS\JsonApi\BaseResource implements AssetIntentInterfa
         $this->attributes['dateOpened'] = $val;
 
         if ($val && !is_int($val)) {
-            $this->setError('dateOpened', 'integer', $this->f->newJsonApiError([
+            $this->setError('dateOpened', 'integer', $this->getFactory()->newError([
                 "status" => 400,
                 "title" => "Invalid Attribute Value for `dateOpened`",
                 "detail" => "`dateOpened` must be an integer or null."
@@ -150,7 +148,7 @@ class AssetIntent extends \KS\JsonApi\BaseResource implements AssetIntentInterfa
         $this->attributes['dateClosed'] = $val;
 
         if ($val && !is_int($val)) {
-            $this->setError('dateClosed', 'integer', $this->f->newJsonApiError([
+            $this->setError('dateClosed', 'integer', $this->getFactory()->newError([
                 "status" => 400,
                 "title" => "Invalid Attribute Value for `dateClosed`",
                 "detail" => "`dateClosed` must be an integer or null."
@@ -166,7 +164,7 @@ class AssetIntent extends \KS\JsonApi\BaseResource implements AssetIntentInterfa
         $this->attributes['initialSharePrice'] = $val;
 
         if ($val && !is_float($val)) {
-            $this->setError('initialSharePrice', 'float', $this->f->newJsonApiError([
+            $this->setError('initialSharePrice', 'float', $this->getFactory()->newError([
                 "status" => 400,
                 "title" => "Invalid Attribute Value for `initialSharePrice`",
                 "detail" => "`initialSharePrice` must be an float or null."
@@ -193,25 +191,6 @@ class AssetIntent extends \KS\JsonApi\BaseResource implements AssetIntentInterfa
 
     public function setAsset(\CFX\AssetInterface $val=null) {
         $this->relationships['asset']->setData($val);
-        return $this;
-    }
-    public function setPartner(\KS\JsonApi\BaseResourceInterface $val=null) {
-        if (!array_key_exists('partner', $this->privateRelationships)) {
-            $this->privateRelationships['partner'] = $this->f->newJsonApiRelationship(['name' => 'partner', 'data' => null]);
-        }
-
-        $this->privateRelationships['partner']->setData($val);
-
-        if (!$val) {
-            $this->setError('partner', 'required', $this->f->newJsonApiError([
-                'status' => 400,
-                'title' => "Required Relationship `partner` Missing",
-                'detail' => "You must associate a partner with this asset intent in order to successfully save it."
-            ]));
-        } else {
-            $this->clearError('partner', 'required');
-        }
-
         return $this;
     }
 

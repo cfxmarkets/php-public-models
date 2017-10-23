@@ -1,12 +1,12 @@
 <?php
-namespace CFX\Brokerage;
+namespace CFX\Exchange;
 
 /**
  * OrderInterface
  *
  * An interface describing a modern CFX Brokerage Order object
  */
-interface OrderInterface extends BaseResourceInterface {
+interface OrderInterface extends \CFX\JsonApi\ResourceInterface {
 
     // Getters
 

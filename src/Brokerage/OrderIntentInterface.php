@@ -1,7 +1,7 @@
 <?php
 namespace CFX\Brokerage;
 
-interface OrderIntentInterface extends BaseResourceInterface {
+interface OrderIntentInterface extends \CFX\JsonApi\ResourceInterface {
     // Getters
     public function getType();
     public function getNumShares();

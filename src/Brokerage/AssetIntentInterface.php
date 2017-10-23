@@ -1,7 +1,7 @@
 <?php
 namespace CFX\Brokerage;
 
-interface AssetIntentInterface extends BaseResourceInterface {
+interface AssetIntentInterface extends \CFX\JsonApi\ResourceInterface {
     // Getters
 
     public function getSymbol();
@@ -21,7 +21,6 @@ interface AssetIntentInterface extends BaseResourceInterface {
     public function getComments();
     public function getStatus();
     public function getAsset();
-    public function getPartner();
 
 
 
@@ -44,7 +43,6 @@ interface AssetIntentInterface extends BaseResourceInterface {
     public function setComments($val);
     public function setStatus($val);
     public function setAsset(\CFX\AssetInterface $val=null);
-    public function setPartner(\KS\JsonApi\BaseResourceInterface $val=null);
 }
 
 
