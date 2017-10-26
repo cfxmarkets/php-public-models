@@ -212,6 +212,41 @@ class OrderIntent extends \CFX\JsonApi\AbstractResource implements OrderIntentIn
     public function setAsset(\CFX\AssetInterface $asset=null) {
         if (!$this->validateStatusActive()) return false;
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        if (!$asset) {
+            if (!$this->getAssetIntent()) {
+                $this->setError('assetOrAssetIntent', 'required', $this->getFactory()->newError([
+                    //adksgasdgad
+                ]));
+            } else {
+                $this->clearError('assetOrAssetIntent', 'required');
+            }
+        } else {
+            if ($this->getAssetIntent()) {
+                $this->setError('assetOrAssetIntent', 'duplicate', $this->getFactory()->newError([
+                ]));
+            } else {
+                $this->clearError('assetOrAssetIntent', 'duplicate');
+            }
+        }
+
         if ($this->getAsset()) {
             if (!$asset || $this->getAsset()->getId() != $asset->getId()) {
                 $this->setError('asset', 'immutable', $this->getFactory()->newError([

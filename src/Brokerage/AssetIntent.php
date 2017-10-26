@@ -53,11 +53,11 @@ class AssetIntent extends \CFX\JsonApi\AbstractResource implements AssetIntentIn
     // Setters
 
     public function setSymbol($val=null) {
-        $this->attributes['symbol'] = $val;
+        $this->_setAttributes('symbol', $val);
         return $this;
     }
     public function setName($val=null) {
-        $this->attributes['name'] = $val;
+        $this->_setAttributes('name', $val);
 
         if (!$val) {
             $this->setError('name', 'required', $this->getFactory()->newError([
@@ -72,32 +72,32 @@ class AssetIntent extends \CFX\JsonApi\AbstractResource implements AssetIntentIn
         return $this;
     }
     public function setDescription($val=null) {
-        $this->attributes['description'] = $val;
+        $this->_setAttributes('description', $val);
         return $this;
     }
     public function setAssetType($val=null) {
-        $this->attributes['assetType'] = $val;
+        $this->_setAttributes('assetType', $val);
         return $this;
     }
     public function setFinanceType($val=null) {
-        $this->attributes['financeType'] = $val;
+        $this->_setAttributes('financeType', $val);
         return $this;
     }
     public function setExemptionType($val=null) {
-        $this->attributes['exemptionType'] = $val;
+        $this->_setAttributes('exemptionType', $val);
         return $this;
     }
     public function setEdgarNum($val=null) {
-        $this->attributes['edgarNum'] = $val;
+        $this->_setAttributes('edgarNum', $val);
         return $this;
     }
     public function setCusipNum($val=null) {
-        $this->attributes['cusipNum'] = $val;
+        $this->_setAttributes('cusipNum', $val);
         return $this;
     }
     public function setSharesOutstanding($val=null) {
         if (is_numeric($val)) $val = (int)$val;
-        $this->attributes['sharesOutstanding'] = $val;
+        $this->_setAttributes('sharesOutstanding', $val);
 
         if ($val && !is_int($val)) {
             $this->setError('sharesOutstanding', 'integer', $this->getFactory()->newError([
@@ -113,7 +113,7 @@ class AssetIntent extends \CFX\JsonApi\AbstractResource implements AssetIntentIn
     }
     public function setOfferAmount($val=null) {
         if (is_numeric($val)) $val = (int)$val;
-        $this->attributes['offerAmount'] = $val;
+        $this->_setAttributes('offerAmount', $val);
 
         if ($val && !is_int($val)) {
             $this->setError('offerAmount', 'integer', $this->getFactory()->newError([
@@ -129,7 +129,7 @@ class AssetIntent extends \CFX\JsonApi\AbstractResource implements AssetIntentIn
     }
     public function setDateOpened($val=null) {
         if (is_numeric($val)) $val = (int)$val;
-        $this->attributes['dateOpened'] = $val;
+        $this->_setAttributes('dateOpened', $val);
 
         if ($val && !is_int($val)) {
             $this->setError('dateOpened', 'integer', $this->getFactory()->newError([
@@ -145,7 +145,7 @@ class AssetIntent extends \CFX\JsonApi\AbstractResource implements AssetIntentIn
     }
     public function setDateClosed($val=null) {
         if (is_numeric($val)) $val = (int)$val;
-        $this->attributes['dateClosed'] = $val;
+        $this->_setAttributes('dateClosed', $val);
 
         if ($val && !is_int($val)) {
             $this->setError('dateClosed', 'integer', $this->getFactory()->newError([
@@ -161,7 +161,7 @@ class AssetIntent extends \CFX\JsonApi\AbstractResource implements AssetIntentIn
     }
     public function setInitialSharePrice($val=null) {
         if (is_numeric($val)) $val = (float)$val;
-        $this->attributes['initialSharePrice'] = $val;
+        $this->_setAttributes('initialSharePrice', $val);
 
         if ($val && !is_float($val)) {
             $this->setError('initialSharePrice', 'float', $this->getFactory()->newError([
@@ -176,21 +176,21 @@ class AssetIntent extends \CFX\JsonApi\AbstractResource implements AssetIntentIn
         return $this;
     }
     public function setHoldingPeriod($val=null) {
-        $this->attributes['holdingPeriod'] = $val;
+        $this->_setAttributes('holdingPeriod', $val);
         return $this;
     }
     public function setComments($val=null) {
-        $this->attributes['comments'] = $val;
+        $this->_setAttributes('comments', $val);
         return $this;
     }
     public function setStatus($val=null) {
-        $this->attributes['status'] = $val;
+        $this->_setAttributes('status', $val);
         return $this;
     }
 
 
     public function setAsset(\CFX\AssetInterface $val=null) {
-        $this->relationships['asset']->setData($val);
+        $this->_setRelationships('asset', $val);
         return $this;
     }
 
