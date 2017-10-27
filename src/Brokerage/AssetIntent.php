@@ -53,11 +53,14 @@ class AssetIntent extends \CFX\JsonApi\AbstractResource implements AssetIntentIn
     // Setters
 
     public function setSymbol($val=null) {
-        $this->_setAttributes('symbol', $val);
+        $this->validateStatus();
+        $this->_setAttribute('symbol', $val);
         return $this;
     }
     public function setName($val=null) {
-        $this->_setAttributes('name', $val);
+        $this->_setAttribute('name', $val);
+
+        if (!$this->validateStatus()) return $this;
 
         if (!$val) {
             $this->setError('name', 'required', $this->getFactory()->newError([
@@ -72,32 +75,40 @@ class AssetIntent extends \CFX\JsonApi\AbstractResource implements AssetIntentIn
         return $this;
     }
     public function setDescription($val=null) {
-        $this->_setAttributes('description', $val);
+        $this->validateStatus();
+        $this->_setAttribute('description', $val);
         return $this;
     }
     public function setAssetType($val=null) {
-        $this->_setAttributes('assetType', $val);
+        $this->validateStatus();
+        $this->_setAttribute('assetType', $val);
         return $this;
     }
     public function setFinanceType($val=null) {
-        $this->_setAttributes('financeType', $val);
+        $this->validateStatus();
+        $this->_setAttribute('financeType', $val);
         return $this;
     }
     public function setExemptionType($val=null) {
-        $this->_setAttributes('exemptionType', $val);
+        $this->validateStatus();
+        $this->_setAttribute('exemptionType', $val);
         return $this;
     }
     public function setEdgarNum($val=null) {
-        $this->_setAttributes('edgarNum', $val);
+        $this->validateStatus();
+        $this->_setAttribute('edgarNum', $val);
         return $this;
     }
     public function setCusipNum($val=null) {
-        $this->_setAttributes('cusipNum', $val);
+        $this->validateStatus();
+        $this->_setAttribute('cusipNum', $val);
         return $this;
     }
     public function setSharesOutstanding($val=null) {
         if (is_numeric($val)) $val = (int)$val;
-        $this->_setAttributes('sharesOutstanding', $val);
+        $this->_setAttribute('sharesOutstanding', $val);
+
+        if (!$this->validateStatus()) return $this;
 
         if ($val && !is_int($val)) {
             $this->setError('sharesOutstanding', 'integer', $this->getFactory()->newError([
@@ -113,7 +124,9 @@ class AssetIntent extends \CFX\JsonApi\AbstractResource implements AssetIntentIn
     }
     public function setOfferAmount($val=null) {
         if (is_numeric($val)) $val = (int)$val;
-        $this->_setAttributes('offerAmount', $val);
+        $this->_setAttribute('offerAmount', $val);
+
+        if (!$this->validateStatus()) return $this;
 
         if ($val && !is_int($val)) {
             $this->setError('offerAmount', 'integer', $this->getFactory()->newError([
@@ -129,7 +142,9 @@ class AssetIntent extends \CFX\JsonApi\AbstractResource implements AssetIntentIn
     }
     public function setDateOpened($val=null) {
         if (is_numeric($val)) $val = (int)$val;
-        $this->_setAttributes('dateOpened', $val);
+        $this->_setAttribute('dateOpened', $val);
+
+        if (!$this->validateStatus()) return $this;
 
         if ($val && !is_int($val)) {
             $this->setError('dateOpened', 'integer', $this->getFactory()->newError([
@@ -145,7 +160,9 @@ class AssetIntent extends \CFX\JsonApi\AbstractResource implements AssetIntentIn
     }
     public function setDateClosed($val=null) {
         if (is_numeric($val)) $val = (int)$val;
-        $this->_setAttributes('dateClosed', $val);
+        $this->_setAttribute('dateClosed', $val);
+
+        if (!$this->validateStatus()) return $this;
 
         if ($val && !is_int($val)) {
             $this->setError('dateClosed', 'integer', $this->getFactory()->newError([
@@ -161,7 +178,9 @@ class AssetIntent extends \CFX\JsonApi\AbstractResource implements AssetIntentIn
     }
     public function setInitialSharePrice($val=null) {
         if (is_numeric($val)) $val = (float)$val;
-        $this->_setAttributes('initialSharePrice', $val);
+        $this->_setAttribute('initialSharePrice', $val);
+
+        if (!$this->validateStatus()) return $this;
 
         if ($val && !is_float($val)) {
             $this->setError('initialSharePrice', 'float', $this->getFactory()->newError([
@@ -176,32 +195,43 @@ class AssetIntent extends \CFX\JsonApi\AbstractResource implements AssetIntentIn
         return $this;
     }
     public function setHoldingPeriod($val=null) {
-        $this->_setAttributes('holdingPeriod', $val);
+        $this->validateStatus();
+        $this->_setAttribute('holdingPeriod', $val);
         return $this;
     }
     public function setComments($val=null) {
-        $this->_setAttributes('comments', $val);
+        $this->validateStatus();
+        $this->_setAttribute('comments', $val);
         return $this;
     }
     public function setStatus($val=null) {
-        $this->_setAttributes('status', $val);
+        if ($this->validateReadOnly('status', $val !== $this->getStatus())) {
+            $this->_setAttribute('status', $val);
+        }
         return $this;
     }
 
 
     public function setAsset(\CFX\AssetInterface $val=null) {
-        $this->_setRelationships('asset', $val);
+        if ($this->validateReadOnly('asset', $val !== $this->getAsset())) {
+            $this->_setRelationship('asset', $val);
+        }
         return $this;
     }
 
 
-
-
-
-    // Interface implementations
-
-    public function fetch(DatasourceInterface $db) {
-        throw new UnimplementedFeatureException("`fetch` is not yet implemented for AssetIntents.");
+    public function validateStatus() {
+        if ($this->getStatus() !== 'submitted') {
+            $this->setError('global', 'status-final', $this->getFactory()->newError([
+                "status" => 400,
+                "title" => "Updates No Longer Permitted",
+                "detail" => "This intent's status is in a final state and you can no longer update it. If you need to update the asset information, create a new intent with the new data."
+            ]);
+            return false;
+        } else {
+            $this->clearError('global', 'status-final');
+            return true;
+        }
     }
 }
 
