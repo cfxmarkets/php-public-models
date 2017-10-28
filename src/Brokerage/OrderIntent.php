@@ -41,7 +41,7 @@ class OrderIntent extends \CFX\JsonApi\AbstractResource implements OrderIntentIn
         if (!$this->validateStatusActive()) return false;
 
         $prevVal = $this->attributes['type'];
-        $this->attributes['type'] = $val;
+        $this->_setAttribute('type', $val);
 
         if ($prevVal !== null && $val != $prevVal) {
             $this->setError('type', 'immutable', $this->getFactory()->newError([
@@ -81,7 +81,7 @@ class OrderIntent extends \CFX\JsonApi\AbstractResource implements OrderIntentIn
         if ($val && $this->attributes['numShares'] == $val) return;
         if (!$this->validateStatusActive()) return false;
 
-        $this->attributes['numShares'] = $val;
+        $this->_setAttribute('numShares', $val);
 
         if ($val === null || $val === '') {
             $this->setError('numShares', 'required', $this->getFactory()->newError([
@@ -121,7 +121,8 @@ class OrderIntent extends \CFX\JsonApi\AbstractResource implements OrderIntentIn
         if ($val && $this->attributes['priceHigh'] == $val) return;
         if (!$this->validateStatusActive()) return false;
 
-        $this->attributes['priceHigh'] = $val;
+        $this->_setAttribute('priceHigh', $val);
+
         if ($this->getType() == 'sell') $this->validatePrice('priceHigh', true);
         else $this->validatePrice('priceHigh', false);
         return $this;
@@ -132,7 +133,8 @@ class OrderIntent extends \CFX\JsonApi\AbstractResource implements OrderIntentIn
         if ($val && $this->attributes['priceLow'] == $val) return;
         if (!$this->validateStatusActive()) return false;
 
-        $this->attributes['priceLow'] = $val;
+        $this->_setAttribute('priceLow', $val);
+
         if ($this->getType() == 'buy') $this->validatePrice('priceLow', true);
         else $this->validatePrice('priceLow', false);
         return $this;
@@ -140,23 +142,10 @@ class OrderIntent extends \CFX\JsonApi\AbstractResource implements OrderIntentIn
 
 
     public function setStatus($val) {
-        if ($val && $this->attributes['status'] == $val) return;
         if (!$this->validateStatusActive()) return false;
+        $this->validateReadOnly('status', $val !== $this->initialState['attributes']['status']);
 
-        if ($this->getStatus()) {
-            if (!$val || $this->getAsset()->getId() != $asset->getId()) {
-                $this->setError('asset', 'immutable', $this->getFactory()->newError([
-                    "title" => "Immutable Relationship `asset`",
-                    "detail" => "You cannot edit the `asset` relationship of an intent. If you'd like to change the asset, you should delete this intent using the DELETE /exchange/api/v2/order-intents/".$this->getId()." endpoint and then create a new one",
-                    "status" => 400
-                ]));
-                return;
-            } else {
-                $this->clearError('asset', 'immutable');
-            }
-        }
-
-        $this->attributes['status'] = $val;
+        $this->_setAttribute('status', $val);
 
         return $this;
     }
@@ -210,30 +199,24 @@ class OrderIntent extends \CFX\JsonApi\AbstractResource implements OrderIntentIn
 
 
     public function setAsset(\CFX\AssetInterface $asset=null) {
-        if (!$this->validateStatusActive()) return false;
+        if (!$this->validateStatusActive()) return $this;
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+        if ($this->initialState['relationships']['asset']) {
+            $this->setError('asset', 'immutable', $this->getFactory()->newError([
+                'status' => 400,
+                'title' => 'Immutable Relationship `asset`',
+                'detail' => "You can only set `asset` once. If you made a mistake and would like to change the asset, you should delete this ".
+                    "order intent and create a new one.",
+            ]));
+            return $this;
+        } else {
 
         if (!$asset) {
             if (!$this->getAssetIntent()) {
                 $this->setError('assetOrAssetIntent', 'required', $this->getFactory()->newError([
-                    //adksgasdgad
+                    'status' => 400,
+                    'title' => 'Asset or AssetIntent Required',
+                    'detail' => 'You must set either and Asset or an AssetIntent for this order intent to be valid.',
                 ]));
             } else {
                 $this->clearError('assetOrAssetIntent', 'required');
@@ -241,58 +224,39 @@ class OrderIntent extends \CFX\JsonApi\AbstractResource implements OrderIntentIn
         } else {
             if ($this->getAssetIntent()) {
                 $this->setError('assetOrAssetIntent', 'duplicate', $this->getFactory()->newError([
+                    'status' => 400,
+                    'title' => "Conflicting Asset and AssetIntent",
+                    "detail" => "You can't have both an asset and an asset intent for this order intent to be valid.",
                 ]));
             } else {
                 $this->clearError('assetOrAssetIntent', 'duplicate');
+
+                // Now validate that the asset exists
+                try {
+                    // Will throw error if asset is invalid
+                    $this->datasource->getRelatedAsset($asset->getId());
+                    $this->clearError('asset', 'valid');
+
+                    // Should add considerations for asset status (non-tradable assets shouldn't be valid)
+                } catch (ResourceNotFoundException $e) {
+                    $this->setError('asset', 'valid', $this->getFactory()->newError([
+                        "status" => 400,
+                        "title" => "Invalid Relationship `asset`",
+                        "detail" => "The asset you've indicated for this order is not currently in our system. If you've submitted this asset via an Asset Intent, it may not be fully processed yet. Check the intent's status and try again. Alternatively, you can create a new Asset Intent to request that we create this asset for you by POSTing to `/exchange/api/asset-intents`."
+                    ]));
+                }
             }
         }
 
-        if ($this->getAsset()) {
-            if (!$asset || $this->getAsset()->getId() != $asset->getId()) {
-                $this->setError('asset', 'immutable', $this->getFactory()->newError([
-                    "title" => "Immutable Relationship `asset`",
-                    "detail" => "You cannot edit the `asset` relationship of an intent. If you'd like to change the asset, you should delete this intent using the DELETE /exchange/api/v2/order-intents/".$this->getId()." endpoint and then create a new one",
-                    "status" => 400
-                ]));
-                return;
-            } else {
-                $this->clearError('asset', 'immutable');
-            }
-        }
-
-        $this->relationships['asset']->setData($asset);
-
-        if (!$asset) {
-            $this->setError('asset', "required", $this->getFactory()->newError([
-                "status" => 400,
-                "title" => "Required Relationship `asset` Missing",
-                "detail" => "You must indicate an asset for this order."
-            ]));
-        } else {
-            $this->clearError('asset', 'required');
-
-            try {
-                // Will throw error if asset is invalid
-                $this->datasource->getRelatedAsset($asset->getId());
-                $this->clearError('asset', 'valid');
-
-                // Should add considerations for asset status (non-tradable assets shouldn't be valid)
-            } catch (ResourceNotFoundException $e) {
-                $this->setError('asset', 'valid', $this->getFactory()->newError([
-                    "status" => 400,
-                    "title" => "Invalid Relationship `asset`",
-                    "detail" => "The asset you've indicated for this order is not currently in our system. If you've submitted this asset via an Asset Intent, it may not be fully processed yet. Check the intent's status and try again. Alternatively, you can create a new Asset Intent to request that we create this asset for you by POSTing to `/exchange/api/asset-intents`."
-                ]));
-            }
-        }
+        $this->_setRelationship('asset', $asset);
 
         return $this;
     }
 
 
 
-    public function setOrder(\CFX\Brokerage\OrderInterface $order=null) {
-        //TODO: Flesh this out
+    public function setOrder(\CFX\Exchange\OrderInterface $order=null) {
+        $this->validateReadOnly('order', $order->getId() !== $this->initialState['relationships']['order']);
         $this->relationships['order']->setData($order);
         return $this;
     }
