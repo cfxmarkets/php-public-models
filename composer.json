@@ -1,5 +1,5 @@
 {
-    "name": "cfxmarkets/php-cfx-public-models",
+    "name": "cfxmarkets/php-public-models",
     "description": "This package provides all of CFX's public data objects.",
     "keywords": [ "cfx", "api", "brokerage", "exchange", "framework", "data objects" ],
     "license": "MIT",
