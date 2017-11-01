@@ -18,6 +18,6 @@ interface UserInterface extends \CFX\JsonApi\ResourceInterface {
     public function setDisplayName($val);
     public function setTimezone($val);
     public function setLanguage($val);
-    public function setOAuthTokens(ResourceCollectionInterface $tokens=null);
+    public function setOAuthTokens(\CFX\JsonApi\ResourceCollectionInterface $tokens=null);
 }
 

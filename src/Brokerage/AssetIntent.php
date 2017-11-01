@@ -19,7 +19,7 @@ class AssetIntent extends \CFX\JsonApi\AbstractResource implements AssetIntentIn
         'initialSharePrice' => null,
         'holdingPeriod' => null,
         'comments' => null,
-        'status' => null,
+        'status' => 'new',
     ];
     protected $relationships = ['asset' => null ];
 
@@ -27,23 +27,23 @@ class AssetIntent extends \CFX\JsonApi\AbstractResource implements AssetIntentIn
 
     // Getters
 
-    public function getSymbol() { return $this->attributes['symbol']; }
-    public function getName() { return $this->attributes['name']; }
-    public function getDescription() { return $this->attributes['description']; }
-    public function getAssetType() { return $this->attributes['assetType']; }
-    public function getFinanceType() { return $this->attributes['financeType']; }
-    public function getExemptionType() { return $this->attributes['exemptionType']; }
-    public function getEdgarNum() { return $this->attributes['edgarNum']; }
-    public function getCusipNum() { return $this->attributes['cusipNum']; }
-    public function getSharesOutstanding() { return $this->attributes['sharesOutstanding']; }
-    public function getOfferAmount() { return $this->attributes['offerAmount']; }
-    public function getDateOpened() { return $this->attributes['dateOpened']; }
-    public function getDateClosed() { return $this->attributes['dateClosed']; }
-    public function getInitialSharePrice() { return $this->attributes['initialSharePrice']; }
-    public function getHoldingPeriod() { return $this->attributes['holdingPeriod']; }
-    public function getComments() { return $this->attributes['comments']; }
-    public function getStatus() { return $this->attributes['status']; }
-    public function getAsset() { return $this->relationships['asset']->getData(); }
+    public function getSymbol() { return $this->_getAttributeValue('symbol'); }
+    public function getName() { return $this->_getAttributeValue('name'); }
+    public function getDescription() { return $this->_getAttributeValue('description'); }
+    public function getAssetType() { return $this->_getAttributeValue('assetType'); }
+    public function getFinanceType() { return $this->_getAttributeValue('financeType'); }
+    public function getExemptionType() { return $this->_getAttributeValue('exemptionType'); }
+    public function getEdgarNum() { return $this->_getAttributeValue('edgarNum'); }
+    public function getCusipNum() { return $this->_getAttributeValue('cusipNum'); }
+    public function getSharesOutstanding() { return $this->_getAttributeValue('sharesOutstanding'); }
+    public function getOfferAmount() { return $this->_getAttributeValue('offerAmount'); }
+    public function getDateOpened() { return $this->_getAttributeValue('dateOpened'); }
+    public function getDateClosed() { return $this->_getAttributeValue('dateClosed'); }
+    public function getInitialSharePrice() { return $this->_getAttributeValue('initialSharePrice'); }
+    public function getHoldingPeriod() { return $this->_getAttributeValue('holdingPeriod'); }
+    public function getComments() { return $this->_getAttributeValue('comments'); }
+    public function getStatus() { return $this->_getAttributeValue('status'); }
+    public function getAsset() { return $this->_getRelationshipValue('asset'); }
 
 
 
@@ -112,7 +112,7 @@ class AssetIntent extends \CFX\JsonApi\AbstractResource implements AssetIntentIn
 
         if ($val && !is_int($val)) {
             $this->setError('sharesOutstanding', 'integer', $this->getFactory()->newError([
-                "status" => 400,
+                "status" => 401,
                 "title" => "Invalid Attribute Value for `sharesOutstanding`",
                 "detail" => "`sharesOutstanding` must be an integer or null."
             ]));
@@ -221,12 +221,12 @@ class AssetIntent extends \CFX\JsonApi\AbstractResource implements AssetIntentIn
 
 
     public function validateStatus() {
-        if ($this->getStatus() !== 'submitted') {
+        if ($this->getStatus() === 'closed') {
             $this->setError('global', 'status-final', $this->getFactory()->newError([
                 "status" => 400,
                 "title" => "Updates No Longer Permitted",
                 "detail" => "This intent's status is in a final state and you can no longer update it. If you need to update the asset information, create a new intent with the new data."
-            ]);
+            ]));
             return false;
         } else {
             $this->clearError('global', 'status-final');

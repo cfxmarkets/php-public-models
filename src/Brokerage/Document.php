@@ -15,8 +15,8 @@ class Document extends CFX\JsonApi\AbstractResource implements CFX\Brokerage\Doc
 
 
 
-	public function getType() { return $this->attributes['type']; }
-	public function setUrl() { return $this->attributes['url']; }
+	public function getType() { return $this->_getAttributeValue('type'); }
+	public function setUrl() { return $this->_getAttributeValue('url'); }
 
 
 	public function setType($val){

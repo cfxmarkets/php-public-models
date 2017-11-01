@@ -18,13 +18,13 @@ class Addresss extends \CFX\JsonApi\AbstractResource implements AddressInterface
 
 // Getters
 
-    public function getLabel() { return $this->attributes['label']; }
-    public function getStreetOne() { return $this->attributes['street1']; }
-    public function getStreetTwo() { return $this->attributes['street2']; }
-    public function getCity() { return $this->attributes['city']; }
-    public function getState() { return $this->attributes['state']; }
-    public function getZip() { return $this->attributes['zip']; }
-    public function getCountry() { return $this->attributes['country']; }
+    public function getLabel() { return $this->_getAttributeValue('label'); }
+    public function getStreetOne() { return $this->_getAttributeValue('street1'); }
+    public function getStreetTwo() { return $this->_getAttributeValue('street2'); }
+    public function getCity() { return $this->_getAttributeValue('city'); }
+    public function getState() { return $this->_getAttributeValue('state'); }
+    public function getZip() { return $this->_getAttributeValue('zip'); }
+    public function getCountry() { return $this->_getAttributeValue('country'); }
 
 
 

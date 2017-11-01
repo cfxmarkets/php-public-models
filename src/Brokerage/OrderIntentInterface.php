@@ -10,6 +10,7 @@ interface OrderIntentInterface extends \CFX\JsonApi\ResourceInterface {
     public function getStatus();
     public function getUser();
     public function getAsset();
+    public function getAssetIntent();
 
     // Setters
     public function setType($val);
@@ -17,8 +18,9 @@ interface OrderIntentInterface extends \CFX\JsonApi\ResourceInterface {
     public function setPriceHigh($val);
     public function setPriceLow($val);
     public function setStatus($val);
-    public function setUser(SiteUserInterface $user=null);
-    public function setAsset(\CFX\AssetInterface $asset=null);
+    public function setUser(UserInterface $user=null);
+    public function setAsset(\CFX\Exchange\AssetInterface $asset=null);
+    public function setAssetIntent(\CFX\Brokerage\AssetIntentInterface $asset=null);
 }
 
 

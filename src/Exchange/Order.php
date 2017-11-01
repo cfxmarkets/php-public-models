@@ -57,14 +57,14 @@ class Order extends \CFX\JsonApi\AbstractResource implements OrderInterface {
         }
     }
 
-    public function getType() { return $this->attributes['type']; }
-    public function getNumShares() { return $this->attributes['numShares']; }
-    public function getPriceHigh() { return $this->attributes['priceHigh']; }
-    public function getPriceLow() { return $this->attributes['priceLow']; }
-    public function getCurrentPrice() { return $this->attributes['currentPrice']; }
-    public function getStatus() { return $this->attributes['status']; }
-    public function getAsset() { return $this->relationships['asset']->getData(); }
-    public function getUser() { return $this->relationships['user']->getData(); }
+    public function getType() { return $this->_getAttributeValue('type'); }
+    public function getNumShares() { return $this->_getAttributeValue('numShares'); }
+    public function getPriceHigh() { return $this->_getAttributeValue('priceHigh'); }
+    public function getPriceLow() { return $this->_getAttributeValue('priceLow'); }
+    public function getCurrentPrice() { return $this->_getAttributeValue('currentPrice'); }
+    public function getStatus() { return $this->_getAttributeValue('status'); }
+    public function getAsset() { return $this->_getRelationshipValue('asset'); }
+    public function getUser() { return $this->_getRelationshipValue('user'); }
 
 
 

@@ -13,12 +13,12 @@ class Asset extends \CFX\JsonApi\AbstractResource implements AssetInterface {
     ];
     protected $relationships = [];
 
-    public function getIssuer() { return $this->attributes['issuer']; }
-    public function getName() { return $this->attributes['name']; }
-    public function getType() { return $this->attributes['type']; }
-    public function getStatusCode() { return $this->attributes['statusCode']; }
-    public function getStatusText() { return $this->attributes['statusText']; }
-    public function getDescription() { return $this->attributes['description']; }
+    public function getIssuer() { return $this->_getAttributeValue('issuer'); }
+    public function getName() { return $this->_getAttributeValue('name'); }
+    public function getType() { return $this->_getAttributeValue('type'); }
+    public function getStatusCode() { return $this->_getAttributeValue('statusCode'); }
+    public function getStatusText() { return $this->_getAttributeValue('statusText'); }
+    public function getDescription() { return $this->_getAttributeValue('description'); }
 
     public function setIssuer($val) {
         $this->attributes['issuer'] = $val;

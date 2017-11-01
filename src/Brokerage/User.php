@@ -20,12 +20,12 @@ class User extends \CFX\JsonApi\AbstractResource implements UserInterface {
 
     // Getters
 
-    public function getEmail() { return $this->attributes['email']; }
-    public function getPhoneNumber() { return $this->attributes['phoneNumber']; }
-    public function getDisplayName() { return $this->attributes['displayName']; }
-    public function getTimezone() { return $this->attributes['timezone']; }
-    public function getLanguage() { return $this->attributes['language']; }
-    public function getOauthTokens() { return $this->relationships['oAuthTokens']->getData(); }
+    public function getEmail() { return $this->_getAttributeValue('email'); }
+    public function getPhoneNumber() { return $this->_getAttributeValue('phoneNumber'); }
+    public function getDisplayName() { return $this->_getAttributeValue('displayName'); }
+    public function getTimezone() { return $this->_getAttributeValue('timezone'); }
+    public function getLanguage() { return $this->_getAttributeValue('language'); }
+    public function getOauthTokens() { return $this->_getRelationshipValue('oAuthTokens'); }
 
 
 
@@ -109,7 +109,7 @@ class User extends \CFX\JsonApi\AbstractResource implements UserInterface {
         $this->_setAttribute('language', $val);
         return $this;
     }
-    public function setOAuthTokens(ResourceCollectionInterface $tokens=null) {
+    public function setOAuthTokens(\CFX\JsonApi\ResourceCollectionInterface $tokens=null) {
         if (!$tokens) $tokens = $this->getFactory()->newResourceCollection();
         $this->_setRelationship('oAuthTokens', $tokens);
         return $this;
