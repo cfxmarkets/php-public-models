@@ -25,6 +25,11 @@
         "files": [
         ]
     },
+    "autoload-dev" : {
+        "psr-4" : {
+            "CFX\\" : "tests/"
+        }
+    },
     "repositories" : [
         {
             "type": "path",
