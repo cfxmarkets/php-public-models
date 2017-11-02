@@ -4,15 +4,16 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "e8125b66699e4a8d847b2200fa4a9de1",
+    "content-hash": "1737558ef526029ed2c2711096d822a1",
     "packages": [
         {
             "name": "cfxmarkets/php-jsonapi-objects",
-            "version": "v1.0",
-            "source": {
-                "type": "git",
-                "url": "git@github.com:cfxmarkets/php-jsonapi-objects.git",
-                "reference": "b99081d59017ab3f38e49c16fae418a9b35fc714"
+            "version": "1.0.9999999.9999999-dev",
+            "dist": {
+                "type": "path",
+                "url": "../php-jsonapi-objects",
+                "reference": "924b6d6615f877d038b9ae1ca6f975441424c76c",
+                "shasum": null
             },
             "require": {
                 "kael-shipman/php-std-traits": "~3.2",
@@ -47,8 +48,7 @@
                 "api",
                 "json",
                 "jsonapi"
-            ],
-            "time": "2017-10-25T01:33:41+00:00"
+            ]
         },
         {
             "name": "kael-shipman/php-std-traits",
@@ -481,16 +481,16 @@
         },
         {
             "name": "phpunit/php-file-iterator",
-            "version": "dev-master",
+            "version": "1.4.x-dev",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/php-file-iterator.git",
-                "reference": "3cc8f69b3028d0f96a9078e6295d86e9bf019be5"
+                "reference": "63304292f3cf89b2382b90dd7a2abf9e0ba232f9"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/php-file-iterator/zipball/3cc8f69b3028d0f96a9078e6295d86e9bf019be5",
-                "reference": "3cc8f69b3028d0f96a9078e6295d86e9bf019be5",
+                "url": "https://api.github.com/repos/sebastianbergmann/php-file-iterator/zipball/63304292f3cf89b2382b90dd7a2abf9e0ba232f9",
+                "reference": "63304292f3cf89b2382b90dd7a2abf9e0ba232f9",
                 "shasum": ""
             },
             "require": {
@@ -524,7 +524,7 @@
                 "filesystem",
                 "iterator"
             ],
-            "time": "2016-10-03T07:40:28+00:00"
+            "time": "2017-10-30T04:21:02+00:00"
         },
         {
             "name": "phpunit/php-text-template",
