@@ -1,101 +1,153 @@
 <?php 
-
-namespace CFX\Brokerage\Tests;
-
-
-class AddressTest extends \PHPUnit\Framework\TestCase{
+namespace CFX\Brokerage;
 
 
-	public function setupBeforeClass(){
-	}
+class AddressTest extends \PHPUnit\Framework\TestCase
+{
+    protected $datasource;
+    protected $address;
 
+    public function setUp() {
+        $this->datasource = new \CFX\JsonApi\Test\MockDatasource();
+        $this->address = new Address($this->datasource);
+    }
 
+    public function testResourceType() {
+        $this->assertEquals('addresses', $this->address->getResourceType());
+    }
 
+    public function testLabel() {
+        // Assert field required
+        $this->assertTrue($this->address->hasErrors('label'));
 
-// Set Street 1
+        $val = "My Address";
+        $this->address->setLabel($val);
+        $this->assertFalse($this->address->hasErrors('label'));
+        $this->assertEquals($val, $this->address->getLabel());
+    }
 
-	public function testSetStreetOneSetsErrorOnNullValue(){
-		$this->markTestIncomplete();
-	}
+    public function testStreet1() {
+        // Assert required
+        $val = "";
+        $this->address->setStreet1($val);
+        $this->assertTrue($this->address->hasErrors('street1'));
+        $this->assertEquals($val, $this->address->getStreet1());
 
-	public function testSetStreetOneSuccessOnValidInput(){
-		$this->markTestIncomplete();
-	}
+        $val = "555 N Address Pt.";
+        $this->address->setStreet1($val);
+        $this->assertFalse($this->address->hasErrors('street1'));
+        $this->assertEquals($val, $this->address->getStreet1());
+    }
 
+    public function testStreet2() {
+        // Assert not required
+        $val = "";
+        $this->address->setStreet1($val);
+        $this->assertFalse($this->address->hasErrors('street2'));
+        $this->assertEquals($val, $this->address->getStreet1());
 
+        $val = "#5523";
+        $this->address->setStreet2($val);
+        $this->assertFalse($this->address->hasErrors('street2'));
+        $this->assertEquals($val, $this->address->getStreet2());
+    }
 
+    public function testCity() {
+        // Assert required
+        $val = "";
+        $this->address->setCity($val);
+        $this->assertTrue($this->address->hasErrors('city'));
+        $this->assertEquals($val, $this->address->getCity());
 
-// Set City
+        $val = "Philadelphia";
+        $this->address->setCity($val);
+        $this->assertFalse($this->address->hasErrors('city'));
+        $this->assertEquals($val, $this->address->getCity());
+    }
 
-	public function testSetCitySetsErrorOnNullValue(){
-		$this->markTestIncomplete();
-	}
+    public function testState() {
+        // Assert required
+        $val = "";
+        $this->address->setState($val);
+        $this->assertTrue($this->address->hasErrors('state'));
+        $this->assertEquals($val, $this->address->getState());
 
-	public function testSetCitySuccessOnValidInput(){
-		$this->markTestIncomplete();
-	}
+        $val = "PA";
+        $this->address->setState($val);
+        $this->assertFalse($this->address->hasErrors('state'));
+        $this->assertEquals($val, $this->address->getState());
+    }
 
+    public function testZip() {
+        // Assert required
+        $val = "";
+        $this->address->setZip($val);
+        $this->assertTrue($this->address->hasErrors('zip'));
+        $this->assertEquals($val, $this->address->getZip());
 
+        $val = "6622ZD0";
+        $this->address->setZip($val);
+        $this->assertFalse($this->address->hasErrors('zip'));
+        $this->assertEquals($val, $this->address->getZip());
+    }
 
+    public function testCountry() {
+        // Assert required
+        $val = "";
+        $this->address->setCountry($val);
+        $this->assertTrue($this->address->hasErrors('country'));
+        $this->assertEquals($val, $this->address->getCountry());
 
-// Set State
+        $val = "US";
+        $this->address->setCountry($val);
+        $this->assertFalse($this->address->hasErrors('country'));
+        $this->assertEquals($val, $this->address->getCountry());
+    }
 
-	public function testSetStateSetsErrorOnNullValue(){
-		$this->markTestIncomplete();
-	}
+    public function testMeta() {
+        $this->assertFalse($this->address->hasErrors('meta'));
+        $this->assertEquals(null, $this->address->getMeta());
 
-	public function testSetStateSuccessOnValidInput(){
-		$this->markTestIncomplete();
-	}
+        $val = ["extra" => "some extra data"];
+        $this->address->setMeta($val);
+        $this->assertFalse($this->address->hasErrors('meta'));
+        $this->assertEquals($val, $this->address->getMeta());
 
+        $val = "some extra data";
+        $this->address->setMeta($val);
+        $this->assertTrue($this->address->hasErrors('meta'));
+        $this->assertEquals($val, $this->address->getMeta());
 
+        $val = '{"extra":"some extra data"}';
+        $this->address->setMeta($val);
+        $this->assertFalse($this->address->hasErrors('meta'));
+        $this->assertEquals(["extra" => "some extra data"], $this->address->getMeta());
 
+        // Messed up json
+        $val = '{"extra":some extra data"}';
+        $this->address->setMeta($val);
+        $this->assertTrue($this->address->hasErrors('meta'));
+    }
 
-// Set Zip
+    public function testIntegration() {
+        $data = [
+            "type" => "addresses",
+            "attributes" => [
+                "label" => "My Address",
+                "street1" => "555 North Place",
+                "street2" => "#2255",
+                "city" => "Chicago",
+                "state" => "IL",
+                "zip" => "6622Z88",
+                "country" => "US",
+                "meta" => '{"extra":"some extra data"}',
+            ],
+        ];
 
-	public function testSetZipSetsErrorOnNullValue(){
-		$this->markTestIncomplete();
-	}
-
-	public function testSetZipSetsErrorOnNonNumericValue(){
-		$this->markTestIncomplete();
-	}
-
-	public function testSetZipSuccessOnValidInput(){
-		$this->markTestIncomplete();
-	}
-
-
-
-
-
-// Set Country
-
-	public function testSetCountrySetsErrorOnNullValue(){
-		$this->markTestIncomplete();
-	}
-
-	public function testSetCountrySuccessOnValidInput(){
-		$this->markTestIncomplete();
-	}
-
-
+        $address = new Address($this->datasource, $data);
+        $this->assertFalse($address->hasErrors());
+        $this->assertEquals(["extra" => "some extra data"], $address->getMeta());
+        $this->assertEquals($data, $address->getChanges());
+    }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 

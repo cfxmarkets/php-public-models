@@ -1,9 +1,7 @@
 <?php
-
-
 namespace CFX\Brokerage;
 
-class Addresss extends \CFX\JsonApi\AbstractResource implements AddressInterface {
+class Address extends \CFX\JsonApi\AbstractResource implements AddressInterface {
     protected $resourceType = 'addresses';
     protected $attributes = [
         'label' => null,
@@ -12,174 +10,108 @@ class Addresss extends \CFX\JsonApi\AbstractResource implements AddressInterface
         'city' => null,
         'state' => null,
         'zip' => null,
-        'country' => null
+        'country' => null,
+        'meta' => null,
     ];
 
 
-// Getters
+    // Getters
 
     public function getLabel() { return $this->_getAttributeValue('label'); }
-    public function getStreetOne() { return $this->_getAttributeValue('street1'); }
-    public function getStreetTwo() { return $this->_getAttributeValue('street2'); }
+    public function getStreet1() { return $this->_getAttributeValue('street1'); }
+    public function getStreet2() { return $this->_getAttributeValue('street2'); }
     public function getCity() { return $this->_getAttributeValue('city'); }
     public function getState() { return $this->_getAttributeValue('state'); }
     public function getZip() { return $this->_getAttributeValue('zip'); }
     public function getCountry() { return $this->_getAttributeValue('country'); }
+    public function getMeta() { return $this->_getAttributeValue('meta'); }
 
 
 
-// Setters
+    // Setters
 
-    public function setLabel($val=null){
-        if($val || $this->attributes['label'] == $val) return;
-        $this->attributes['label'] == $val;
+    public function setLabel($val=null)
+    {
+        $this->_setAttribute('label', $val);
+        $this->validateRequired('label', $val);
         return $this;
     }
 
-    public function setStreetOne($val){
-        if($val || $this->attributes['street1'] == $val) return;
-        $this->attributes['street1'] = $val;
-
-        if(!$val){
-            $this->setError('street1', 'required', $this->getFactory()->newError([
-                'status' => 400,
-                'title' => 'Required Attribute `street1` Missing',
-                'detail' => 'You must send a value for attribute `street1` .'
-            ]));
-        } else {
-            $this->clearError('street1', 'required');
-        }
-
+    public function setStreet1($val)
+    {
+        $this->_setAttribute('street1', $val);
+        $this->validateRequired('street1', $val);
         return $this;
     }
 
-    public function setStreetTwo($val=null){
-        if($val || $this->attributes['street2'] == $val) return;
-        $this->attributes['street2'] = $val;
-
+    public function setStreet2($val=null)
+    {
+        $this->_setAttribute('street2', $val);
         return $this;
     }
 
-    public function setCity($val){
-        if($val || $this->attributes['city'] == $val) return;
-        $this->attributes['city'] = $val;
-
-        if(!$val){
-            $this->setError('city', 'required', $this->getFactory()->newError([
-                'status' => 400,
-                'title' => 'Required Attribute `city` Missing',
-                'detail' => 'You must send a value for attribute `city` .'
-            ]));
-        } else {
-            $this->clearError('city', 'required');
-        }
-
+    public function setCity($val)
+    {
+        $this->_setAttribute('city', $val);
+        $this->validateRequired('city', $val);
         return $this;
     }
 
-    public function setState($val){
-        if($val || $this->attributes['state'] == $val) return;
-        $this->attributes['state'] = $val;
-
-        if(!$val){
-            $this->setError('state', 'required', $this->getFactory()->newError([
-                'status' => 400,
-                'title' => 'Required Attribute `state` Missing',
-                'detail' => 'You must send a value for attribute `state` .'
-            ]));
-        } else {
-            $this->clearError('state', 'required');
-        }
-
+    public function setState($val)
+    {
+        $this->_setAttribute('state', $val);
+        $this->validateRequired('state', $val);
         return $this;
     }
 
-    public function setZip($val){
-        if($val || $this->attributes['zip'] == $val) return;
-        $this->attributes['zip'] = $val;
+    public function setZip($val)
+    {
+        $this->_setAttribute('zip', $val);
+        $this->validateRequired('zip', $val);
+        return $this;
+    }
 
-        if ($val === null || $val === '') {
-            $this->setError('zip', 'required', $this->getFactory()->newError([
-                'status' => 400,
-                'title' => 'Required Attribute `zip` Missing',
-                'detail' => 'You must send a value for attribute `zip` .'
-            ]));
-        } else {
+    public function setCountry($val)
+    {
+        $this->_setAttribute('country', $val);
+        $this->validateRequired('country', $val);
+        return $this;
+    }
 
-            $this->clearError('zip', 'required');
-
-            if (!is_numeric($this->getZip())) {
-                $this->setError('zip', 'numeric', $this->getFactory()->newError([
-                    'status' => 400,
-                    'title' => 'Invalid Attribute value for `zip`.',
-                    'detail' => 'You must send a numeric value for attribute `zip`.'
-                ]));
-
-            }else {
-                $this->clearError('zip', 'numeric');
+    public function setMeta($val)
+    {
+        $valid = false;
+        if (is_string($val)) {
+            $inflated = json_decode($val, true);
+            if ($inflated !== null || $val === 'null') {
+                $val = $inflated;
+                $valid = true;
             }
+        } elseif (is_array($val) || $val === null) {
+            $valid = true;
         }
 
-        return $this;
-    }
+        $this->_setAttribute('meta', $val);
 
-    public function setCountry($val){
-        if($val || $this->attributes['country'] == $val) return;
-        $this->attributes['country'] = $val;
-
-        if(!$val){
-            $this->setError('country', 'required', $this->getFactory()->newError([
-                'status' => 400,
-                'title' => 'Required Attribute `country` Missing',
-                'detail' => 'You must send a value for attribute `country` .'
-            ]));
+        if (!$valid) {
+            $this->setError('meta', 'format', [
+                'title' => 'Invalid Format for `meta`',
+                'detail' => "The `meta` field is meant for miscellaneous data stored in json format. It ".
+                "should be something intelligible to the PHP `json_decode` function."
+            ]);
         } else {
-            $this->clearError('country', 'required');
+            $this->clearError('meta', 'format');
         }
 
         return $this;
     }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+    protected function serializeAttribute($name)
+    {
+        if ($name === 'meta') {
+            return json_encode($this->attributes[$name]);
+        }
+        return parent::serializeAttribute($name);
+    }
+}
 
