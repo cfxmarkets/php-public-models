@@ -149,5 +149,20 @@ class AddressTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals(["extra" => "some extra data"], $address->getMeta());
         $this->assertEquals($data, $address->getChanges());
     }
+
+    public function testMethodChaining() {
+        $json = $this->address
+            ->setLabel('My Address')
+            ->setStreet1('12345')
+            ->setStreet2('#223')
+            ->setCity('Philly')
+            ->setState('CA')
+            ->setZip('22222')
+            ->setCountry('US')
+            ->setMeta(['test' => 'value'])
+            ->jsonSerialize();
+
+        $this->assertEquals('12345', $json['attributes']['street1']);
+    }
 }
 
