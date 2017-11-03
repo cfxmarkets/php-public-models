@@ -42,9 +42,9 @@ class AddressTest extends \PHPUnit\Framework\TestCase
     public function testStreet2() {
         // Assert not required
         $val = "";
-        $this->address->setStreet1($val);
+        $this->address->setStreet2($val);
         $this->assertFalse($this->address->hasErrors('street2'));
-        $this->assertEquals($val, $this->address->getStreet1());
+        $this->assertEquals($val, $this->address->getStreet2());
 
         $val = "#5523";
         $this->address->setStreet2($val);
