@@ -1,7 +1,7 @@
 <?php
 namespace CFX\Brokerage;
 
-class LeageEntityTest extends \PHPUnit\Framework\TestCase
+class LegalEntityTest extends \PHPUnit\Framework\TestCase
 {
     protected $datasource;
     protected $entity;

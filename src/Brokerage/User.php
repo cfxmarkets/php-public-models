@@ -25,7 +25,7 @@ class User extends \CFX\JsonApi\AbstractResource implements UserInterface {
     public function getDisplayName() { return $this->_getAttributeValue('displayName'); }
     public function getTimezone() { return $this->_getAttributeValue('timezone'); }
     public function getLanguage() { return $this->_getAttributeValue('language'); }
-    public function getOauthTokens() { return $this->_getRelationshipValue('oAuthTokens'); }
+    public function getOauthTokens() { return $this->get2MRel('oAuthTokens'); }
 
 
 
