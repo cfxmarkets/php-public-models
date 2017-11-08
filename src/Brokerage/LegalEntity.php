@@ -9,11 +9,16 @@ class LegalEntity extends \CFX\JsonApi\AbstractResource implements LegalEntityIn
 
     protected $attributes = [
         'type' => null,
-        'label' => null,
         'legalId' => null,
         'legalName' => null,
         'finraStatus' => null,
         'finraStatusText' => null,
+        'dateOfBirth' => null,
+        'placeOfOrigin' => null,
+        'corporateStatus' => null,
+        'corporateStatusText' => null,
+        'custodianName' => null,
+        'custodianAccountNum' => null,
     ];
 
     protected $relationships = [
@@ -34,11 +39,6 @@ class LegalEntity extends \CFX\JsonApi\AbstractResource implements LegalEntityIn
         return $this->_getAttributeValue('type');
     }
 
-    public function getLabel()
-    {
-        return $this->_getAttributeValue('label');
-    }
-
     public function getLegalId()
     {
         return $this->_getAttributeValue('legalId');
@@ -57,6 +57,41 @@ class LegalEntity extends \CFX\JsonApi\AbstractResource implements LegalEntityIn
     public function getFinraStatusText()
     {
         return $this->_getAttributeValue('finraStatusText');
+    }
+
+    public function getDateOfBirth()
+    {
+        return $this->_getAttributeValue('dateOfBirth');
+    }
+
+    public function getCitizenship()
+    {
+        return $this->_getAttributeValue('citizenship');
+    }
+
+    public function getPlaceOfOrigin()
+    {
+        return $this->_getAttributeValue('placeOfOrigin');
+    }
+
+    public function getCorporateStatus()
+    {
+        return $this->_getAttributeValue('corporateStatus');
+    }
+
+    public function getCorporateStatusText()
+    {
+        return $this->_getAttributeValue('corporateStatusText');
+    }
+
+    public function getCustodianName()
+    {
+        return $this->_getAttributeValue('custodianName');
+    }
+
+    public function getCustodianAccountNum()
+    {
+        return $this->_getAttributeValue('custodianAccountNum');
     }
 
     public function getPrimaryAddress()
@@ -91,37 +126,51 @@ class LegalEntity extends \CFX\JsonApi\AbstractResource implements LegalEntityIn
         return $this;
     }
 
-    public function setLabel($val)
-    {
-        if ($val) {
-            $val = trim($val);
-            if ($val === '') {
-                $val = null;
-            }
-        }
-        $this->validateRequired('label', $val);
-        return $this->_setAttribute('label', $val);
-    }
-
     public function setLegalId($val)
     {
-        if ($val) {
-            $val = trim($val);
-            if ($val === '') {
-                $val = null;
+        if ($val !== null) {
+            if (!is_string($val) && !is_int($val)) {
+                $this->setError("legalId", "valid", [
+                    "title" => "Invalid Value for Field `legalId`",
+                    "detail" => "`legalId` must be either a string or an integer or null"
+                ]);
+            } else {
+                $this->clearError("legalId", "valid");
+                if (is_string($val)) {
+                    $val = trim($val);
+                    if ($val === '') {
+                        $val = null;
+                    }
+                }
             }
+        } else {
+            $this->clearError("legalId", "valid");
         }
+
         return $this->_setAttribute('legalId', $val);
     }
 
     public function setLegalName($val)
     {
-        if ($val) {
-            $val = trim($val);
-            if ($val === '') {
-                $val = null;
+        if ($val !== null) {
+            if (!is_string($val) && !is_int($val)) {
+                $this->setError("legalName", "valid", [
+                    "title" => "Invalid Value for Field `legalName`",
+                    "detail" => "`legalName` must be either a string or an integer or null"
+                ]);
+            } else {
+                $this->clearError("legalName", "valid");
+                if (is_string($val)) {
+                    $val = trim($val);
+                    if ($val === '') {
+                        $val = null;
+                    }
+                }
             }
+        } else {
+            $this->clearError("legalName", "valid");
         }
+
         return $this->_setAttribute('legalName', $val);
     }
 
@@ -131,8 +180,6 @@ class LegalEntity extends \CFX\JsonApi\AbstractResource implements LegalEntityIn
             $val = (bool)$val;
         }
 
-        $this->_setAttribute('finraStatus', $val);
-
         if ($val !== null && !is_bool($val)) {
             $this->setError('finraStatus', 'valid', [
                 "title" => "Invalid Value for Field `finraStatus`",
@@ -141,17 +188,165 @@ class LegalEntity extends \CFX\JsonApi\AbstractResource implements LegalEntityIn
         } else {
             $this->clearError('finraStatus', 'valid');
         }
+
+        return $this->_setAttribute('finraStatus', $val);
     }
 
     public function setFinraStatusText($val)
     {
+        if ($val !== null) {
+            if (!is_string($val)) {
+                $this->setError("finraStatusText", "valid", [
+                    "title" => "Invalid Value for Field `finraStatusText`",
+                    "detail" => "`finraStatusText` must be either a string or null"
+                ]);
+            } else {
+                $this->clearError("finraStatusText", "valid");
+                $val = trim($val);
+                if ($val === '') {
+                    $val = null;
+                }
+            }
+        } else {
+            $this->clearError("finraStatusText", "valid");
+        }
+
+        return $this->_setAttribute('finraStatusText', $val);
+    }
+
+    public function setDateOfBirth($val)
+    {
         if ($val) {
+            try {
+                if (is_numeric($val)) {
+                    $dob = "@$val";
+                } else {
+                    $dob = $val;
+                }
+                if (!($dob instanceof \DateTime)) {
+                    $dob = new \DateTime($dob);
+                }
+                $this->clearError('dateOfBirth', 'valid');
+            } catch (\Exception $e) {
+                $dob = $val;
+                $this->setError('dateOfBirth', 'valid', [
+                    "title" => "Invalid Value for `dateOfBirth`",
+                    "detail" => "Value for `dateOfBirth` field must either be an integer unix timestamp or some other date ".
+                    "value interpretable by PHP's `DateTime` constructor."
+                ]);
+            }
+        } else {
+            $this->clearError('dateOfBirth', 'valid');
+            $dob = $val;
+        }
+
+        return $this->_setAttribute('dateOfBirth', $dob);
+    }
+
+    public function setPlaceOfOrigin($val)
+    {
+        if ($val !== null) {
+            if (!is_string($val)) {
+                $this->setError("placeOfOrigin", "valid", [
+                    "title" => "Invalid Value for Field `placeOfOrigin`",
+                    "detail" => "`placeOfOrigin` must be either a string or null"
+                ]);
+            } else {
+                $this->clearError("placeOfOrigin", "valid");
+                $val = trim($val);
+                if ($val === '') {
+                    $val = null;
+                }
+            }
+        } else {
+            $this->clearError("placeOfOrigin", "valid");
+        }
+
+        return $this->_setAttribute('placeOfOrigin', $val);
+    }
+
+    public function setCorporateStatus($val)
+    {
+        if ($val == 1 || $val === '0' || $val === 0) {
+            $val = (bool)$val;
+        }
+
+        if ($val !== null && !is_bool($val)) {
+            $this->setError('corporateStatus', 'valid', [
+                "title" => "Invalid Value for Field `corporateStatus`",
+                "detail" => "You must pass a boolean or boolean equivalent as value for field `corporateStatus`",
+            ]);
+        } else {
+            $this->clearError('corporateStatus', 'valid');
+        }
+
+        return $this->_setAttribute('corporateStatus', $val);
+    }
+
+    public function setCorporateStatusText($val)
+    {
+        if ($val && is_string($val)) {
             $val = trim($val);
             if ($val === '') {
                 $val = null;
             }
         }
-        return $this->_setAttribute('finraStatusText', $val);
+
+        if ($val !== null && !is_string($val)) {
+            $this->setError("corporateStatusText", "valid", [
+                "title" => "Invalid Value for Field `corporateStatusText`",
+                "detail" => "This field must be a string",
+            ]);
+        } else {
+            $this->clearError("corporateStatusText", "valid");
+        }
+
+        return $this->_setAttribute('corporateStatusText', $val);
+    }
+
+    public function setCustodianName($val)
+    {
+        if ($val && is_string($val)) {
+            $val = trim($val);
+            if ($val === '') {
+                $val = null;
+            }
+        }
+
+        if ($val !== null && !is_string($val)) {
+            $this->setError("custodianName", "valid", [
+                "title" => "Invalid Value for Field `custodianName`",
+                "detail" => "This field must be a string (or null)",
+            ]);
+        } else {
+            $this->clearError("custodianName", "valid");
+        }
+
+        return $this->_setAttribute("custodianName", $val);
+    }
+
+    public function setCustodianAccountNum($val)
+    {
+        if ($val !== null) {
+            if (!is_string($val) && !is_int($val)) {
+                $this->setError("custodianAccountNum", "valid", [
+                    "title" => "Invalid Value for Field `custodianAccountNum`",
+                    "detail" => "`custodianAccountNum` must be either a string or an integer or null"
+                ]);
+            } else {
+                $this->clearError("custodianAccountNum", "valid");
+                if (is_string($val)) {
+                    $val = trim($val);
+                    if ($val === '') {
+                        $val = null;
+                    }
+                }
+            }
+        } else {
+            $this->clearError("custodianAccountNum", "valid");
+        }
+
+        return $this->_setAttribute("custodianAccountNum", $val);
     }
 
     public function setPrimaryAddress(AddressInterface $val = null)
@@ -209,6 +404,20 @@ class LegalEntity extends \CFX\JsonApi\AbstractResource implements LegalEntityIn
             'edit',
             'delete',
         ];
+    }
+
+    protected function serializeAttribute($name)
+    {
+        if ($name === 'dateOfBirth') {
+            $val = $this->getDateOfBirth();
+            if ($val) {
+                return $val->format("U");
+            } else {
+                return $val;
+            }
+        }
+
+        return parent::serializeAttribute($name);
     }
 }
 

@@ -205,7 +205,7 @@ class AssetIntent extends \CFX\JsonApi\AbstractResource implements AssetIntentIn
         return $this;
     }
     public function setStatus($val=null) {
-        if ($this->validateReadOnly('status', $val !== $this->getStatus())) {
+        if ($this->validateReadOnly('status', $val)) {
             $this->_setAttribute('status', $val);
         }
         return $this;
@@ -213,7 +213,7 @@ class AssetIntent extends \CFX\JsonApi\AbstractResource implements AssetIntentIn
 
 
     public function setAsset(\CFX\AssetInterface $val=null) {
-        if ($this->validateReadOnly('asset', $val !== $this->getAsset())) {
+        if ($this->validateReadOnly('asset', $val)) {
             $this->_setRelationship('asset', $val);
         }
         return $this;
