@@ -1,132 +1,93 @@
 <?php 
-
-namespace CFX\Brokerage\Tests;
-
-
-class BankAccountTest extends \PHPUnit\Framework\TestCase{
+namespace CFX\Brokerage;
 
 
-	public function setupBeforeClass(){
-	}
+class BankAccountTest extends \PHPUnit\Framework\TestCase
+{
+    use \CFX\ResourceTestTrait;
 
+    protected $className = "\\CFX\\Brokerage\\BankAccount";
 
-// Set Bank Name
+    public function testResourceType()
+    {
+        $this->assertEquals('bank-accounts', $this->resource->getResourceType());
+    }
 
-	public function testSetBankNameSetsErrorOnNullValue(){
-		$this->markTestIncomplete();
-	}
+    public function testLabel()
+    {
+        $field = 'label';
+        $this->assertValid($field, [ "Personal Account", "Account # 11555" ]);
+        $this->assertInvalid($field, [ null, '', new \DateTime(), 2.5 ]);
+        $this->assertChanged($field, "New Label", "attributes");
+        $this->assertChains($field);
+    }
 
-	public function testSetBankNameSetsErrorOnNonSringValue(){ // means to prevent sending numbers instead of string.
-		$this->markTestIncomplete();
-	}
+    public function testBankName()
+    {
+        $field = 'bankName';
+        $this->assertValid($field, [ "Chase", "Bank of America", "Podunk Bank #1" ]);
+        $this->assertInvalid($field, [ null, '', new \DateTime(), 2.5 ]);
+        $this->assertChanged($field, "New name", "attributes");
+        $this->assertChains($field);
+    }
 
-	public function testSetBankNameSuccessOnValidInput(){
-		$this->markTestIncomplete();
-	}
+    public function testAccountType()
+    {
+        $field = 'accountType';
+        $this->assertValid($field, [ "checking:personal", "checking:business", "ira", "wire", "savings" ]);
+        $this->assertInvalid($field, [ null, '', new \DateTime(), 2.5, "checking", "bunk" ]);
+        $this->assertChanged($field, "ira", "attributes");
+        $this->assertChains($field);
+    }
 
+    public function testHolderName()
+    {
+        $field = 'holderName';
+        $this->assertValid($field, [ "Mr. Eric Holder", "Test Testerson", "Test" ]);
+        $this->assertInvalid($field, [ null, '', new \DateTime(), 2.5 ]);
+        $this->assertChanged($field, "New Holder", "attributes");
+        $this->assertChains($field);
+    }
 
+    public function testRoutingNum()
+    {
+        $field = 'routingNum';
+        $this->assertValid($field, [ 123456789, "123456789", "AB-DD1235" ]);
+        $this->assertInvalid($field, [ null, '', new \DateTime(), 2.5 ]);
+        $this->assertChanged($field, "new-111555", "attributes");
+        $this->assertChains($field);
+    }
 
+    public function testAccountNum()
+    {
+        $field = 'accountNum';
+        $this->assertValid($field, [ "55112233", 122345567, "AB-CC122345" ]);
+        $this->assertInvalid($field, [ null, '', new \DateTime(), 2.5 ]);
+        $this->assertChanged($field, "new-155223", "attributes");
+        $this->assertChains($field);
+    }
 
-// Set Type
+    public function testBankAddress()
+    {
+        $field = 'bankAddress';
+        $this->assertValid($field, [ "1234 S Main St, Southport, IN 55023" ]);
+        $this->assertInvalid($field, [ null, '', new \DateTime(), 2.5 ]);
+        $this->assertChanged($field, "1111 New Address, Chicago, IL", "attributes");
+        $this->assertChains($field);
+    }
 
-	public function testSetTypeSetsErrorOnNullValue(){
-		$this->markTestIncomplete();
-	}
+    public function testStatus()
+    {
+        $field = 'status';
+        $this->assertReadOnly($field, "approved");
+    }
 
-	public function testSetTypeSetsErrorOnNonValidValue(){
-		$this->markTestIncomplete();
-	}
-
-	public function testSetTypeSuccessOnValidInput(){
-		$this->markTestIncomplete();
-	}
-
-
-
-
-// Set Account Holder Name
-
-	public function testSetAccountHolderNameSetsErrorOnNullValue(){
-		$this->markTestIncomplete();
-	}
-
-	public function testSetAccountHolderNameSetsErrorOnNonStringValue(){ // means to prevent sending numbers instead of string.
-		$this->markTestIncomplete();
-	}
-
-	public function testSetAccountHolderNameSuccessOnValidInput(){
-		$this->markTestIncomplete();
-	}
-
-
-
-
-// Set Routing Number
-
-	public function testSetRoutingNumberSetsErrorOnNullValue(){
-		$this->markTestIncomplete();
-	}
-
-	public function testSetRoutingNumberSetsErrorOnNonNumericValue(){
-		$this->markTestIncomplete();
-	}
-
-	public function testSetRoutingNumberSetsErrorOnNonValidValue(){ // to count  if the value it's less than zero.
-		$this->markTestIncomplete();
-	}
-
-	public function testSetRoutingNumberSetsErrorOnInvalidInput(){ //Also, maybe it shoud equal to certain number.
-		$this->markTestIncomplete();
-	}
-
-	public function testSetRoutingNumberSuccessOnValidInput(){
-		$this->markTestIncomplete();
-	}
-
-
-
-
-// Set Account Number
-
-	public function testSetAccountNumberSetsErrorOnNullValue(){
-		$this->markTestIncomplete();
-	}
-
-	public function testSetAccountNumberSetsErrorOnNonNumericValue(){
-		$this->markTestIncomplete();
-	}
-
-	public function testSetAccountNumberSetsErrorOnNonValidValue(){ // to count  if the value it's less than zero. 
-		$this->markTestIncomplete();
-	}
-
-	public function testSetAccountNumberSetsErrorOnInvalidInput(){ //Also, maybe it shoud equal to certain number.
-		$this->markTestIncomplete();
-	}
-
-	public function testSetAccountNumberSuccessOnValidInput(){
-		$this->markTestIncomplete();
-	}
-
-
+    public function testOwner()
+    {
+        $field = 'owner';
+        $this->assertValid($field, [ new LegalEntity($this->datasource) ]);
+        $this->assertChanged($field, (new LegalEntity($this->datasource))->setId("12345"), "relationships");
+        $this->assertChains($field);
+    }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
