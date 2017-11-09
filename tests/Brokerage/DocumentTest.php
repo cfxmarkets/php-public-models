@@ -119,7 +119,7 @@ class DocumentTest extends \PHPUnit\Framework\TestCase
     public function testMethodChaining() {
         $json = $this->resource
             ->setLabel('My Document')
-            ->setType(Document::getValidTypes()[0])
+            ->setType(array_keys(Document::getValidTypes())[0])
             ->setUrl("/our-server/doc.pdf")
             ->setNotes('Some notes')
             ->jsonSerialize();

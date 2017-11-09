@@ -42,6 +42,37 @@ trait ResourceValidationsTrait {
         }
     }
 
+    protected function validateNumeric($field, $val)
+    {
+        if (!is_numeric($val)) {
+            $this->setError($field, 'numeric', [
+                "title" => "Invalid Attribute Value for `$field`",
+                "detail" => "The quanity you indicate for this value must be numeric"
+            ]);
+            return false;
+        } else {
+            $this->clearError($field, 'numeric');
+            return true;
+        }
+    }
+
+    protected function validateRelatedResourceExists($field, \CFX\JsonApi\ResourceInterface $r)
+    {
+        try {
+            // Will throw error if resource is invalid
+            $r->initialize();
+            $this->clearError($field, 'exists');
+            return true;
+
+        } catch (ResourceNotFoundException $e) {
+            $this->setError($field, 'exists', [
+                "title" => "Invalid Relationship `$field`",
+                "detail" => "The `$field` you've indicated for this order is not currently in our system."
+            ]);
+            return false;
+        }
+    }
+
     protected function cleanStringValue($val)
     {
         if ($val !== null) {
@@ -62,6 +93,20 @@ trait ResourceValidationsTrait {
         if ($val !== null) {
             if ($val == 1 || $val === 0 || $val === '0') {
                 $val = (bool)$val;
+            }
+        }
+        return $val;
+    }
+
+    protected function cleanNumberValue($val)
+    {
+        if ($val !== null) {
+            if (is_string($val)) {
+                if (trim($val) === '') {
+                    $val = null;
+                } elseif (is_numeric($val)) {
+                    $val = $val*1;
+                }
             }
         }
         return $val;

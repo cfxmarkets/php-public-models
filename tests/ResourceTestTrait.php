@@ -38,11 +38,25 @@ trait ResourceTestTrait {
         $set = 'set'.ucfirst($field);
         $get = 'get'.ucfirst($field);
 
+        if (gettype($val) !== 'object') {
+            if (is_bool($val)) {
+                $displayVal = 'bool(`'.($val ? "true": "false").'`)';
+            } elseif ($val === null) {
+                $displayVal = 'null';
+            } elseif (is_array($val)) {
+                $displayVal = 'array('.count($val).')';
+            } else {
+                $displayVal = gettype($val)."(`$val`)";
+            }
+        } else {
+            $displayVal = get_class($val);
+        }
+
         $this->resource->$set($val);
         if ($has) {
-            $this->assertTrue($this->resource->hasErrors($field));
+            $this->assertTrue($this->resource->hasErrors($field), "Value $displayVal for field `$field` should have produced errors, but didn't.");
         } else {
-            $this->assertFalse($this->resource->hasErrors($field));
+            $this->assertFalse($this->resource->hasErrors($field), "Value $displayVal for field `$field` shouldn't have produced errors, but did.");
         }
 
         if ($assertSame) {
@@ -78,7 +92,7 @@ trait ResourceTestTrait {
     protected function assertChains($field)
     {
         $set = 'set'.ucfirst($field);
-        $this->assertSame($this->resource, $this->resource->$set(null));
+        $this->assertSame($this->resource, $this->resource->$set(null), "Method `$this->className::$set` should return the resource object for method chaining.");
     }
 
     protected function assertReadonly($field, $val = "test")
@@ -86,7 +100,7 @@ trait ResourceTestTrait {
         $set = 'set'.ucfirst($field);
         $this->resource->$set($val);
         $errorTypes = array_keys($this->resource->getErrors($field));
-        $this->assertContains("readonly", $errorTypes);
+        $this->assertContains("readonly", $errorTypes, "Setting readonly field `$this->className::$field` should result in a readonly error on that field.");
     }
 }
 
