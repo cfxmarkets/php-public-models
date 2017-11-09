@@ -14,7 +14,7 @@ class BankAccount extends \CFX\JsonApi\AbstractResource implements BankAccountIn
         'routingNum' => null,
         'accountNum' => null,
         'bankAddress' => null,
-        'status' => null,
+        'status' => false,
     ];
     protected $relationships = [
         'owner' => null,
@@ -161,6 +161,7 @@ class BankAccount extends \CFX\JsonApi\AbstractResource implements BankAccountIn
 
     public function setStatus($val)
     {
+        $val = $this->cleanBooleanValue($val);
         if ($this->validateReadOnly('status', $val)) {
             $this->_setAttribute('status', $val);
         }
@@ -170,6 +171,19 @@ class BankAccount extends \CFX\JsonApi\AbstractResource implements BankAccountIn
     public function setOwner(LegalEntityInterface $owner = null)
     {
         return $this->_setRelationship('owner', $owner);
+    }
+
+
+    protected function serializeAttribute($name)
+    {
+        if ($name === 'status') {
+            if ($this->getStatus() !== null) {
+                return (int)$this->getStatus();
+            } else {
+                return $this->getStatus();
+            }
+        }
+        return parent::serializeAttribute($name);
     }
 }
 

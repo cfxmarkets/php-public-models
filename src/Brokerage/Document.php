@@ -28,12 +28,12 @@ class Document extends \CFX\JsonApi\AbstractResource implements DocumentInterfac
      * @var string[] A list of valid document types
      */
     protected static $validTypes = [
-        'id:person',
-        'id:ein',
-        'formation',
-        'bylaws',
-        'ownership',
-        'agreement',
+        'id:person' => 'Photo ID',
+        'id:ein' => 'Proof of EIN',
+        'formation' => "Formation Document",
+        'bylaws' => "Bylaws Document",
+        'ownership' => "Proof of Ownership",
+        'agreement' => "Signed Contract",
     ];
 
 
@@ -75,15 +75,13 @@ class Document extends \CFX\JsonApi\AbstractResource implements DocumentInterfac
     {
         $this->_setAttribute('label', $val);
 
-        if ($this->validateRequired('label', $val)) {
-            if (!is_string($val) && !is_int($val)) {
-                $this->setError('label', 'format', [
-                    "title" => "Invalid Value for `label`",
-                    "detail" => "`label` must be a string."
-                ]);
-            } else {
-                $this->clearError('label', 'format');
-            }
+        if ($val !== null && !is_string($val)) {
+            $this->setError('label', 'format', [
+                "title" => "Invalid Value for `label`",
+                "detail" => "`label` must be a string."
+            ]);
+        } else {
+            $this->clearError('label', 'format');
         }
 
         return $this;
@@ -94,10 +92,10 @@ class Document extends \CFX\JsonApi\AbstractResource implements DocumentInterfac
         $this->_setAttribute('type', $val);
 
         if ($this->validateRequired('type', $val)) {
-            if (!in_array($val, static::$validTypes)) {
+            if (!in_array($val, array_keys(static::$validTypes))) {
                 $this->setError('type', 'valid', [
                     "title" => "Invalid Value for `type`",
-                    "detail" => "`type` must be one of the valid types, `".implode("`, `", static::$validTypes)."`."
+                    "detail" => "`type` must be one of the valid types, `".implode("`, `", array_keys(static::$validTypes))."`."
                 ]);
             } else {
                 $this->clearError('type', 'valid');

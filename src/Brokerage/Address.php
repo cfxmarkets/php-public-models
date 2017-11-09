@@ -33,7 +33,6 @@ class Address extends \CFX\JsonApi\AbstractResource implements AddressInterface 
     public function setLabel($val=null)
     {
         $this->_setAttribute('label', $val);
-        $this->validateRequired('label', $val);
         return $this;
     }
 

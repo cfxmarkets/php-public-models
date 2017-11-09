@@ -10,6 +10,8 @@ trait ResourceValidationsTrait {
             $result = is_int($val);
         } elseif ($type === 'string or int') {
             $result = is_string($val) || is_int($val);
+        } elseif ($type === 'boolean' || $type === 'bool') {
+            $result = is_bool($val);
         } else {
             throw new \RuntimeException("Programmer: Don't know how to validate for type `$type`!");
         }
@@ -42,10 +44,24 @@ trait ResourceValidationsTrait {
 
     protected function cleanStringValue($val)
     {
-        if ($val !== null && is_string($val)) {
-            $val = trim($val);
-            if ($val === '') {
-                $val = null;
+        if ($val !== null) {
+            if (is_string($val)) {
+                $val = trim($val);
+                if ($val === '') {
+                    $val = null;
+                }
+            } elseif (is_int($val)) {
+                $val = (string)$val;
+            }
+        }
+        return $val;
+    }
+
+    protected function cleanBooleanValue($val)
+    {
+        if ($val !== null) {
+            if ($val == 1 || $val === 0 || $val === '0') {
+                $val = (bool)$val;
             }
         }
         return $val;

@@ -267,7 +267,7 @@ class OrderIntent extends \CFX\JsonApi\AbstractResource implements OrderIntentIn
     public function setAssetIntent(\CFX\Brokerage\AssetIntentInterface $assetIntent=null) {
         if (!$this->validateStatusActive()) return $this;
 
-        if ($this->valueDiffersFromInitial('assetIntent', $assetIntent)) {
+        if ($this->getInitial('assetIntent') !== null && $this->valueDiffersFromInitial('assetIntent', $assetIntent)) {
             $this->setError('assetIntent', 'immutable', $this->getFactory()->newError([
                 'status' => 400,
                 'title' => 'Immutable Relationship `assetIntent`',
