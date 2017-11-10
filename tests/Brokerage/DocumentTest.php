@@ -12,92 +12,87 @@ class DocumentTest extends \PHPUnit\Framework\TestCase
     }
 
     public function testLabel() {
-        $this->assertValid('label', [null, '', 'My Document']);
+        $this->assertValid('label', [ null, '', 'My Document' ]);
     }
 
     public function testType() {
-        // Assert required
-        $this->assertTrue($this->resource->hasErrors('type'));
-
-        // Assert required again
-        $val = "";
-        $this->resource->setType($val);
-        $this->assertTrue($this->resource->hasErrors('type'));
-        $this->assertEquals($val, $this->resource->getType());
-
-        // Throws errors for bad type
-        $val = "bunk";
-        $this->resource->setType($val);
-        $this->assertTrue($this->resource->hasErrors('type'));
-        $this->assertEquals($val, $this->resource->getType());
-
-        // No errors for good types
-        foreach(array_keys(Document::getValidTypes()) as $t) {
-            $this->resource->setType($t);
-            $this->assertFalse($this->resource->hasErrors('type'));
-            $this->assertEquals($t, $this->resource->getType());
-        }
+        $this->assertValid("type", array_keys(Document::getValidTypes()));
+        $this->assertInvalid("type", [ null, '', 'bunk', new \DateTime(), 2.5, [] ]);
+        $this->assertChanged("type", array_keys(Document::getValidTypes())[1], 'attributes');
+        $this->assertChains("type", null);
     }
 
     public function testUrl() {
-        // Assert required
-        $this->assertTrue($this->resource->hasErrors('url'));
-
-        // Assert required again
-        $val = "";
-        $this->resource->setUrl($val);
-        $this->assertTrue($this->resource->hasErrors('url'));
-        $this->assertEquals($val, $this->resource->getUrl());
-
-        // Errors for bad input
-        $val = "bunk";
-        $this->resource->setUrl($val);
-        $this->assertTrue($this->resource->hasErrors('url'));
-        $this->assertEquals($val, $this->resource->getUrl());
-
-        // No errors for good input
-        $val = "/valid/absolute/path.pdf";
-        $this->resource->setUrl($val);
-        $this->assertFalse($this->resource->hasErrors('url'));
-        $this->assertEquals($val, $this->resource->getUrl());
-
-        $val = "https://somehost.com/valid/absolute/path.jpg";
-        $this->resource->setUrl($val);
-        $this->assertFalse($this->resource->hasErrors('url'));
-        $this->assertEquals($val, $this->resource->getUrl());
+        $this->assertValid("url", [ "/valid/absolute/path.pdf", "https://somehost.com/valid/path.jpg", "https://somehost.com/my/photo/12344" ]);
+        $this->assertInvalid("url", [ null, '', 'bunk' ]);
+        $this->assertChanged("url", "/my/photo.pdf", "attributes");
+        $this->assertChains("url");
     }
 
     public function testStatus() {
         // Default is fine
         $this->assertFalse($this->resource->hasErrors('status'));
-
-        // Assert Readonly
-        $this->resource->setStatus('approved');
-        $this->assertTrue($this->resource->hasErrors('status'));
-        $this->assertEquals('approved', $this->resource->getStatus());
-        $this->resource->setStatus(null);
-        $this->assertFalse($this->resource->hasErrors('status'));
-        $this->assertNull($this->resource->getStatus());
+        $this->assertReadOnly("status", "approved");
     }
 
     public function testNotes() {
-        // Assert not required
-        $this->assertFalse($this->resource->hasErrors('notes'));
+        $this->assertValid("notes", [ null, '', "These are some notes" ]);
+        $this->assertInvalid("notes", [ new \DateTime(), 2.5, [] ]);
+        $this->assertChanged("notes", "notes", "attributes");
+        $this->assertChains("notes");
+    }
 
-        // Assert not required again
-        $val = "";
-        $this->resource->setNotes($val);
-        $this->assertFalse($this->resource->hasErrors('notes'));
-        $this->assertEquals($val, $this->resource->getNotes());
+    public function testLegalEntity()
+    {
+        $this->assertValid("legalEntity", [ null, new LegalEntity($this->datasource) ]);
+        $this->assertChanged("legalEntity", (new LegalEntity($this->datasource))->setId("12345"), "relationships");
+        $this->assertChains("legalEntity", null);
 
-        $val = new \DateTime();
-        $this->resource->setNotes($val);
-        $this->assertTrue($this->resource->hasErrors('notes'));
+        $entity = (new LegalEntity($this->datasource))->setId("67890");
+        $this->resource->setLegalEntity($entity);
+        $this->assertFalse($this->resource->hasErrors("legalEntity"));
+        $this->assertTrue($this->resource->hasErrors("type"));
 
-        $val = "These are some notes";
-        $this->resource->setNotes($val);
-        $this->assertFalse($this->resource->hasErrors('notes'));
-        $this->assertEquals($val, $this->resource->getNotes());
+        $this->resource->setType('agreement');
+        $this->assertTrue($this->resource->hasErrors('legalEntity'));
+        $this->assertContains("invalidForType", array_keys($this->resource->getErrors('legalEntity')));
+
+        $this->resource->setType("ownership");
+        $this->assertTrue($this->resource->hasErrors('legalEntity'));
+        $this->assertContains("invalidForType", array_keys($this->resource->getErrors('legalEntity')));
+
+        $this->resource->setType("id");
+        $this->assertFalse($this->resource->hasErrors('legalEntity'));
+
+        $this->resource->setLegalEntity(null);
+        $this->assertTrue($this->resource->hasErrors('legalEntity'));
+        $this->assertContains("required", array_keys($this->resource->getErrors('legalEntity')));
+    }
+
+    public function testOrderIntent()
+    {
+        $this->assertValid("orderIntent", [ null, new OrderIntent($this->datasource) ]);
+        $this->assertChanged("orderIntent", (new OrderIntent($this->datasource))->setId("12345"), "relationships");
+        $this->assertChains("orderIntent", null);
+
+        $intent = (new OrderIntent($this->datasource))->setId("67890");
+        $this->resource->setOrderIntent($intent);
+        $this->assertFalse($this->resource->hasErrors("orderIntent"));
+        $this->assertTrue($this->resource->hasErrors("type"));
+
+        $this->resource->setType("id");
+        $this->assertTrue($this->resource->hasErrors('orderIntent'));
+        $this->assertContains("invalidForType", array_keys($this->resource->getErrors('orderIntent')));
+
+        $this->resource->setType('agreement');
+        $this->assertFalse($this->resource->hasErrors('orderIntent'));
+
+        $this->resource->setType("ownership");
+        $this->assertFalse($this->resource->hasErrors('orderIntent'));
+
+        $this->resource->setOrderIntent(null);
+        $this->assertTrue($this->resource->hasErrors('orderIntent'));
+        $this->assertContains("required", array_keys($this->resource->getErrors('orderIntent')));
     }
 
     public function testIntegration() {
@@ -105,26 +100,24 @@ class DocumentTest extends \PHPUnit\Framework\TestCase
             "type" => "documents",
             "attributes" => [
                 "label" => "My Document",
-                "type" => array_keys(Document::getValidTypes())[0],
+                "type" => 'id',
                 "url" => "/our-server/doc.pdf",
                 "notes" => "Here's a quick note about the doc.",
             ],
+            "relationships" => [
+                "legalEntity" => [
+                    "data" => [
+                        "type" => "legal-entities",
+                        "id" => "12345",
+                    ]
+                ]
+            ]
         ];
 
+        $this->datasource->addClassToCreate("\\CFX\\Brokerage\\LegalEntity");
         $document = new Document($this->datasource, $data);
         $this->assertFalse($document->hasErrors());
-        $this->assertEquals($data, $document->getChanges());
-    }
-
-    public function testMethodChaining() {
-        $json = $this->resource
-            ->setLabel('My Document')
-            ->setType(array_keys(Document::getValidTypes())[0])
-            ->setUrl("/our-server/doc.pdf")
-            ->setNotes('Some notes')
-            ->jsonSerialize();
-
-        $this->assertEquals('Some notes', $json['attributes']['notes']);
+        $this->assertEquals($data, json_decode(json_encode($document->getChanges()), true));
     }
 }
 

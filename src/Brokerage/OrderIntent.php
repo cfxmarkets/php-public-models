@@ -2,6 +2,7 @@
 namespace CFX\Brokerage;
 
 class OrderIntent extends \CFX\JsonApi\AbstractResource implements OrderIntentInterface {
+    use \CFX\JsonApi\Rel2MTrait;
     use \CFX\ResourceValidationsTrait;
 
     protected $resourceType = 'order-intents';
@@ -19,6 +20,8 @@ class OrderIntent extends \CFX\JsonApi\AbstractResource implements OrderIntentIn
         'assetOwner' => null,
         'order' => null,
         'bankAccount' => null,
+        'agreement' => null,
+        'ownershipDoc' => null,
     ];
 
     protected static $validTypes = ['sell', 'buy'];
@@ -67,6 +70,16 @@ class OrderIntent extends \CFX\JsonApi\AbstractResource implements OrderIntentIn
     public function getBankAccount()
     {
         return $this->_getRelationshipValue('bankAccount');
+    }
+
+    public function getAgreement()
+    {
+        return $this->_getRelationshipValue('agreement');
+    }
+
+    public function getOwnershipDoc()
+    {
+        return $this->_getRelationshipValue('ownershipDoc');
     }
 
 
@@ -291,6 +304,22 @@ class OrderIntent extends \CFX\JsonApi\AbstractResource implements OrderIntentIn
             }
         }
         return $this->_setRelationship('bankAccount', $bankAccount);
+    }
+
+    public function setAgreement(DocumentInterface $val = null)
+    {
+        if ($val) {
+            $this->validateRelatedResourceExists('agreement', $val);
+        }
+        return $this->_setRelationship('agreement', $val);
+    }
+
+    public function setOwnershipDoc(DocumentInterface $val = null)
+    {
+        if ($val) {
+            $this->validateRelatedResourceExists('ownershipDoc', $val);
+        }
+        return $this->_setRelationship('ownershipDoc', $val);
     }
 
 

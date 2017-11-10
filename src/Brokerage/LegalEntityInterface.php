@@ -16,7 +16,7 @@ interface LegalEntityInterface extends \CFX\JsonApi\ResourceInterface {
     public function getCustodianName();
     public function getCustodianAccountNum();
     public function getPrimaryAddress();
-    public function getIdDocuments();
+    public function getIdDocs();
 
 
     public function setType($val);
@@ -31,10 +31,10 @@ interface LegalEntityInterface extends \CFX\JsonApi\ResourceInterface {
     public function setCustodianName($val);
     public function setCustodianAccountNum($val);
     public function setPrimaryAddress(AddressInterface $val = null);
-    public function setIdDocuments(\CFX\JsonApi\ResourceCollectionInterface $val = null);
-    public function addIdDocument(DocumentInterface $val);
-    public function hasIdDocument(DocumentInterface $val);
-    public function removeIdDocument(DocumentInterface $val);
+    public function setIdDocs(\CFX\JsonApi\ResourceCollectionInterface $val = null);
+    public function addIdDoc(DocumentInterface $val);
+    public function hasIdDoc(DocumentInterface $val);
+    public function removeIdDoc(DocumentInterface $val);
 
     /**
      * getPermissionsCode -- Gets an integer representing a bitmask of the requested permissions

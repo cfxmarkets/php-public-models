@@ -173,39 +173,39 @@ class LegalEntityTest extends \PHPUnit\Framework\TestCase
         $this->assertSame($this->resource, $this->resource->setPrimaryAddress($val));
     }
 
-    public function testIdDocuments() {
+    public function testIdDocs() {
         // Assert field NOT required
-        $this->assertFalse($this->resource->hasErrors('idDocuments'));
+        $this->assertFalse($this->resource->hasErrors('idDocs'));
 
         $val = new \CFX\JsonApi\ResourceCollection();
-        $this->resource->setIdDocuments($val);
-        $this->assertFalse($this->resource->hasErrors('idDocuments'));
-        $this->assertEquals($val, $this->resource->getIdDocuments());
+        $this->resource->setIdDocs($val);
+        $this->assertFalse($this->resource->hasErrors('idDocs'));
+        $this->assertEquals($val, $this->resource->getIdDocs());
 
         // Assert changed
         $changes = $this->resource->getChanges();
-        $this->assertContains('idDocuments', array_keys($changes['relationships']));
-        $this->assertSame($val, $changes['relationships']['idDocuments']->getData());
+        $this->assertContains('idDocs', array_keys($changes['relationships']));
+        $this->assertSame($val, $changes['relationships']['idDocs']->getData());
 
         // Assert chaining
-        $this->assertSame($this->resource, $this->resource->setIdDocuments($val));
+        $this->assertSame($this->resource, $this->resource->setIdDocs($val));
 
-        // AddIdDocument
+        // AddIdDoc
         $this->markTestIncomplete();
         /*
          * NOT possible with generic MockDatasource
         $doc = new Document($this->datasource);
-        $this->resource->addIdDocument($doc);
-        $this->assertFalse($this->resource->hasErrors('idDocuments'));
-        $this->assertEquals(1, count($this->resource->getIdDocuments()));
+        $this->resource->addIdDoc($doc);
+        $this->assertFalse($this->resource->hasErrors('idDocs'));
+        $this->assertEquals(1, count($this->resource->getIdDocs()));
 
-        // HasIdDocument
-        $this->assertTrue($this->resource->hasIdDocument($doc));
+        // HasIdDoc
+        $this->assertTrue($this->resource->hasIdDoc($doc));
 
-        // RemoveIdDocument
-        $this->resource->removeIdDocument($doc);
-        $this->assertFalse($this->resource->hasErrors('idDocuments'));
-        $this->assertEquals(0, count($this->resource->getIdDocuments()));
+        // RemoveIdDoc
+        $this->resource->removeIdDoc($doc);
+        $this->assertFalse($this->resource->hasErrors('idDocs'));
+        $this->assertEquals(0, count($this->resource->getIdDocs()));
          */
     }
 
@@ -228,7 +228,7 @@ class LegalEntityTest extends \PHPUnit\Framework\TestCase
                         "id" => "12345",
                     ],
                 ],
-                "idDocuments" => [
+                "idDocs" => [
                     "data" => [
                         [
                             "type" => 'documents',

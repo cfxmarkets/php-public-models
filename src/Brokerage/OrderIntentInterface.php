@@ -13,6 +13,8 @@ interface OrderIntentInterface extends \CFX\JsonApi\ResourceInterface {
     public function getAssetIntent();
     public function getAssetOwner();
     public function getBankAccount();
+    public function getAgreement();
+    public function getOwnershipDoc();
 
     // Setters
     public function setType($val);
@@ -25,6 +27,8 @@ interface OrderIntentInterface extends \CFX\JsonApi\ResourceInterface {
     public function setAssetIntent(\CFX\Brokerage\AssetIntentInterface $asset=null);
     public function setAssetOwner(LegalEntityInterface $owner = null);
     public function setBankAccount(BankAccountInterface $bankAccount = null);
+    public function setAgreement(DocumentInterface $val = null);
+    public function setOwnershipDoc(DocumentInterface $val = null);
 }
 
 

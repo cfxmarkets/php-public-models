@@ -5,6 +5,8 @@ namespace CFX\Brokerage;
 
 class Document extends \CFX\JsonApi\AbstractResource implements DocumentInterface
 {
+    use \CFX\ResourceValidationsTrait;
+
 	protected $resourceType = 'documents';
 
 	protected $attributes = [
@@ -14,6 +16,11 @@ class Document extends \CFX\JsonApi\AbstractResource implements DocumentInterfac
         'status' => null,
         'notes' => null,
 	];
+
+    protected $relationships = [
+        'legalEntity' => null,
+        'orderIntent' => null,
+    ];
 
     //
     // WARNING!!
@@ -28,10 +35,7 @@ class Document extends \CFX\JsonApi\AbstractResource implements DocumentInterfac
      * @var string[] A list of valid document types
      */
     protected static $validTypes = [
-        'id:person' => 'Photo ID',
-        'id:ein' => 'Proof of EIN',
-        'formation' => "Formation Document",
-        'bylaws' => "Bylaws Document",
+        'id' => "Proof of Identity",
         'ownership' => "Proof of Ownership",
         'agreement' => "Signed Contract",
     ];
@@ -69,45 +73,46 @@ class Document extends \CFX\JsonApi\AbstractResource implements DocumentInterfac
         return $this->_getAttributeValue('notes');
     }
 
+    public function getLegalEntity()
+    {
+        return $this->_getRelationshipValue('legalEntity');
+    }
+
+    public function getOrderIntent()
+    {
+        return $this->_getRelationshipValue('orderIntent');
+    }
+
 
 
     public function setLabel($val)
     {
-        $this->_setAttribute('label', $val);
-
-        if ($val !== null && !is_string($val)) {
-            $this->setError('label', 'format', [
-                "title" => "Invalid Value for `label`",
-                "detail" => "`label` must be a string."
-            ]);
-        } else {
-            $this->clearError('label', 'format');
-        }
-
-        return $this;
+        $val = $this->cleanStringValue($val);
+        $this->validateType('label', $val, 'string', false);
+        return $this->_setAttribute('label', $val);
     }
 
     public function setType($val)
     {
-        $this->_setAttribute('type', $val);
-
+        $val = $this->cleanStringValue($val);
         if ($this->validateRequired('type', $val)) {
-            if (!in_array($val, array_keys(static::$validTypes))) {
-                $this->setError('type', 'valid', [
-                    "title" => "Invalid Value for `type`",
-                    "detail" => "`type` must be one of the valid types, `".implode("`, `", array_keys(static::$validTypes))."`."
-                ]);
-            } else {
-                $this->clearError('type', 'valid');
+            if ($this->validateType('type', $val, 'string')) {
+                $this->validateAmong('type', $val, array_keys(static::$validTypes));
             }
         }
 
-		return $this;
+        $this->_setAttribute('type', $val);
+
+        // Trigger re-validation for changes to type
+        $this->setLegalEntity($this->getLegalEntity());
+        $this->setOrderIntent($this->getOrderIntent());
+
+        return $this;
 	}
 
     public function setUrl($val)
     {
-        $this->_setAttribute('url', $val);
+        $val = $this->cleanStringValue($val);
 
         if ($this->validateRequired('url', $val)) {
             if (!preg_match("/^(?:https?:\/\/[\w]+[\w.-_]+)?\/.+$/", $val)) {
@@ -120,30 +125,82 @@ class Document extends \CFX\JsonApi\AbstractResource implements DocumentInterfac
 			}
 		}
 
-		return $this;
+        return $this->_setAttribute('url', $val);
     }
 
     public function setStatus($val)
     {
         $this->validateReadOnly('status', $val);
-        $this->_setAttribute('status', $val);
-        return $this;
+        return $this->_setAttribute('status', $val);
     }
 
     public function setNotes($val)
     {
-        $this->_setAttribute('notes', $val);
+        $val = $this->cleanStringValue($val);
+        $this->validateType('notes', $val, 'string', false);
+        return $this->_setAttribute('notes', $val);
+    }
 
-        if ($val && !is_string($val)) {
-            $this->setError('notes', 'valid', [
-                "title" => "Invalid Value for `notes`",
-                "detail" => "`notes` must be a string."
-            ]);
+    public function setLegalEntity(LegalEntityInterface $val = null)
+    {
+        if (!$this->hasErrors('type')) {
+            if ($val) {
+                $this->clearError('legalEntity', 'required');
+
+                if ($this->getType() !== 'id') {
+                    $this->setError("legalEntity", "invalidForType", [
+                        "title" => "Illegal Entity",
+                        "detail" => "Documents of type `{$this->getType()}` cannot have LegalEntities associated with them."
+                    ]);
+                } else {
+                    $this->clearError('legalEntity', "invalidForType");
+                }
+            } else {
+                if ($this->getType() === 'id') {
+                    $this->setError("legalEntity", "required", [
+                        "title" => "Field `legalEntity` Required",
+                        "detail" => "Field `legalEntity` is required for documents of type `{$this->getType()}`",
+                    ]);
+                } else {
+                    $this->clearError("legalEntity", "required");
+                }
+            }
         } else {
-            $this->clearError('notes', 'valid');
+            $this->clearError('legalEntity');
         }
 
-        return $this;
+        return $this->_setRelationship('legalEntity', $val);
+    }
+
+    public function setOrderIntent(OrderIntentInterface $val = null)
+    {
+        if (!$this->hasErrors('type')) {
+            if ($val) {
+                $this->clearError('orderIntent', 'required');
+
+                if (!in_array($this->getType(), [ 'agreement', 'ownership' ])) {
+                    $this->setError("orderIntent", "invalidForType", [
+                        "title" => "Illegal Order Intent",
+                        "detail" => "Documents of type `{$this->getType()}` cannot have OrderIntents associated with them."
+                    ]);
+                } else {
+                    $this->clearError('orderIntent', "invalidForType");
+                }
+            } else {
+                if (in_array($this->getType(), [ 'agreement', 'ownership' ])) {
+                    $this->setError("orderIntent", "required", [
+                        "title" => "Field `orderIntent` Required",
+                        "detail" => "Field `orderIntent` is required for documents of type `{$this->getType()}`",
+                    ]);
+                } else {
+                    $this->clearError("orderIntent", "required");
+                }
+            }
+        } else {
+            $this->clearError('orderIntent');
+        }
+
+        return $this->_setRelationship('orderIntent', $val);
     }
 }
 

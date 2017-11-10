@@ -95,7 +95,7 @@ trait ResourceTestTrait {
         $this->assertSame($this->resource, $this->resource->$set(null), "Method `$this->className::$set` should return the resource object for method chaining.");
     }
 
-    protected function assertReadonly($field, $val = "test")
+    protected function assertReadOnly($field, $val = "test")
     {
         $set = 'set'.ucfirst($field);
         $this->resource->$set($val);

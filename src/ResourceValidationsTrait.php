@@ -2,18 +2,22 @@
 namespace CFX;
 
 trait ResourceValidationsTrait {
-    protected function validateType($field, $val, $type)
+    protected function validateType($field, $val, $type, $required = true)
     {
-        if ($type === 'string') {
-            $result = is_string($val);
-        } elseif ($type === 'int' || $type === 'integer') {
-            $result = is_int($val);
-        } elseif ($type === 'string or int') {
-            $result = is_string($val) || is_int($val);
-        } elseif ($type === 'boolean' || $type === 'bool') {
-            $result = is_bool($val);
+        if ($val !== null) {
+            if ($type === 'string') {
+                $result = is_string($val);
+            } elseif ($type === 'int' || $type === 'integer') {
+                $result = is_int($val);
+            } elseif ($type === 'string or int') {
+                $result = is_string($val) || is_int($val);
+            } elseif ($type === 'boolean' || $type === 'bool') {
+                $result = is_bool($val);
+            } else {
+                throw new \RuntimeException("Programmer: Don't know how to validate for type `$type`!");
+            }
         } else {
-            throw new \RuntimeException("Programmer: Don't know how to validate for type `$type`!");
+            $result = !$required;
         }
 
         if ($result) {
@@ -28,43 +32,63 @@ trait ResourceValidationsTrait {
         }
     }
 
-    protected function validateAmong($field, $val, array $validOptions)
+    protected function validateAmong($field, $val, array $validOptions, $required = true)
     {
-        if (!in_array($val, $validOptions)) {
+        if ($val !== null) {
+            $result = in_array($val, $validOptions);
+        } else {
+            $result = !$required;
+        }
+
+        if ($result) {
+            $this->clearError($field, 'validAmongOptions');
+            return true;
+        } else {
             $this->setError($field, 'validAmongOptions', [
                 "title" => "Invalid Value for Field `$field`",
                 "detail" => "Field `$field` must be one of the accepted options: `".implode("`, `", $validOptions)."`"
             ]);
             return false;
-        } else {
-            $this->clearError($field, 'validAmongOptions');
-            return true;
         }
     }
 
-    protected function validateNumeric($field, $val)
+    protected function validateNumeric($field, $val, $required = true)
     {
-        if (!is_numeric($val)) {
+        if ($val !== null) {
+            $result = is_numeric($val);
+        } else {
+            $result = !$required;
+        }
+
+        if ($result) {
+            $this->clearError($field, 'numeric');
+            return true;
+        } else {
             $this->setError($field, 'numeric', [
                 "title" => "Invalid Attribute Value for `$field`",
                 "detail" => "The quanity you indicate for this value must be numeric"
             ]);
             return false;
-        } else {
-            $this->clearError($field, 'numeric');
-            return true;
         }
     }
 
-    protected function validateRelatedResourceExists($field, \CFX\JsonApi\ResourceInterface $r)
+    protected function validateRelatedResourceExists($field, \CFX\JsonApi\ResourceInterface $r, $required = true)
     {
-        try {
-            // Will throw error if resource is invalid
-            $r->initialize();
+        if ($r !== null) {
+            try {
+                $r->initialize();
+                $result = true;
+            } catch (ResourceNotFoundException $e) {
+                $result = false;
+            }
+        } else {
+            $result = !$required;
+        }
+
+        if ($result) {
             $this->clearError($field, 'exists');
             return true;
-
-        } catch (ResourceNotFoundException $e) {
+        } else {
             $this->setError($field, 'exists', [
                 "title" => "Invalid Relationship `$field`",
                 "detail" => "The `$field` you've indicated for this order is not currently in our system."

@@ -23,7 +23,7 @@ class LegalEntity extends \CFX\JsonApi\AbstractResource implements LegalEntityIn
 
     protected $relationships = [
         'primaryAddress' => null,
-        'idDocuments' => null,
+        'idDocs' => null,
     ];
 
 
@@ -99,9 +99,9 @@ class LegalEntity extends \CFX\JsonApi\AbstractResource implements LegalEntityIn
         return $this->_getRelationshipValue('primaryAddress');
     }
 
-    public function getIdDocuments()
+    public function getIdDocs()
     {
-        return $this->_getRelationshipValue('idDocuments');
+        return $this->_getRelationshipValue('idDocs');
     }
 
 
@@ -354,24 +354,24 @@ class LegalEntity extends \CFX\JsonApi\AbstractResource implements LegalEntityIn
         return $this->_setRelationship('primaryAddress', $val);
     }
 
-    public function setIdDocuments(\CFX\JsonApi\ResourceCollectionInterface $val = null)
+    public function setIdDocs(\CFX\JsonApi\ResourceCollectionInterface $val = null)
     {
-        return $this->_setRelationship('idDocuments', $val);
+        return $this->_setRelationship('idDocs', $val);
     }
 
-    public function addIdDocument(DocumentInterface $val)
+    public function addIdDoc(DocumentInterface $val)
     {
-        return $this->add2MRel('idDocuments', $val);
+        return $this->add2MRel('idDocs', $val);
     }
 
-    public function hasIdDocument(DocumentInterface $val)
+    public function hasIdDoc(DocumentInterface $val)
     {
-        return $this->has2MRel('idDocuments', $val);
+        return $this->has2MRel('idDocs', $val);
     }
 
-    public function removeIdDocument(DocumentInterface $val)
+    public function removeIdDoc(DocumentInterface $val)
     {
-        return $this->remove2MRel('idDocuments', $val);
+        return $this->remove2MRel('idDocs', $val);
     }
 
 

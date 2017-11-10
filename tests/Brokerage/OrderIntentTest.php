@@ -139,5 +139,15 @@ class OrderIntentTest extends \PHPUnit\Framework\TestCase
             $this->assertSame($val, $this->resource->$get());
         }
     }
+
+    public function testAgreement()
+    {
+        $this->markTestIncomplete();
+    }
+
+    public function testOwnershipDoc()
+    {
+        $this->markTestIncomplete();
+    }
 }
 
