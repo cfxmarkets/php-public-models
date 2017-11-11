@@ -11,6 +11,54 @@ class DocumentTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals('documents', $this->resource->getResourceType());
     }
 
+    /**
+     * This is to remind us to handle type changes gracefully, since mismatches between what's in the
+     * database and what's defined in the application can cause unexpected errors.
+     */
+    public function testValidTypes()
+    {
+        $types = [
+            'id' => "Proof of Identity",
+            'ownership' => "Proof of Ownership",
+            'agreement' => "Signed Contract",
+        ];
+
+        $appTypes = Document::getValidTypes();
+        $appKeys = array_keys($appTypes);
+        $appVals = array_values($appTypes);
+
+        $i = 0;
+        foreach($types as $k => $v) {
+            $this->assertEquals($appKeys[$i], $k);
+            $this->assertEquals($appVals[$i], $v);
+            $i++;
+        }
+    }
+
+    /**
+     * This is to remind us to handle status changes gracefully, since mismatches between what's in the
+     * database and what's defined in the application can cause unexpected errors.
+     */
+    public function testValidStatuses()
+    {
+        $statuses = [
+            0 => 'not-submitted',
+            1 => 'reviewing',
+            2 => 'approved',
+        ];
+
+        $appStatuses = Document::getValidStatuses();
+        $appKeys = array_keys($appStatuses);
+        $appVals = array_values($appStatuses);
+
+        $i = 0;
+        foreach($statuses as $k => $v) {
+            $this->assertEquals($appKeys[$i], $k);
+            $this->assertEquals($appVals[$i], $v);
+            $i++;
+        }
+    }
+
     public function testLabel() {
         $this->assertValid('label', [ null, '', 'My Document' ]);
     }
@@ -23,7 +71,7 @@ class DocumentTest extends \PHPUnit\Framework\TestCase
     }
 
     public function testUrl() {
-        $this->assertValid("url", [ "/valid/absolute/path.pdf", "https://somehost.com/valid/path.jpg", "https://somehost.com/my/photo/12344" ]);
+        $this->assertValid("url", [ "/valid/absolute/path.pdf", "https://somehost.com/valid/path.jpg", "https://somehost.com/my/photo/12344", "hellosign:1123453234123412341234" ]);
         $this->assertInvalid("url", [ null, '', 'bunk' ]);
         $this->assertChanged("url", "/my/photo.pdf", "attributes");
         $this->assertChains("url");
@@ -117,6 +165,8 @@ class DocumentTest extends \PHPUnit\Framework\TestCase
         $this->datasource->addClassToCreate("\\CFX\\Brokerage\\LegalEntity");
         $document = new Document($this->datasource, $data);
         $this->assertFalse($document->hasErrors());
+
+        $data['attributes']['status'] = 0;
         $this->assertEquals($data, json_decode(json_encode($document->getChanges()), true));
     }
 }

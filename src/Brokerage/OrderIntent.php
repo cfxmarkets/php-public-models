@@ -309,7 +309,7 @@ class OrderIntent extends \CFX\JsonApi\AbstractResource implements OrderIntentIn
     public function setAgreement(DocumentInterface $val = null)
     {
         if ($val) {
-            $this->validateRelatedResourceExists('agreement', $val);
+            //$this->validateRelatedResourceExists('agreement', $val);
         }
         return $this->_setRelationship('agreement', $val);
     }
@@ -317,7 +317,7 @@ class OrderIntent extends \CFX\JsonApi\AbstractResource implements OrderIntentIn
     public function setOwnershipDoc(DocumentInterface $val = null)
     {
         if ($val) {
-            $this->validateRelatedResourceExists('ownershipDoc', $val);
+            //$this->validateRelatedResourceExists('ownershipDoc', $val);
         }
         return $this->_setRelationship('ownershipDoc', $val);
     }

@@ -13,7 +13,7 @@ class Document extends \CFX\JsonApi\AbstractResource implements DocumentInterfac
         'label' => null,
 		'type' => null,
 		'url' => null,
-        'status' => null,
+        'status' => 0,
         'notes' => null,
 	];
 
@@ -40,10 +40,24 @@ class Document extends \CFX\JsonApi\AbstractResource implements DocumentInterfac
         'agreement' => "Signed Contract",
     ];
 
+    /**
+     * @var string[] A list of valid statuses
+     */
+    protected static $validStatuses = [
+        0 => 'not-submitted',
+        1 => 'reviewing',
+        2 => 'approved',
+    ];
+
 
 
     public static function getValidTypes() {
         return static::$validTypes;
+    }
+
+    public static function getValidStatuses()
+    {
+        return static::$validStatuses;
     }
 
 
@@ -115,7 +129,7 @@ class Document extends \CFX\JsonApi\AbstractResource implements DocumentInterfac
         $val = $this->cleanStringValue($val);
 
         if ($this->validateRequired('url', $val)) {
-            if (!preg_match("/^(?:https?:\/\/[\w]+[\w.-_]+)?\/.+$/", $val)) {
+            if (!preg_match("/^(?:https?:\/\/[\w]+[\w.-_]+)?\/.+$/", $val) && !preg_match("/^hellosign:.{20,}$/", $val)) {
 				$this->setError('url', 'valid', [
 					'title' => 'Invalid `url',
 					'detail' => 'You must send a valid value for attribute `url`. It should be in the following format, ex: [`http://www.url.com`] or [`https://www.url.com`].'
