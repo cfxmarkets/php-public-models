@@ -1,10 +1,9 @@
 <?php
 namespace CFX\Brokerage;
 
-class OrderIntent extends \KS\JsonApi\BaseResource implements OrderIntentInterface, DatasourceConsumerInterface {
-    use \KS\JsonApi\ValidationQueueTrait;
-
-    protected $db;
+class OrderIntent extends \CFX\JsonApi\AbstractResource implements OrderIntentInterface {
+    use \CFX\JsonApi\Rel2MTrait;
+    use \CFX\ResourceValidationsTrait;
 
     protected $resourceType = 'order-intents';
     protected $attributes = [
@@ -12,35 +11,76 @@ class OrderIntent extends \KS\JsonApi\BaseResource implements OrderIntentInterfa
         'numShares' => null,
         'priceHigh' => null,
         'priceLow' => null,
-        'status' => null,
+        'status' => 'new',
     ];
-    protected $relationships = ['user', 'asset', 'order' ];
-    protected $privateRelationships = [ 'apiKey' ];
-    protected $validTypes = ['sell', 'buy'];
+    protected $relationships = [
+        'user' => null,
+        'asset' => null,
+        'assetIntent' => null,
+        'assetOwner' => null,
+        'order' => null,
+        'bankAccount' => null,
+        'agreement' => null,
+        'ownershipDoc' => null,
+    ];
+
+    protected static $validTypes = ['sell', 'buy'];
+    protected static $validStatuses = [
+        'new',
+        'picked-up',
+        'reviewing',
+        'hold',
+        'pending',
+        'listed',
+        'sold',
+        'sold_closed',
+        'expired',
+        'cancelled',
+    ];
 
 
 
-    public function __construct(\KS\JsonApi\FactoryInterface $f, $data=null) {
-        $this->privateRelationships = [ 'apiKey' => $f->newJsonApiRelationship(['name' => 'apiKey']) ];
-        parent::__construct($f, $data);
+    public static function getValidTypes()
+    {
+        return static::$validTypes;
     }
 
-
-
+    public static function getValidStatuses()
+    {
+        return static::$validStatuses;
+    }
 
 
 
     // Getters
 
-    public function getType() { return $this->attributes['type']; }
-    public function getNumShares() { return $this->attributes['numShares']; }
-    public function getPriceHigh() { return $this->attributes['priceHigh']; }
-    public function getPriceLow() { return $this->attributes['priceLow']; }
-    public function getStatus() { return $this->attributes['status']; }
-    public function getUser() { return $this->relationships['user']->getData(); }
-    public function getAsset() { return $this->relationships['asset']->getData(); }
-    public function getOrder() { return $this->relationships['order']->getData(); }
-    public function getApiKey() { return $this->privateRelationships['apiKey']->getData(); }
+    public function getType() { return $this->_getAttributeValue('type'); }
+    public function getNumShares() { return $this->_getAttributeValue('numShares'); }
+    public function getPriceHigh() { return $this->_getAttributeValue('priceHigh'); }
+    public function getPriceLow() { return $this->_getAttributeValue('priceLow'); }
+    public function getStatus() { return $this->_getAttributeValue('status'); }
+    public function getUser() { return $this->_getRelationshipValue('user'); }
+    public function getAsset() { return $this->_getRelationshipValue('asset'); }
+    public function getAssetIntent() { return $this->_getRelationshipValue('assetIntent'); }
+    public function getAssetOwner()
+    {
+        return $this->_getRelationshipValue('assetOwner');
+    }
+    public function getOrder() { return $this->_getRelationshipValue('order'); }
+    public function getBankAccount()
+    {
+        return $this->_getRelationshipValue('bankAccount');
+    }
+
+    public function getAgreement()
+    {
+        return $this->_getRelationshipValue('agreement');
+    }
+
+    public function getOwnershipDoc()
+    {
+        return $this->_getRelationshipValue('ownershipDoc');
+    }
 
 
 
@@ -49,282 +89,237 @@ class OrderIntent extends \KS\JsonApi\BaseResource implements OrderIntentInterfa
     // Setters
 
     public function setType($val) {
-        if ($val && $this->attributes['type'] == $val) return;
-        if (!$this->validateStatusActive()) return false;
+        if ($this->validateStatusActive('type')) {
+            $val = $this->cleanStringValue($val);
 
-        $prevVal = $this->attributes['type'];
-        $this->attributes['type'] = $val;
-
-        if ($prevVal !== null && $val != $prevVal) {
-            $this->setError('type', 'immutable', $this->f->newJsonApiError([
-                'status' => 400,
-                'title' => 'Immutable Attribute `type`',
-                'detail' => 'The `type` attribute can\'t be changed, once set. If you need to change the type of this intent, please delete this intent and create a new one.',
-            ]));
-        } else {
-            $this->clearError('type', 'immutable');
-
-            if (!$val) {
-                $this->setError('type', 'required', $this->f->newJsonApiError([
-                    "status" => 400,
-                    "title" => "Required Attribute `type` Missing",
-                    "detail" => "You must indicate the type of order this is. Valid order types are '".implode("', '", $this->validTypes)."'."
-                ]));
+            $initial = $this->getInitial('type');
+            if ($initial !== null && $val !== $initial) {
+                $this->setError('type', 'immutable', [
+                    'title' => 'Immutable Attribute `type`',
+                    'detail' => 'The `type` attribute can\'t be changed, once set. If you need to change the type of this intent, please delete this intent and create a new one.',
+                ]);
             } else {
-                $this->clearError('type', 'required');
+                $this->clearError('type', 'immutable');
 
-                if (!in_array($val, $this->validTypes)) {
-                    $this->setError('type', 'valid', $this->f->newJsonApiError([
-                        "status" => 400,
-                        "title" => "Invalid Attribute Value for `type`",
-                        "detail" => "Valid order types are '".implode("', '", $this->validTypes)."'. The type you've indicated is '{$val}'."
-                    ]));
-                } else {
-                    $this->clearError('type', 'valid');
+                if ($this->validateRequired('type', $val)) {
+                    $this->validateAmong('type', $val, $this::getValidTypes());
                 }
             }
         }
 
-        return $this;
+        return $this->_setAttribute('type', $val);
     }
 
 
     public function setNumShares($val) {
-        if ($val && $this->attributes['numShares'] == $val) return;
-        if (!$this->validateStatusActive()) return false;
+        if ($this->validateStatusActive('numShares')) {
+            $val = $this->cleanNumberValue($val);
 
-        $this->attributes['numShares'] = $val;
-
-        if ($val === null || $val === '') {
-            $this->setError('numShares', 'required', $this->f->newJsonApiError([
-                "status" => 400,
-                "title" => "Required Attribute `numShares` Missing",
-                "detail" => "You must indicated a quantity for this order."
-            ]));
-        } else {
-            $this->clearError('numShares', 'required');
-
-            if (!is_numeric($this->getNumShares())) {
-                $this->setError('numShares', 'numeric', $this->f->newJsonApiError([
-                    "status" => 400,
-                    "title" => "Invalid Attribute Value for `numShares`",
-                    "detail" => "The quanity you indicate for this order must be numeric"
-                ]));
-            } else {
-                $this->clearError('numShares', 'numeric');
-
-                if ($this->getNumShares() < 1) {
-                    $this->setError('numShares', 'qty', $this->f->newJsonApiError([
-                        "status" => 400,
-                        "title" => "Invalid Attribute Value for `numShares`",
-                        "detail" => "You can't enter orders for less than a single share on our system."
-                    ]));
-                } else {
-                    $this->clearError('numShares', 'qty');
+            if ($this->validateRequired('numShares', $val)) {
+                if ($this->validateNumeric('numShares', $val)) {
+                    if ($val < 1) {
+                        $this->setError('numShares', 'qty', [
+                            "title" => "Invalid Attribute Value for `numShares`",
+                            "detail" => "You can't enter orders for less than a single share on our system."
+                        ]);
+                    } else {
+                        $this->clearError('numShares', 'qty');
+                    }
                 }
             }
         }
 
-        return $this;
+        return $this->_setAttribute('numShares', $val);
     }
 
 
     public function setPriceHigh($val) {
-        if ($val && $this->attributes['priceHigh'] == $val) return;
-        if (!$this->validateStatusActive()) return false;
+        if ($this->validateStatusActive('priceHigh')) {
+            $val = $this->cleanNumberValue($val);
+            $this->validatePrice('priceHigh', $val, true);
+        }
 
-        $this->attributes['priceHigh'] = $val;
-        if ($this->getType() == 'sell') $this->validatePrice('priceHigh', true);
-        else $this->validatePrice('priceHigh', false);
-        return $this;
+        return $this->_setAttribute('priceHigh', $val);
     }
 
 
     public function setPriceLow($val) {
-        if ($val && $this->attributes['priceLow'] == $val) return;
-        if (!$this->validateStatusActive()) return false;
+        if ($this->validateStatusActive('priceLow')) {
+            $val = $this->cleanNumberValue($val);
+            $this->validatePrice('priceLow', $val, false);
+        }
 
-        $this->attributes['priceLow'] = $val;
-        if ($this->getType() == 'buy') $this->validatePrice('priceLow', true);
-        else $this->validatePrice('priceLow', false);
-        return $this;
+        return $this->_setAttribute('priceLow', $val);
     }
 
 
     public function setStatus($val) {
-        if ($val && $this->attributes['status'] == $val) return;
-        if (!$this->validateStatusActive()) return false;
-
-        if ($this->getStatus()) {
-            if (!$val || $this->getAsset()->getId() != $asset->getId()) {
-                $this->setError('asset', 'immutable', $this->f->newJsonApiError([
-                    "title" => "Immutable Relationship `asset`",
-                    "detail" => "You cannot edit the `asset` relationship of an intent. If you'd like to change the asset, you should delete this intent using the DELETE /exchange/api/v2/order-intents/".$this->getId()." endpoint and then create a new one",
-                    "status" => 400
-                ]));
-                return;
-            } else {
-                $this->clearError('asset', 'immutable');
-            }
+        if ($this->validateReadOnly('status', $val)) {
+            $this->validateAmong('status', $val, $this::getValidStatuses());
+            $this->_setAttribute('status', $val);
         }
-
-        $this->attributes['status'] = $val;
-
         return $this;
     }
 
 
-    public function setUser(SiteUserInterface $user=null) {
-        if ($user && $this->getUser() && $this->getUser()->getId() == $user->getId()) return;
-        if (!$this->validateStatusActive()) return false;
-           
-        // User is immutable
-        if ($this->getUser()) {
-            if (!$user || $this->getUser()->getId() != $user->getId()) {
-                $this->setError('user', 'immutable', $this->f->newJsonApiError([
-                    "title" => "Immutable Relationship `user`",
-                    "detail" => "You cannot edit the `user` relationship of an order intent. If you'd like to change the user, you should delete this intent using the DELETE /exchange/api/v2/order-intents/".$this->getId()." endpoint and then create a new one",
-                    "status" => 400
-                ]));
-                return;
-            } else {
-                $this->clearError('user', 'immutable');
-            }
-        }
-
-        $this->relationships['user']->setData($user);
-
-        if (!$user) {
-            $this->setError('user', 'required', $this->f->newJsonApiError([
-                "status" => 400,
-                "title" => "Required Relationship `user` Missing",
-                "detail" => "You must associate this Order Intent with a user"
-            ]));
-        } else {
-            $this->clearError('user', 'required');
-
-            if (!$this->db) $this->queueRelationshipValidation('user', 'db');
-            else {
-                $user = $this->db->getSiteUserById($user->getId());
-                if (!$user) {
-                    $this->setError('user', 'valid', $this->f->newJsonApiError([
-                        "status" => 400,
-                        "title" => "Invalid Relationship `user`",
-                        "detail" => "The user you've specified doesn't appear to be in our database."
-                    ])); 
+    public function setUser(UserInterface $user=null) {
+        if ($this->validateStatusActive('user')) {
+            if ($this->validateRequired('user', $user)) {
+                // User is immutable
+                if ($this->getInitial('user') && $this->valueDiffersFromInitial('user', $user)) {
+                    $this->setError('user', 'immutable', [
+                        "title" => "Immutable Relationship `user`",
+                        "detail" => "You cannot edit the `user` relationship of an order intent. If you'd like to change the user, you should delete this intent using the DELETE /exchange/api/v2/order-intents/".$this->getId()." endpoint and then create a new one",
+                    ]);
                 } else {
-                    $this->clearError('user', 'valid');
+                    $this->clearError('user', 'immutable');
+
+                    try {
+                        $user->initialize();
+                        $this->clearError('user', 'valid');
+                    } catch (\CFX\Persistence\ResourceNotFoundException $e) {
+                        $this->setError('user', 'valid', [
+                            "title" => "Invalid Relationship `user`",
+                            "detail" => "The user you've specified doesn't appear to be in our database."
+                        ]); 
+                    }
                 }
             }
         }
 
-        return $this;
+        return $this->_setRelationship('user', $user);
     }
 
 
-    public function setApiKey(ApiKeyInterface $val=null) {
-        if ($val && $this->getApiKey() && $this->getApiKey()->getId() == $val->getId()) return;
-        if (!$this->validateStatusActive()) return false;
 
-        if ($this->getApiKey()) {
-            if (!$val || $this->getApiKey()->getId() != $val->getId()) {
-                $this->setError('apiKey', 'immutable', $this->f->newJsonApiError([
-                    "title" => "Immutable Relationship `apiKey`",
-                    "detail" => "You cannot edit the `apikey` relationship of an intent. If you'd like to change the api key, you should delete this intent using the DELETE /exchange/api/v2/order-intents/".$this->getId()." endpoint and then create a new one",
-                    "status" => 400
-                ]));
-                return;
+
+    public function setAsset(\CFX\Exchange\AssetInterface $asset=null) {
+        if ($this->validateStatusActive('asset')) {
+            if ($this->getInitial('asset') && $this->valueDiffersFromInitial('asset', $asset)) {
+                $this->setError('asset', 'immutable', [
+                    'title' => 'Immutable Relationship `asset`',
+                    'detail' => "You can only set `asset` once. If you made a mistake and would like to change the asset, you should delete this ".
+                        "order intent and create a new one.",
+                ]);
             } else {
-                $this->clearError('apiKey', 'immutable');
-            }
-        }
+                $this->clearError('asset','immutable');
 
-        $this->privateRelationships['apiKey']->setData($val);
+                if (!$asset) {
+                    if (!$this->getAssetIntent()) {
+                        $this->setError('assetOrAssetIntent', 'required', [
+                            'title' => 'Asset or AssetIntent Required',
+                            'detail' => 'You must set either and Asset or an AssetIntent for this order intent to be valid.',
+                        ]);
+                    } else {
+                        $this->clearError('assetOrAssetIntent', 'required');
+                    }
+                } else {
+                    $this->clearError('assetOrAssetIntent', 'required');
 
-        if (!$val) {
-            $this->setError('apiKey', "required", $this->f->newJsonApiError([
-                "status" => 400,
-                "title" => "Required Relationship `apiKey` Missing",
-                "detail" => "You must indicate an api key for this order."
-            ]));
-        } else {
-            $this->clearError('apiKey', 'required');
-
-            if (!$this->db) $this->queueRelationshipValidation('apiKey', 'db');
-            else {
-                try {
-                    // Will throw error if asset is invalid
-                    $this->db->getApiKeyById($val->getId());
-                    $this->clearError('apiKey', 'valid');
-                } catch (ResourceNotFoundException $e) {
-                    $this->setError('apiKey', 'valid', $this->f->newJsonApiError([
-                        "status" => 400,
-                        "title" => "Invalid Relationship `asset`",
-                        "detail" => "The apiKey you've indicated for this order is not currently in our system. This is likely a bug in our code, which you can report to `support@cfxtrading.com`."
-                    ]));
+                    if ($this->getAssetIntent()) {
+                        $this->setError('assetOrAssetIntent', 'duplicate', [
+                            'title' => "Conflicting Asset and AssetIntent",
+                            "detail" => "You can't have both an asset and an asset intent for this order intent to be valid.",
+                        ]);
+                    } else {
+                        $this->clearError('assetOrAssetIntent', 'duplicate');
+                        $this->validateRelatedResourceExists('asset', $asset);
+                        // Should add considerations for asset status (non-tradable assets shouldn't be valid)
+                    }
                 }
             }
         }
 
-        return $this;
+        return $this->_setRelationship('asset', $asset);
     }
 
 
-
-    public function setAsset(\CFX\AssetInterface $asset=null) {
-        if (!$this->validateStatusActive()) return false;
-
-        if ($this->getAsset()) {
-            if (!$asset || $this->getAsset()->getId() != $asset->getId()) {
-                $this->setError('asset', 'immutable', $this->f->newJsonApiError([
-                    "title" => "Immutable Relationship `asset`",
-                    "detail" => "You cannot edit the `asset` relationship of an intent. If you'd like to change the asset, you should delete this intent using the DELETE /exchange/api/v2/order-intents/".$this->getId()." endpoint and then create a new one",
-                    "status" => 400
-                ]));
-                return;
+    public function setAssetIntent(\CFX\Brokerage\AssetIntentInterface $assetIntent=null) {
+        if ($this->validateStatusActive('assetIntent')) {
+            if ($this->getInitial('assetIntent') !== null && $this->valueDiffersFromInitial('assetIntent', $assetIntent)) {
+                $this->setError('assetIntent', 'immutable', [
+                    'title' => 'Immutable Relationship `assetIntent`',
+                    'detail' => "You can only set `assetIntent` once. If you made a mistake and would like to change the assetIntent, you should delete this ".
+                        "order intent and create a new one.",
+                ]);
             } else {
-                $this->clearError('asset', 'immutable');
-            }
-        }
+                $this->clearError('assetIntent','immutable');
 
-        $this->relationships['asset']->setData($asset);
+                if (!$assetIntent) {
+                    if (!$this->getAsset()) {
+                        $this->setError('assetOrAssetIntent', 'required', [
+                            'title' => 'Asset or AssetIntent Required',
+                            'detail' => 'You must set either and Asset or an AssetIntent for this order intent to be valid.',
+                        ]);
+                    } else {
+                        $this->clearError('assetOrAssetIntent', 'required');
+                    }
+                } else {
+                    $this->clearError('assetOrAssetIntent', 'required');
 
-        if (!$asset) {
-            $this->setError('asset', "required", $this->f->newJsonApiError([
-                "status" => 400,
-                "title" => "Required Relationship `asset` Missing",
-                "detail" => "You must indicate an asset for this order."
-            ]));
-        } else {
-            $this->clearError('asset', 'required');
-
-            if (!$this->db) $this->queueRelationshipValidation('asset', 'db');
-            else {
-                try {
-                    // Will throw error if asset is invalid
-                    $this->db->getAssetById($asset->getId());
-                    $this->clearError('asset', 'valid');
-
-                    // Should add considerations for asset status (non-tradable assets shouldn't be valid)
-                } catch (ResourceNotFoundException $e) {
-                    $this->setError('asset', 'valid', $this->f->newJsonApiError([
-                        "status" => 400,
-                        "title" => "Invalid Relationship `asset`",
-                        "detail" => "The asset you've indicated for this order is not currently in our system. If you've submitted this asset via an Asset Intent, it may not be fully processed yet. Check the intent's status and try again. Alternatively, you can create a new Asset Intent to request that we create this asset for you by POSTing to `/exchange/api/asset-intents`."
-                    ]));
+                    if ($this->getAsset()) {
+                        $this->setError('assetOrAssetIntent', 'duplicate', [
+                            'title' => "Conflicting Asset and AssetIntent",
+                            "detail" => "You can't have both an assetIntent and an assetIntent intent for this order intent to be valid.",
+                        ]);
+                    } else {
+                        $this->clearError('assetOrAssetIntent', 'duplicate');
+                        $this->validateRelatedResourceExists('assetIntent', $assetIntent);
+                    }
                 }
             }
         }
 
-        return $this;
+        return $this->_setRelationship('assetIntent', $assetIntent);
     }
 
 
+    public function setAssetOwner(\CFX\Brokerage\LegalEntityInterface $owner = null)
+    {
+        if ($this->validateStatusActive('assetOwner')) {
+            if ($owner) {
+                $this->validateRelatedResourceExists('assetOwner', $owner);
+            }
+        }
+        return $this->_setRelationship('assetOwner', $owner);
+    }
 
-    public function setOrder(\CFX\Brokerage\OrderInterface $order=null) {
-        //TODO: Flesh this out
-        $this->relationships['order']->setData($order);
-        return $this;
+
+    public function setOrder(\CFX\Exchange\OrderInterface $order=null) {
+        if ($this->validateReadOnly('order', $order)) {
+            if (!$this->validateStatusActive('order')) {
+                if ($order) {
+                    $this->validateRelatedResourceExists('order', $order);
+                }
+            }
+        }
+        return $this->_setRelationship('order', $order);
+    }
+
+    public function setBankAccount(\CFX\Brokerage\BankAccountInterface $bankAccount = null)
+    {
+        if ($this->validateStatusActive('bankAccount')) {
+            if ($bankAccount) {
+                $this->validateRelatedResourceExists('bankAccount', $bankAccount);
+            }
+        }
+        return $this->_setRelationship('bankAccount', $bankAccount);
+    }
+
+    public function setAgreement(DocumentInterface $val = null)
+    {
+        if ($val) {
+            //$this->validateRelatedResourceExists('agreement', $val);
+        }
+        return $this->_setRelationship('agreement', $val);
+    }
+
+    public function setOwnershipDoc(DocumentInterface $val = null)
+    {
+        if ($val) {
+            //$this->validateRelatedResourceExists('ownershipDoc', $val);
+        }
+        return $this->_setRelationship('ownershipDoc', $val);
     }
 
 
@@ -335,82 +330,52 @@ class OrderIntent extends \KS\JsonApi\BaseResource implements OrderIntentInterfa
 
     // Custom validators
 
-    protected function validatePrice($which, $required) {
-        $price = $this->attributes[$which];
+    protected function validatePrice($field, $val, $required) {
         if ($required) {
-            if ($price === null || $price === '') {
-                $this->setError($which, 'required', $this->f->newJsonApiError([
-                    "status" => 400,
-                    "title" => "Required Attribute `$which` Missing",
-                    "detail" => "You must indicate a high price for this order. (If this is a sell order, this would be the *asking price*; if it's a buy order, this would be the *maximum bid*.)"
-                ]));
-            } else {
-                $this->clearError($which, 'required');
+            if (!$this->validateRequired($field, $val)) {
+                return false;
             }
         }
 
-        if ($price !== null && $price !== '') {
-            if (!is_numeric($price)) {
-                $this->setError($which, 'numeric', $this->f->newJsonApiError([
-                    "status" => 400,
-                    "title" => "Invalid Attribute Value for `$which`",
-                    "detail" => "Price must be numeric"
-                ]));
-            } else {
-                $this->clearError($which, 'numeric');
+        if ($val !== null && $val !== '') {
+            if (!$this->validateNumeric($field, $val)) {
+                return false;
+            }
 
-                if ($price <= 0) {
-                    $this->setError($which, 'gtzero', $this->f->newJsonApiError([
-                        "status" => 400,
-                        "title" => "Invalid Attribute Value for `$which`",
-                        "detail" => 'Price must be greater than 0'
-                    ]));
-                } else {
-                    $this->clearError($which, 'gtzero');
-                }
+            if ($val <= 0) {
+                $this->setError($field, 'gtzero', [
+                    "title" => "Invalid Attribute Value for `$field`",
+                    "detail" => 'Price must be greater than 0'
+                ]);
+                return false;
+            } else {
+                $this->clearError($field, 'gtzero');
             }
         }
+
+        return true;
     }
 
 
-    protected function validateStatusActive() {
+    protected function validateStatusActive($field) {
         $passedStates = [
             'listed' => ["Sale In Progress", "This intent has already passed to listing phase and cannot be altered"],
             'sold' => ["Item Already Sold", "This intent has already been successfully executed and sold and cannot be altered"],
-            'closed' => ["Item Closed", "This intent has been closed and cannot be altered"],
+            'sold_closed' => ["Item Closed", "This intent has been closed and cannot be altered"],
             'expired' => ["Item Expired", "This intent has expired and cannot be altered"],
             'cancelled' => ["Item Cancelled", "This intent has been cancelled and cannot be altered"],
         ];
 
         if (in_array($this->getStatus(), array_keys($passedStates))) {
-            $this->setError('object', 'immutable', $this->f->newJsonApiError([
-                "status" => 400,
+            $this->setError($field, 'immutableStatus', [
                 "title" => "Order Intent Not Alterable",
-                "detail" => $passedStatus[$this->getStatus()],
-            ]));
+                "detail" => $passedStates[$this->getStatus()],
+            ]);
             return false;
         } else {
-            $this->clearError('object', 'immutable');
+            $this->clearError($field, 'immutableStatus');
             return true;
         }
-    }
-
-
-
-
-    public function setDatasource(DatasourceInterface $db) {
-        $this->db = $db;
-        $this->releaseValidationQueue('db');
-        return $this;
-    }
-
-
-
-    // Interface implementations
-
-    public function fetch(DatasourceInterface $db) {
-        throw new UnimplementedFeatureException("`fetch` is not yet implemented for OrderIntents.");
-        $this->setDatasource($db);
     }
 }
 

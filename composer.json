@@ -10,8 +10,8 @@
         }
     ],
     "require" : {
-        "php" : ">=5.4.0 <7",
-        "cfxmarkets/php-cfx-framework": "dev-master"
+        "php" : ">=5.4.0",
+        "cfxmarkets/php-jsonapi-objects": "~1.1.0"
     },
     "require-dev" : {
         "phpunit/phpunit" : "~4.8.0",
@@ -22,22 +22,31 @@
             "CFX\\" : "src/"
         },
         "files": [
-            "src/Exceptions.php"
         ]
+    },
+    "autoload-dev" : {
+        "psr-4" : {
+            "CFX\\" : "tests/"
+        }
     },
     "repositories" : [
         {
             "type": "git",
-            "url": "https://github.com/cfxmarkets/php-jsonapi-objects.git"
+            "url": "https://github.com/cfxmarkets/php-jsonapi-objects"
         },
         {
             "type": "git",
-            "url": "https://github.com/cfxmarkets/php-jsonapi-transport.git"
+            "url": "https://github.com/cfxmarkets/php-std-traits.git"
         },
         {
             "type": "git",
             "url": "https://github.com/kael-shipman/psr7.git"
         }
-    ]
+    ],
+    "extra": {
+        "branch-alias": {
+            "dev-v1.x": "v1.x-dev"
+        }
+    }
 }
 

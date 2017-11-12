@@ -1,7 +1,7 @@
 <?php
-namespace CFX;
+namespace CFX\Exchange;
 
-class Asset extends BaseResource implements AssetInterface {
+class Asset extends \CFX\JsonApi\AbstractResource implements AssetInterface {
     protected $resourceType = 'assets';
     protected $attributes = [
         'issuer' => null,
@@ -13,27 +13,12 @@ class Asset extends BaseResource implements AssetInterface {
     ];
     protected $relationships = [];
 
-    public static function fromV1(FactoryInterface $f, $asset) {
-        $data = [
-            'id' => $asset['asset_symbol'],
-            'attributes' => [
-                'issuer' => $asset['issuer_ident'],
-                'name' => $asset['asset_name'],
-                'type' => $asset['asset_type'],
-                'statusCode' => $asset['asset_status'],
-                'statusText' => $asset['asset_status_text'],
-                'description' => $asset['asset_description'],
-            ]
-        ];
-        return new static($f, $data);
-    }
-
-    public function getIssuer() { return $this->attributes['issuer']; }
-    public function getName() { return $this->attributes['name']; }
-    public function getType() { return $this->attributes['type']; }
-    public function getStatusCode() { return $this->attributes['statusCode']; }
-    public function getStatusText() { return $this->attributes['statusText']; }
-    public function getDescription() { return $this->attributes['description']; }
+    public function getIssuer() { return $this->_getAttributeValue('issuer'); }
+    public function getName() { return $this->_getAttributeValue('name'); }
+    public function getType() { return $this->_getAttributeValue('type'); }
+    public function getStatusCode() { return $this->_getAttributeValue('statusCode'); }
+    public function getStatusText() { return $this->_getAttributeValue('statusText'); }
+    public function getDescription() { return $this->_getAttributeValue('description'); }
 
     public function setIssuer($val) {
         $this->attributes['issuer'] = $val;

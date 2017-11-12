@@ -1,17 +1,12 @@
 <?php
-namespace CFX;
+namespace CFX\Exchange;
 
 /**
  * AssetInterface
  *
  * An interface describing a modern CFX Brokerage Asset object
  */
-interface AssetInterface extends BaseResourceInterface {
-    /**
-     * Translate $oldObj into the resource on which this method is defined.
-     */
-    static function fromV1(FactoryInterface $f, $oldObj);
-
+interface AssetInterface extends \CFX\JsonApi\ResourceInterface {
     // Getters
 
     public function getIssuer();

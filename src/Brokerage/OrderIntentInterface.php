@@ -1,7 +1,7 @@
 <?php
 namespace CFX\Brokerage;
 
-interface OrderIntentInterface extends BaseResourceInterface {
+interface OrderIntentInterface extends \CFX\JsonApi\ResourceInterface {
     // Getters
     public function getType();
     public function getNumShares();
@@ -10,6 +10,11 @@ interface OrderIntentInterface extends BaseResourceInterface {
     public function getStatus();
     public function getUser();
     public function getAsset();
+    public function getAssetIntent();
+    public function getAssetOwner();
+    public function getBankAccount();
+    public function getAgreement();
+    public function getOwnershipDoc();
 
     // Setters
     public function setType($val);
@@ -17,8 +22,13 @@ interface OrderIntentInterface extends BaseResourceInterface {
     public function setPriceHigh($val);
     public function setPriceLow($val);
     public function setStatus($val);
-    public function setUser(SiteUserInterface $user=null);
-    public function setAsset(\CFX\AssetInterface $asset=null);
+    public function setUser(UserInterface $user=null);
+    public function setAsset(\CFX\Exchange\AssetInterface $asset=null);
+    public function setAssetIntent(\CFX\Brokerage\AssetIntentInterface $asset=null);
+    public function setAssetOwner(LegalEntityInterface $owner = null);
+    public function setBankAccount(BankAccountInterface $bankAccount = null);
+    public function setAgreement(DocumentInterface $val = null);
+    public function setOwnershipDoc(DocumentInterface $val = null);
 }
 
 

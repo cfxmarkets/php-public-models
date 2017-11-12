@@ -1,7 +1,7 @@
 <?php
 namespace CFX\Brokerage;
 
-class AssetIntent extends \KS\JsonApi\BaseResource implements AssetIntentInterface {
+class AssetIntent extends \CFX\JsonApi\AbstractResource implements AssetIntentInterface {
     protected $resourceType = 'asset-intents';
     protected $attributes = [
         'symbol' => null,
@@ -19,33 +19,31 @@ class AssetIntent extends \KS\JsonApi\BaseResource implements AssetIntentInterfa
         'initialSharePrice' => null,
         'holdingPeriod' => null,
         'comments' => null,
-        'status' => null,
+        'status' => 'new',
     ];
-    protected $relationships = ['asset' ];
-    protected $privateRelationships = [];
+    protected $relationships = ['asset' => null ];
 
 
 
     // Getters
 
-    public function getSymbol() { return $this->attributes['symbol']; }
-    public function getName() { return $this->attributes['name']; }
-    public function getDescription() { return $this->attributes['description']; }
-    public function getAssetType() { return $this->attributes['assetType']; }
-    public function getFinanceType() { return $this->attributes['financeType']; }
-    public function getExemptionType() { return $this->attributes['exemptionType']; }
-    public function getEdgarNum() { return $this->attributes['edgarNum']; }
-    public function getCusipNum() { return $this->attributes['cusipNum']; }
-    public function getSharesOutstanding() { return $this->attributes['sharesOutstanding']; }
-    public function getOfferAmount() { return $this->attributes['offerAmount']; }
-    public function getDateOpened() { return $this->attributes['dateOpened']; }
-    public function getDateClosed() { return $this->attributes['dateClosed']; }
-    public function getInitialSharePrice() { return $this->attributes['initialSharePrice']; }
-    public function getHoldingPeriod() { return $this->attributes['holdingPeriod']; }
-    public function getComments() { return $this->attributes['comments']; }
-    public function getStatus() { return $this->attributes['status']; }
-    public function getAsset() { return $this->relationships['asset']->getData(); }
-    public function getPartner() { return array_key_exists('partner', $this->privateRelationships) ? $this->privateRelationships['partner']->getData() : null; }
+    public function getSymbol() { return $this->_getAttributeValue('symbol'); }
+    public function getName() { return $this->_getAttributeValue('name'); }
+    public function getDescription() { return $this->_getAttributeValue('description'); }
+    public function getAssetType() { return $this->_getAttributeValue('assetType'); }
+    public function getFinanceType() { return $this->_getAttributeValue('financeType'); }
+    public function getExemptionType() { return $this->_getAttributeValue('exemptionType'); }
+    public function getEdgarNum() { return $this->_getAttributeValue('edgarNum'); }
+    public function getCusipNum() { return $this->_getAttributeValue('cusipNum'); }
+    public function getSharesOutstanding() { return $this->_getAttributeValue('sharesOutstanding'); }
+    public function getOfferAmount() { return $this->_getAttributeValue('offerAmount'); }
+    public function getDateOpened() { return $this->_getAttributeValue('dateOpened'); }
+    public function getDateClosed() { return $this->_getAttributeValue('dateClosed'); }
+    public function getInitialSharePrice() { return $this->_getAttributeValue('initialSharePrice'); }
+    public function getHoldingPeriod() { return $this->_getAttributeValue('holdingPeriod'); }
+    public function getComments() { return $this->_getAttributeValue('comments'); }
+    public function getStatus() { return $this->_getAttributeValue('status'); }
+    public function getAsset() { return $this->_getRelationshipValue('asset'); }
 
 
 
@@ -55,14 +53,17 @@ class AssetIntent extends \KS\JsonApi\BaseResource implements AssetIntentInterfa
     // Setters
 
     public function setSymbol($val=null) {
-        $this->attributes['symbol'] = $val;
+        $this->validateStatus();
+        $this->_setAttribute('symbol', $val);
         return $this;
     }
     public function setName($val=null) {
-        $this->attributes['name'] = $val;
+        $this->_setAttribute('name', $val);
+
+        if (!$this->validateStatus()) return $this;
 
         if (!$val) {
-            $this->setError('name', 'required', $this->f->newJsonApiError([
+            $this->setError('name', 'required', $this->getFactory()->newError([
                 "status" => 400,
                 "title" => "Required Attribute `name` Missing",
                 "detail" => "You must provide a name for the asset you're intending to create."
@@ -74,36 +75,44 @@ class AssetIntent extends \KS\JsonApi\BaseResource implements AssetIntentInterfa
         return $this;
     }
     public function setDescription($val=null) {
-        $this->attributes['description'] = $val;
+        $this->validateStatus();
+        $this->_setAttribute('description', $val);
         return $this;
     }
     public function setAssetType($val=null) {
-        $this->attributes['assetType'] = $val;
+        $this->validateStatus();
+        $this->_setAttribute('assetType', $val);
         return $this;
     }
     public function setFinanceType($val=null) {
-        $this->attributes['financeType'] = $val;
+        $this->validateStatus();
+        $this->_setAttribute('financeType', $val);
         return $this;
     }
     public function setExemptionType($val=null) {
-        $this->attributes['exemptionType'] = $val;
+        $this->validateStatus();
+        $this->_setAttribute('exemptionType', $val);
         return $this;
     }
     public function setEdgarNum($val=null) {
-        $this->attributes['edgarNum'] = $val;
+        $this->validateStatus();
+        $this->_setAttribute('edgarNum', $val);
         return $this;
     }
     public function setCusipNum($val=null) {
-        $this->attributes['cusipNum'] = $val;
+        $this->validateStatus();
+        $this->_setAttribute('cusipNum', $val);
         return $this;
     }
     public function setSharesOutstanding($val=null) {
         if (is_numeric($val)) $val = (int)$val;
-        $this->attributes['sharesOutstanding'] = $val;
+        $this->_setAttribute('sharesOutstanding', $val);
+
+        if (!$this->validateStatus()) return $this;
 
         if ($val && !is_int($val)) {
-            $this->setError('sharesOutstanding', 'integer', $this->f->newJsonApiError([
-                "status" => 400,
+            $this->setError('sharesOutstanding', 'integer', $this->getFactory()->newError([
+                "status" => 401,
                 "title" => "Invalid Attribute Value for `sharesOutstanding`",
                 "detail" => "`sharesOutstanding` must be an integer or null."
             ]));
@@ -115,10 +124,12 @@ class AssetIntent extends \KS\JsonApi\BaseResource implements AssetIntentInterfa
     }
     public function setOfferAmount($val=null) {
         if (is_numeric($val)) $val = (int)$val;
-        $this->attributes['offerAmount'] = $val;
+        $this->_setAttribute('offerAmount', $val);
+
+        if (!$this->validateStatus()) return $this;
 
         if ($val && !is_int($val)) {
-            $this->setError('offerAmount', 'integer', $this->f->newJsonApiError([
+            $this->setError('offerAmount', 'integer', $this->getFactory()->newError([
                 "status" => 400,
                 "title" => "Invalid Attribute Value for `offerAmount`",
                 "detail" => "`offerAmount` must be an integer or null."
@@ -131,10 +142,12 @@ class AssetIntent extends \KS\JsonApi\BaseResource implements AssetIntentInterfa
     }
     public function setDateOpened($val=null) {
         if (is_numeric($val)) $val = (int)$val;
-        $this->attributes['dateOpened'] = $val;
+        $this->_setAttribute('dateOpened', $val);
+
+        if (!$this->validateStatus()) return $this;
 
         if ($val && !is_int($val)) {
-            $this->setError('dateOpened', 'integer', $this->f->newJsonApiError([
+            $this->setError('dateOpened', 'integer', $this->getFactory()->newError([
                 "status" => 400,
                 "title" => "Invalid Attribute Value for `dateOpened`",
                 "detail" => "`dateOpened` must be an integer or null."
@@ -147,10 +160,12 @@ class AssetIntent extends \KS\JsonApi\BaseResource implements AssetIntentInterfa
     }
     public function setDateClosed($val=null) {
         if (is_numeric($val)) $val = (int)$val;
-        $this->attributes['dateClosed'] = $val;
+        $this->_setAttribute('dateClosed', $val);
+
+        if (!$this->validateStatus()) return $this;
 
         if ($val && !is_int($val)) {
-            $this->setError('dateClosed', 'integer', $this->f->newJsonApiError([
+            $this->setError('dateClosed', 'integer', $this->getFactory()->newError([
                 "status" => 400,
                 "title" => "Invalid Attribute Value for `dateClosed`",
                 "detail" => "`dateClosed` must be an integer or null."
@@ -163,10 +178,12 @@ class AssetIntent extends \KS\JsonApi\BaseResource implements AssetIntentInterfa
     }
     public function setInitialSharePrice($val=null) {
         if (is_numeric($val)) $val = (float)$val;
-        $this->attributes['initialSharePrice'] = $val;
+        $this->_setAttribute('initialSharePrice', $val);
+
+        if (!$this->validateStatus()) return $this;
 
         if ($val && !is_float($val)) {
-            $this->setError('initialSharePrice', 'float', $this->f->newJsonApiError([
+            $this->setError('initialSharePrice', 'float', $this->getFactory()->newError([
                 "status" => 400,
                 "title" => "Invalid Attribute Value for `initialSharePrice`",
                 "detail" => "`initialSharePrice` must be an float or null."
@@ -178,51 +195,43 @@ class AssetIntent extends \KS\JsonApi\BaseResource implements AssetIntentInterfa
         return $this;
     }
     public function setHoldingPeriod($val=null) {
-        $this->attributes['holdingPeriod'] = $val;
+        $this->validateStatus();
+        $this->_setAttribute('holdingPeriod', $val);
         return $this;
     }
     public function setComments($val=null) {
-        $this->attributes['comments'] = $val;
+        $this->validateStatus();
+        $this->_setAttribute('comments', $val);
         return $this;
     }
     public function setStatus($val=null) {
-        $this->attributes['status'] = $val;
+        if ($this->validateReadOnly('status', $val)) {
+            $this->_setAttribute('status', $val);
+        }
         return $this;
     }
 
 
     public function setAsset(\CFX\AssetInterface $val=null) {
-        $this->relationships['asset']->setData($val);
+        if ($this->validateReadOnly('asset', $val)) {
+            $this->_setRelationship('asset', $val);
+        }
         return $this;
     }
-    public function setPartner(\KS\JsonApi\BaseResourceInterface $val=null) {
-        if (!array_key_exists('partner', $this->privateRelationships)) {
-            $this->privateRelationships['partner'] = $this->f->newJsonApiRelationship(['name' => 'partner', 'data' => null]);
-        }
 
-        $this->privateRelationships['partner']->setData($val);
 
-        if (!$val) {
-            $this->setError('partner', 'required', $this->f->newJsonApiError([
-                'status' => 400,
-                'title' => "Required Relationship `partner` Missing",
-                'detail' => "You must associate a partner with this asset intent in order to successfully save it."
+    public function validateStatus() {
+        if ($this->getStatus() === 'closed') {
+            $this->setError('global', 'status-final', $this->getFactory()->newError([
+                "status" => 400,
+                "title" => "Updates No Longer Permitted",
+                "detail" => "This intent's status is in a final state and you can no longer update it. If you need to update the asset information, create a new intent with the new data."
             ]));
+            return false;
         } else {
-            $this->clearError('partner', 'required');
+            $this->clearError('global', 'status-final');
+            return true;
         }
-
-        return $this;
-    }
-
-
-
-
-
-    // Interface implementations
-
-    public function fetch(DatasourceInterface $db) {
-        throw new UnimplementedFeatureException("`fetch` is not yet implemented for AssetIntents.");
     }
 }
 
