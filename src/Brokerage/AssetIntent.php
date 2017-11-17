@@ -212,7 +212,7 @@ class AssetIntent extends \CFX\JsonApi\AbstractResource implements AssetIntentIn
     }
 
 
-    public function setAsset(\CFX\AssetInterface $val=null) {
+    public function setAsset(\CFX\Exchange\AssetInterface $val=null) {
         if ($this->validateReadOnly('asset', $val)) {
             $this->_setRelationship('asset', $val);
         }
