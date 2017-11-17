@@ -1,6 +1,23 @@
 <?php
 namespace CFX\Exchange;
 
+/**
+ * Class representing an Exchange Order object
+ *
+ * An Order object has the following public fields:
+ *
+ * `side` - buy or sell
+ * `lotSize` - how many shares this order represents
+ * `asset` - the security being bought or sold
+ * `priceHigh` - the ask price (in the case of a sell order) or limit price (in the case of a buy order)
+ * `priceLow` - the "reserve" price (lowest acceptable price) in the case of a sell order. (Not pertinent to buy orders)
+ * `currentPrice` - the current price of the order according to the matching algorithm (this will change as the order book changes)
+ * `status` - one of the defined status strings
+ * `statusDetail` - an arbitrary text explanation of the status
+ * `documentKey` - the key representing the signed agreement document
+ * `referenceKey` - an arbitrary Broker-supplied reference key used by the broker to associate the order with a client
+ * `bankAccountId` - the ID of the bank account being used for the transaction
+ */
 class Order extends \CFX\JsonApi\AbstractResource implements OrderInterface {
     use \CFX\ResourceValidationsTrait;
 
