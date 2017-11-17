@@ -35,7 +35,7 @@ trait ResourceValidationsTrait {
     protected function validateAmong($field, $val, array $validOptions, $required = true)
     {
         if ($val !== null) {
-            $result = in_array($val, $validOptions);
+            $result = in_array($val, $validOptions, true);
         } else {
             $result = !$required;
         }
