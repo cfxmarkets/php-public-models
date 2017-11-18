@@ -28,7 +28,7 @@ class Order extends \CFX\JsonApi\AbstractResource implements OrderInterface {
         'priceHigh' => null,
         'priceLow' => null,
         'currentPrice' => null,
-        'status' => null,
+        'status' => 'new',
         'statusDetail' => null,
         'documentKey' => null,
         'referenceKey' => null,
@@ -175,12 +175,12 @@ class Order extends \CFX\JsonApi\AbstractResource implements OrderInterface {
     }
 
     public function setCurrentPrice($val) {
-        if ($this->validateReadOnly('priceLow', $val)) {
+        if ($this->validateReadOnly('currentPrice', $val)) {
             $val = $this->cleanNumberValue($val);
             $this->validatePrice('currentPrice', $val, false);
         }
 
-        return $this->_setAttribute('priceLow', $val);
+        return $this->_setAttribute('currentPrice', $val);
     }
 
 
@@ -206,12 +206,8 @@ class Order extends \CFX\JsonApi\AbstractResource implements OrderInterface {
 
     public function setDocumentKey($val)
     {
-        if ($this->validateStatusActive('documentKey')) {
-            $val = $this->cleanStringValue($val);
-            if ($this->validateRequired('documentKey', $val)) {
-                $this->validateType('documentKey', $val, 'string');
-            }
-        }
+        $val = $this->cleanStringValue($val);
+        $this->validateType('documentKey', $val, 'string', false);
 
         return $this->_setAttribute('documentKey', $val);
     }
@@ -230,12 +226,8 @@ class Order extends \CFX\JsonApi\AbstractResource implements OrderInterface {
 
     public function setBankAccountId($val)
     {
-        if ($this->validateStatusActive('bankAccountId')) {
-            $val = $this->cleanStringValue($val);
-            if ($this->validateRequired('bankAccountId', $val)) {
-                $this->validateType('bankAccountId', $val, 'string');
-            }
-        }
+        $val = $this->cleanStringValue($val);
+        $this->validateType('bankAccountId', $val, 'string', false);
 
         return $this->_setAttribute('bankAccountId', $val);
     }
@@ -281,22 +273,25 @@ class Order extends \CFX\JsonApi\AbstractResource implements OrderInterface {
 
 
     protected function validateStatusActive($field) {
-        $passedStates = [
-            'active' => ["Order Active", "This order is currently active and cannot be altered"],
-            'cancelled' => ["Item Cancelled", "This order has been cancelled and cannot be altered"],
-            'matched' => ["Item Sold", "This order has already been successfully executed and sold and cannot be altered"],
-            'expired' => ["Item Expired", "This intent has expired and cannot be altered"],
-        ];
+        if (!$this->initializing) {
+            $passedStates = [
+                'active' => ["Order Active", "This order is currently active and cannot be altered"],
+                'cancelled' => ["Item Cancelled", "This order has been cancelled and cannot be altered"],
+                'matched' => ["Item Sold", "This order has already been successfully executed and sold and cannot be altered"],
+                'expired' => ["Item Expired", "This intent has expired and cannot be altered"],
+            ];
 
-        if (in_array($this->getStatus(), array_keys($passedStates))) {
-            $this->setError($field, 'immutableStatus', [
-                "title" => "Order Not Alterable",
-                "detail" => $passedStates[$this->getStatus()],
-            ]);
-            return false;
-        } else {
-            $this->clearError($field, 'immutableStatus');
-            return true;
+            if (in_array($this->getStatus(), array_keys($passedStates))) {
+                $e = $passedStates[$this->getStatus()];
+                $this->setError($field, 'immutableStatus', [
+                    "title" => "Order Not Alterable",
+                    "detail" => $e[1],
+                ]);
+                return false;
+            } else {
+                $this->clearError($field, 'immutableStatus');
+                return true;
+            }
         }
     }
 }

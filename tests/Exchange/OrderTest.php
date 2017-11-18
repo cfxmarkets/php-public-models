@@ -56,6 +56,7 @@ class OrderTest extends \PHPUnit\Framework\TestCase
     public function testStatus()
     {
         $field = 'status';
+        $this->assertFalse($this->resource->hasErrors($field));
         $this->assertReadOnly($field);
         $this->assertChains($field, null);
     }
@@ -63,6 +64,7 @@ class OrderTest extends \PHPUnit\Framework\TestCase
     public function testStatusDetail()
     {
         $field = 'statusDetail';
+        $this->assertFalse($this->resource->hasErrors($field));
         $this->assertReadOnly($field);
         $this->assertChains($field, null);
     }
@@ -70,11 +72,10 @@ class OrderTest extends \PHPUnit\Framework\TestCase
     public function testDocumentKey()
     {
         $field = 'documentKey';
-        $this->assertValid($field, [ "abcde12345" ]);
-        $this->assertInvalid($field, [ null, '', new \DateTime(), 2.15 ]);
+        $this->assertValid($field, [ null, '', "abcde12345" ]);
+        $this->assertInvalid($field, [ new \DateTime(), 2.15 ]);
         $this->assertChanged($field, "12345abcde", "attributes");
         $this->assertChains($field);
-        $this->assertImmutableOnFinalStatus($field, "54321edcba");
     }
 
     public function testReferenceKey()
@@ -90,11 +91,10 @@ class OrderTest extends \PHPUnit\Framework\TestCase
     public function testBankAccountId()
     {
         $field = 'bankAccountId';
-        $this->assertValid($field, [ 'abcde', '12345', 'abcde-12345' ]);
-        $this->assertInvalid($field, [ null, '', new \DateTime(), 2.15 ]);
+        $this->assertValid($field, [ null, '', 'abcde', '12345', 'abcde-12345' ]);
+        $this->assertInvalid($field, [ new \DateTime(), 2.15 ]);
         $this->assertChanged($field, "12345abcde", "attributes");
         $this->assertChains($field);
-        $this->assertImmutableOnFinalStatus($field, "54321edcba");
     }
 
     public function testAsset()
