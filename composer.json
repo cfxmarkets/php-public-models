@@ -11,10 +11,11 @@
     ],
     "require" : {
         "php" : ">=5.4.0",
-        "cfxmarkets/php-jsonapi-objects": "~1.1.0"
+        "cfxmarkets/php-jsonapi-objects": "~1.1"
     },
     "require-dev" : {
         "phpunit/phpunit" : "~4.8.0",
+        "phpdocumentor/phpdocumentor" : "~2.9",
         "guzzlehttp/guzzle": "~5.0"
     },
     "autoload" : {
@@ -45,7 +46,8 @@
     ],
     "extra": {
         "branch-alias": {
-            "dev-v1.x": "v1.x-dev"
+            "dev-v1.0.x": "v1.0.x-dev",
+            "dev-v1.1.x": "v1.1.x-dev"
         }
     }
 }

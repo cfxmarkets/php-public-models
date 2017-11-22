@@ -1,295 +1,317 @@
 <?php
 namespace CFX\Exchange;
 
+/**
+ * Class representing an Exchange Order object
+ *
+ * An Order object has the following public fields:
+ *
+ * * `side` - buy or sell
+ * * `lotSize` - how many shares this order represents
+ * * `asset` - the security being bought or sold
+ * * `priceHigh` - the ask price (in the case of a sell order) or limit price (in the case of a buy order)
+ * * `priceLow` - the "reserve" price (lowest acceptable price) in the case of a sell order. (Not pertinent to buy orders)
+ * * `currentPrice` - the current price of the order according to the matching algorithm (this will change as the order book changes)
+ * * `status` - one of the defined status strings
+ * * `statusDetail` - an arbitrary text explanation of the status
+ * * `documentKey` - the key representing the signed agreement document
+ * * `referenceKey` - an arbitrary Broker-supplied reference key used by the broker to associate the order with a client
+ * * `bankAccountId` - the ID of the bank account being used for the transaction
+ */
 class Order extends \CFX\JsonApi\AbstractResource implements OrderInterface {
-    
+    use \CFX\ResourceValidationsTrait;
+
     protected $resourceType = 'orders';
     protected $attributes = [
-        'type' => null,
-        'numShares' => null,
+        'side' => null,
+        'lotSize' => null,
         'priceHigh' => null,
         'priceLow' => null,
         'currentPrice' => null,
-        'status' => null,
+        'status' => 'new',
+        'statusDetail' => null,
+        'documentKey' => null,
+        'referenceKey' => null,
+        'bankAccountId' => null
     ];
-
     protected $relationships = [
         'asset' => null,
-        'user' => null,
     ];
-    protected $validTypes = ['sell', 'buy'];
+    protected static $validStatuses = [
+        'new',
+        'active',
+        'cancelled',
+        'expired',
+        'matched',
+    ];
 
-
-
-    public static function adaptFrom(FactoryInterface $f, $order) {
-        if ($order instanceof \stdClass) {
-            $data = [
-                'id' => $order->asset_symbol,
-                'attributes' => [
-                    'issuer' => $asset->issuer_ident,
-                    'name' => $asset->asset_name,
-                    'type' => $asset->asset_type,
-                    'statusCode' => $asset->asset_status,
-                    'statusText' => $asset->asset_status_text,
-                    'description' => $asset->asset_description,
-                ]
-            ];
-            return new static($f, $data);
-        }
-
-        if (is_object($order)) $type = get_class($order);
-        else $type = gettype($order);
-        throw new UnknownResourceDataFormatException("Don't know how to adapt resources of type `$type`. To implement adapting of these resources, you should add a block for it in the definition for the `\CFX\Brokerage\Asset::adaptFrom` method.");
+    public static function getValidStatuses()
+    {
+        return static::$validStatuses;
     }
 
-    public function getData($format=null) {
-        if (!$format) return $this->jsonSerialize();
-        if ($format == 'compat') {
-            return [
-                'order_type' => $this->getType(),
-                'order_numShares' => $this->getNumShares(),
-                'order_priceHigh' => $this->getPriceHigh(),
-                'order_priceLow' => $this->getPriceLow(),
-                'order_currentPrice' => $this->getCurrentPrice(),
-            ];
-        } else {
-            throw new UnknownResourceDataFormatException("Don't know how to cast this object to type `$format`. To implement this, simply add a block for this type in the definition for the `\CFX\Brokerage\Order::getData` function.");
-        }
+
+
+    public function getSide()
+    {
+        return $this->_getAttributeValue('side');
     }
 
-    public function getType() { return $this->_getAttributeValue('type'); }
-    public function getNumShares() { return $this->_getAttributeValue('numShares'); }
-    public function getPriceHigh() { return $this->_getAttributeValue('priceHigh'); }
-    public function getPriceLow() { return $this->_getAttributeValue('priceLow'); }
-    public function getCurrentPrice() { return $this->_getAttributeValue('currentPrice'); }
-    public function getStatus() { return $this->_getAttributeValue('status'); }
-    public function getAsset() { return $this->_getRelationshipValue('asset'); }
-    public function getUser() { return $this->_getRelationshipValue('user'); }
+    public function getLotSize()
+    {
+        return $this->_getAttributeValue('lotSize');
+    }
+
+    public function getPriceHigh()
+    {
+        return $this->_getAttributeValue('priceHigh');
+    }
+
+    public function getPriceLow()
+    {
+        return $this->_getAttributeValue('priceLow');
+    }
+
+    public function getCurrentPrice()
+    {
+        return $this->_getAttributeValue('currentPrice');
+    }
+
+    public function getStatus()
+    {
+        return $this->_getAttributeValue('status');
+    }
+
+    public function getStatusDetail()
+    {
+        return $this->_getAttributeValue('statusDetail');
+    }
+
+    public function getDocumentKey()
+    {
+        return $this->_getAttributeValue('documentKey');
+    }
+
+    public function getReferenceKey()
+    {
+        return $this->_getAttributeValue('referenceKey');
+    }
+
+    public function getBankAccountId()
+    {
+        return $this->_getAttributeValue('bankAccountId');
+    }
+
+    public function getAsset()
+    {
+        return $this->_getRelationshipValue('asset');
+    }
 
 
 
-    public function setType($val) {
-        if ($val && $this->attributes['type'] == $val) return;
-        if (!$this->validateStatusActive()) return false;
 
-        $prevVal = $this->attributes['type'];
-        $this->attributes['type'] = $val;
+    public function setSide($val) {
+        if ($this->validateStatusActive('side')) {
+            $val = $this->cleanStringValue($val);
 
-        if ($prevVal !== null && $val != $prevVal) {
-            $this->setError('type', 'immutable', $this->getFactory()->newError([
-                'status' => 400,
-                'title' => 'Immutable Attribute `type`',
-                'detail' => 'The `type` attribute can\'t be changed, once set. If you need to change the type of this intent, please delete this intent and create a new one.',
-            ]));
-        } else {
-            $this->clearError('type', 'immutable');
-
-            if (!$val) {
-                $this->setError('type', 'required', $this->getFactory()->newError([
-                    "status" => 400,
-                    "title" => "Required Attribute `type` Missing",
-                    "detail" => "You must indicate the type of order this is. Valid order types are '".implode("', '", $this->validTypes)."'."
-                ]));
+            $initial = $this->getInitial('side');
+            if ($initial !== null && $val !== $initial) {
+                $this->setError('side', 'immutable', [
+                    'title' => 'Immutable Attribute `side`',
+                    'detail' => 'The `side` attribute can\'t be changed, once set. If you need to change which side this order is on, please cancel the order and create a new one.',
+                ]);
             } else {
-                $this->clearError('type', 'required');
+                $this->clearError('side', 'immutable');
 
-                if (!in_array($val, $this->validTypes)) {
-                    $this->setError('type', 'valid', $this->getFactory()->newError([
-                        "status" => 400,
-                        "title" => "Invalid Attribute Value for `type`",
-                        "detail" => "Valid order types are '".implode("', '", $this->validTypes)."'. The type you've indicated is '{$val}'."
-                    ]));
-                } else {
-                    $this->clearError('type', 'valid');
+                if ($this->validateRequired('side', $val)) {
+                    $this->validateAmong('side', $val, [ 'buy', 'sell' ]);
                 }
             }
         }
-        return $this;
-    }
-    public function setNumShares($val) {
-        if (is_numeric($val)) $val = (int)$val;
-        $this->attributes['numShares'] = $val;
 
-        if ($val && !is_int($val)) {
-            $this->setError('numShares', 'integer', $this->getFactory()->newError([
-                "status" => 400,
-                "title" => "Invalid Attribute Value for `numShares`",
-                "detail" => "`numShares` must be an integer or null."
-            ]));
-        } else {
-            $this->clearError('numShares', 'integer');
-        }
-        return $this;
+        return $this->_setAttribute('side', $val);
     }
+
+
+    public function setLotSize($val) {
+        if ($this->validateStatusActive('lotSize')) {
+            $val = $this->cleanNumberValue($val);
+
+            if ($this->validateRequired('lotSize', $val)) {
+                if ($this->validateNumeric('lotSize', $val)) {
+                    if ($val < 1) {
+                        $this->setError('lotSize', 'qty', [
+                            "title" => "Invalid Attribute Value for `lotSize`",
+                            "detail" => "You can't enter orders for less than a single share on our system."
+                        ]);
+                    } else {
+                        $this->clearError('lotSize', 'qty');
+                    }
+                }
+            }
+        }
+
+        return $this->_setAttribute('lotSize', $val);
+    }
+
+
     public function setPriceHigh($val) {
-        if (is_numeric($val)) $val = (int)$val;
-        $this->attributes['priceHigh'] = $val;
-
-        if ($val && !is_int($val)) {
-            $this->setError('priceHigh', 'integer', $this->getFactory()->newError([
-                "status" => 400,
-                "title" => "Invalid Attribute Value for `priceHigh`",
-                "detail" => "`priceHigh` must be an integer or null."
-            ]));
-        } else {
-            $this->clearError('priceHigh', 'integer');
+        if ($this->validateStatusActive('priceHigh')) {
+            $val = $this->cleanNumberValue($val);
+            $this->validatePrice('priceHigh', $val, true);
         }
-        return $this;
+
+        return $this->_setAttribute('priceHigh', $val);
     }
+
+
     public function setPriceLow($val) {
-        if (is_numeric($val)) $val = (int)$val;
-        $this->attributes['priceLow'] = $val;
-
-        if ($val && !is_int($val)) {
-            $this->setError('priceLow', 'integer', $this->getFactory()->newError([
-                "status" => 400,
-                "title" => "Invalid Attribute Value for `priceLow`",
-                "detail" => "`priceLow` must be an integer or null."
-            ]));
-        } else {
-            $this->clearError('priceLow', 'integer');
+        if ($this->validateStatusActive('priceLow')) {
+            $val = $this->cleanNumberValue($val);
+            $this->validatePrice('priceLow', $val, false);
         }
-        return $this;
+
+        return $this->_setAttribute('priceLow', $val);
     }
+
     public function setCurrentPrice($val) {
-        if (is_numeric($val)) $val = (int)$val;
-        $this->attributes['currentPrice'] = $val;
-
-        if ($val && !is_int($val)) {
-            $this->setError('currentPrice', 'integer', $this->getFactory()->newError([
-                "status" => 400,
-                "title" => "Invalid Attribute Value for `currentPrice`",
-                "detail" => "`currentPrice` must be an integer or null."
-            ]));
-        } else {
-            $this->clearError('currentPrice', 'integer');
-        }
-        return $this;
-    }
-   
-    public function setAsset(\CFX\AssetInterface $val=null) {
-        $this->relationships['asset']->setData($val);
-        return $this;
-    }
-
-     public function setUser(SiteUserInterface $user=null) {
-        if ($user && $this->getUser() && $this->getUser()->getId() == $user->getId()) return;
-        if (!$this->validateStatusActive()) return false;
-           
-        // User is immutable
-        if ($this->getUser()) {
-            if (!$user || $this->getUser()->getId() != $user->getId()) {
-                $this->setError('user', 'immutable', $this->getFactory()->newError([
-                    "title" => "Immutable Relationship `user`",
-                    "detail" => "You cannot edit the `user` relationship of an order intent. If you'd like to change the user, you should delete this intent using the DELETE /exchange/api/v2/order-intents/".$this->getId()." endpoint and then create a new one",
-                    "status" => 400
-                ]));
-                return;
-            } else {
-                $this->clearError('user', 'immutable');
-            }
+        if ($this->validateReadOnly('currentPrice', $val)) {
+            $val = $this->cleanNumberValue($val);
+            $this->validatePrice('currentPrice', $val, false);
         }
 
-        $this->relationships['user']->setData($user);
-
-        if (!$user) {
-            $this->setError('user', 'required', $this->getFactory()->newError([
-                "status" => 400,
-                "title" => "Required Relationship `user` Missing",
-                "detail" => "You must associate this Order Intent with a user"
-            ]));
-        } else {
-            $this->clearError('user', 'required');
-
-            if (!$this->db) $this->queueRelationshipValidation('user', 'db');
-            else {
-                $user = $this->db->getSiteUserById($user->getId());
-                if (!$user) {
-                    $this->setError('user', 'valid', $this->getFactory()->newError([
-                        "status" => 400,
-                        "title" => "Invalid Relationship `user`",
-                        "detail" => "The user you've specified doesn't appear to be in our database."
-                    ])); 
-                } else {
-                    $this->clearError('user', 'valid');
-                }
-            }
-        }
-
-        return $this;
+        return $this->_setAttribute('currentPrice', $val);
     }
+
 
     public function setStatus($val) {
-        $this->_setAttribute('status', $val);
-    }
-
-
-
-    // Custom Vaildators
-
-
-    protected function validateStatusActive() {
-        $passedStates = [
-            'complete' => ["Order Is Complete", "This order has already passed to CH and cannot be altered"],
-            'pending' => ["Order Is Pending", "This order is pending for review and cann be alterd"],
-            'reviewed' => ["Order Reviewed", "This order has been reviewed and cannot be altered"],
-            'initiated' => ["Order Initiated", "This order has been intiated and can be altered"],
-            'cancelled' => ["Order Cancelled", "This order has been cancelled and cannot be altered"],
-        ];
-
-        if (in_array($this->getStatus(), array_keys($passedStates))) {
-            $this->setError('object', 'immutable', $this->getFactory()->newError([
-                "status" => 400,
-                "title" => "Order Intent Not Alterable",
-                "detail" => $passedStatus[$this->getStatus()],
-            ]));
-            return false;
-        } else {
-            $this->clearError('object', 'immutable');
-            return true;
+        if ($this->validateReadOnly('status', $val)) {
+            $this->validateAmong('status', $val, $this::getValidStatuses());
+            $this->_setAttribute('status', $val);
         }
+        return $this;
     }
 
-    protected function validatePrice($which, $required) {
-        $price = $this->attributes[$which];
+
+    public function setStatusDetail($val)
+    {
+        if ($this->validateReadOnly('statusDetail', $val)) {
+            $val = $this->cleanStringValue($val);
+            $this->validateType('statusDetail', $val, 'string', false);
+            $this->_setAttribute('statusDetail', $val);
+        }
+        return $this;
+    }
+
+
+    public function setDocumentKey($val)
+    {
+        $val = $this->cleanStringValue($val);
+        $this->validateType('documentKey', $val, 'string', false);
+
+        return $this->_setAttribute('documentKey', $val);
+    }
+
+    public function setReferenceKey($val)
+    {
+        if ($this->validateStatusActive('referenceKey')) {
+            $val = $this->cleanStringValue($val);
+            if ($this->validateRequired('referenceKey', $val)) {
+                $this->validateType('referenceKey', $val, 'string');
+            }
+        }
+
+        return $this->_setAttribute('referenceKey', $val);
+    }
+
+    public function setBankAccountId($val)
+    {
+        $val = $this->cleanStringValue($val);
+        $this->validateType('bankAccountId', $val, 'string', false);
+
+        return $this->_setAttribute('bankAccountId', $val);
+    }
+
+    public function setAsset(AssetInterface $val = null)
+    {
+        if ($this->validateStatusActive('asset')) {
+            $this->validateRequired('asset', $val);
+        }
+        return $this->_setRelationship('asset', $val);
+    }
+
+
+
+
+    // Custom validators
+
+    /**
+     * Validate a price (high, low, or current)
+     *
+     * Ensures that the given value is numeric and greater than 0
+     *
+     * @param string $field The name of the field being validated
+     * @param mixed $val The value to validate
+     * @param bool $required Whether or not the value is required (this affects how `null` is handled)
+     * @return bool Whether or not the validation has passed
+     */
+    protected function validatePrice($field, $val, $required) {
         if ($required) {
-            if ($price === null || $price === '') {
-                $this->setError($which, 'required', $this->getFactory()->newError([
-                    "status" => 400,
-                    "title" => "Required Attribute `$which` Missing",
-                    "detail" => "You must indicate a high price for this order. (If this is a sell order, this would be the *asking price*; if it's a buy order, this would be the *maximum bid*.)"
-                ]));
-            } else {
-                $this->clearError($which, 'required');
+            if (!$this->validateRequired($field, $val)) {
+                return false;
             }
         }
 
-        if ($price !== null && $price !== '') {
-            if (!is_numeric($price)) {
-                $this->setError($which, 'numeric', $this->getFactory()->newError([
-                    "status" => 400,
-                    "title" => "Invalid Attribute Value for `$which`",
-                    "detail" => "Price must be numeric"
-                ]));
-            } else {
-                $this->clearError($which, 'numeric');
+        if ($val !== null && $val !== '') {
+            if (!$this->validateNumeric($field, $val)) {
+                return false;
+            }
 
-                if ($price <= 0) {
-                    $this->setError($which, 'gtzero', $this->getFactory()->newError([
-                        "status" => 400,
-                        "title" => "Invalid Attribute Value for `$which`",
-                        "detail" => 'Price must be greater than 0'
-                    ]));
-                } else {
-                    $this->clearError($which, 'gtzero');
-                }
+            if ($val <= 0) {
+                $this->setError($field, 'gtzero', [
+                    "title" => "Invalid Attribute Value for `$field`",
+                    "detail" => 'Price must be greater than 0'
+                ]);
+                return false;
+            } else {
+                $this->clearError($field, 'gtzero');
             }
         }
+
+        return true;
     }
-    // Interface implementations
 
-    public function fetch(DatasourceInterface $db) {
-        throw new UnimplementedFeatureException("`fetch` is not yet implemented for Orders.");
+
+    /**
+     * Validates that the current status permits edits
+     *
+     * If the order is actively listed, certain fields should not be editable. This checks the status and
+     * sets an error if the user is trying to edit fields that are not editable for the given status.
+     *
+     * @param string $field The name of the field being validated
+     * @return bool Whether or not the validation has passed
+     */
+    protected function validateStatusActive($field) {
+        if (!$this->initializing) {
+            $passedStates = [
+                'active' => ["Order Active", "This order is currently active and cannot be altered"],
+                'cancelled' => ["Item Cancelled", "This order has been cancelled and cannot be altered"],
+                'matched' => ["Item Sold", "This order has already been successfully executed and sold and cannot be altered"],
+                'expired' => ["Item Expired", "This intent has expired and cannot be altered"],
+            ];
+
+            if (in_array($this->getStatus(), array_keys($passedStates), true)) {
+                $e = $passedStates[$this->getStatus()];
+                $this->setError($field, 'immutableStatus', [
+                    "title" => "Order Not Alterable",
+                    "detail" => $e[1],
+                ]);
+                return false;
+            } else {
+                $this->clearError($field, 'immutableStatus');
+                return true;
+            }
+        }
     }
 }
 

@@ -1,7 +1,20 @@
 <?php
 namespace CFX;
 
+/**
+ * A trait to provide frequently-used validations and value-handling functions for
+ * Resource classes
+ */
 trait ResourceValidationsTrait {
+    /**
+     * Validates that the value for a given field is of the specified type
+     *
+     * @param string $field The name of the field (attribute or relationship) being validated
+     * @param mixed $val The value to validate
+     * @param string $type The type that the value should be
+     * @param bool $required Whether or not the value is required (this affects how `null` is handled)
+     * @return bool Whether or not the validation has passed
+     */
     protected function validateType($field, $val, $type, $required = true)
     {
         if ($val !== null) {
@@ -32,10 +45,19 @@ trait ResourceValidationsTrait {
         }
     }
 
+    /**
+     * Validates that the value for a given field is in the given array of valid options
+     *
+     * @param string $field The name of the field (attribute or relationship) being validated
+     * @param mixed $val The value to validate
+     * @param array $validOptions The collection of valid options among which the value should be found
+     * @param bool $required Whether or not the value is required (this affects how `null` is handled)
+     * @return bool Whether or not the validation has passed
+     */
     protected function validateAmong($field, $val, array $validOptions, $required = true)
     {
         if ($val !== null) {
-            $result = in_array($val, $validOptions);
+            $result = in_array($val, $validOptions, true);
         } else {
             $result = !$required;
         }
@@ -52,6 +74,14 @@ trait ResourceValidationsTrait {
         }
     }
 
+    /**
+     * Validates that the value for a given field is numeric (either float, int, or numeric string)
+     *
+     * @param string $field The name of the field (attribute or relationship) being validated
+     * @param mixed $val The value to validate
+     * @param bool $required Whether or not the value is required (this affects how `null` is handled)
+     * @return bool Whether or not the validation has passed
+     */
     protected function validateNumeric($field, $val, $required = true)
     {
         if ($val !== null) {
@@ -72,6 +102,14 @@ trait ResourceValidationsTrait {
         }
     }
 
+    /**
+     * Validates that the given resource actually exists in the database
+     *
+     * @param string $field The name of the field (attribute or relationship) being validated
+     * @param \CFX\JsonApi\ResourceInterface $r The resource to validate
+     * @param bool $required Whether or not the resource is required (this affects how `null` is handled)
+     * @return bool Whether or not the validation has passed
+     */
     protected function validateRelatedResourceExists($field, \CFX\JsonApi\ResourceInterface $r, $required = true)
     {
         if ($r !== null) {
@@ -97,6 +135,15 @@ trait ResourceValidationsTrait {
         }
     }
 
+    /**
+     * Cleans a value that is expected to be a string
+     *
+     * If the value _is_ a string, this trims it and sets it to null if it's an empty string. If the value
+     * is an integer, it coerces it into a string. Otherwise, it leaves the value alone.
+     *
+     * @param mixed $val The value to clean
+     * @return mixed The cleaned string or null or the original value, if not stringish
+     */
     protected function cleanStringValue($val)
     {
         if ($val !== null) {
@@ -112,6 +159,15 @@ trait ResourceValidationsTrait {
         return $val;
     }
 
+    /**
+     * Cleans a value that is expected to be a boolean
+     *
+     * If the value is a string or integer that can evaluate to a boolean, this coerces it into a boolean. Otherwise,
+     * it leaves the value alone.
+     *
+     * @param mixed $val The value to clean
+     * @return mixed A boolean value or the original value, if not boolish
+     */
     protected function cleanBooleanValue($val)
     {
         if ($val !== null) {
@@ -122,6 +178,15 @@ trait ResourceValidationsTrait {
         return $val;
     }
 
+    /**
+     * Cleans a value that is expected to be a number
+     *
+     * If the value is a string, this coerces it into an int or float by multiplying by 1. Otherwise,
+     * it leaves the value alone.
+     *
+     * @param mixed $val The value to clean
+     * @return mixed An int or float value or the original value, if not numeric
+     */
     protected function cleanNumberValue($val)
     {
         if ($val !== null) {

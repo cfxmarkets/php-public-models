@@ -403,6 +403,7 @@ class LegalEntity extends \CFX\JsonApi\AbstractResource implements LegalEntityIn
             'view',
             'edit',
             'delete',
+            'sign',
         ];
     }
 
@@ -411,7 +412,7 @@ class LegalEntity extends \CFX\JsonApi\AbstractResource implements LegalEntityIn
         if ($name === 'dateOfBirth') {
             $val = $this->getDateOfBirth();
             if ($val) {
-                return $val->format("U");
+                return $val->format("Y-m-d");
             } else {
                 return $val;
             }
