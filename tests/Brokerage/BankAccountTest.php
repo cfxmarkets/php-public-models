@@ -86,6 +86,7 @@ class BankAccountTest extends \PHPUnit\Framework\TestCase
     {
         $field = 'owner';
         $this->assertValid($field, [ new LegalEntity($this->datasource) ]);
+        $this->assertInvalid($field, [ null ]);
         $this->assertChanged($field, (new LegalEntity($this->datasource))->setId("12345"), "relationships");
         $this->assertChains($field);
     }

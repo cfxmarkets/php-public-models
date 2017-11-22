@@ -170,6 +170,7 @@ class BankAccount extends \CFX\JsonApi\AbstractResource implements BankAccountIn
 
     public function setOwner(LegalEntityInterface $owner = null)
     {
+        $this->validateRequired('owner', $owner);
         return $this->_setRelationship('owner', $owner);
     }
 
