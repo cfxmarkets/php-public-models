@@ -13,7 +13,7 @@ class Document extends \CFX\JsonApi\AbstractResource implements DocumentInterfac
         'label' => null,
 		'type' => null,
 		'url' => null,
-        'status' => 0,
+        'status' => 'not-submitted',
         'notes' => null,
 	];
 
@@ -144,17 +144,13 @@ class Document extends \CFX\JsonApi\AbstractResource implements DocumentInterfac
 
     public function setStatus($val)
     {
-        if ($this->validateReadOnly('status', $val)) {
-            if (array_key_exists($val, static::$validStatuses)) {
-                $status = static::$validStatuses[$val];
-            } elseif (array_search($val, static::$validStatuses) !== false) {
-                $status = $val;
-            } else {
-                $status = null;
-            }
+        if (array_key_exists($val, static::$validStatuses)) {
+            $val = static::$validStatuses[$val];
+        }
 
-            $this->validateAmong('status', $status, static::$validStatuses);
-            $this->_setAttribute('status', $status);
+        if ($this->validateReadOnly('status', $val)) {
+            $this->validateAmong('status', $val, static::$validStatuses);
+            $this->_setAttribute('status', $val);
         }
         return $this;
     }
