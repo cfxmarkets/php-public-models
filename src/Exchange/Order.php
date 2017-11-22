@@ -6,17 +6,17 @@ namespace CFX\Exchange;
  *
  * An Order object has the following public fields:
  *
- * `side` - buy or sell
- * `lotSize` - how many shares this order represents
- * `asset` - the security being bought or sold
- * `priceHigh` - the ask price (in the case of a sell order) or limit price (in the case of a buy order)
- * `priceLow` - the "reserve" price (lowest acceptable price) in the case of a sell order. (Not pertinent to buy orders)
- * `currentPrice` - the current price of the order according to the matching algorithm (this will change as the order book changes)
- * `status` - one of the defined status strings
- * `statusDetail` - an arbitrary text explanation of the status
- * `documentKey` - the key representing the signed agreement document
- * `referenceKey` - an arbitrary Broker-supplied reference key used by the broker to associate the order with a client
- * `bankAccountId` - the ID of the bank account being used for the transaction
+ * * `side` - buy or sell
+ * * `lotSize` - how many shares this order represents
+ * * `asset` - the security being bought or sold
+ * * `priceHigh` - the ask price (in the case of a sell order) or limit price (in the case of a buy order)
+ * * `priceLow` - the "reserve" price (lowest acceptable price) in the case of a sell order. (Not pertinent to buy orders)
+ * * `currentPrice` - the current price of the order according to the matching algorithm (this will change as the order book changes)
+ * * `status` - one of the defined status strings
+ * * `statusDetail` - an arbitrary text explanation of the status
+ * * `documentKey` - the key representing the signed agreement document
+ * * `referenceKey` - an arbitrary Broker-supplied reference key used by the broker to associate the order with a client
+ * * `bankAccountId` - the ID of the bank account being used for the transaction
  */
 class Order extends \CFX\JsonApi\AbstractResource implements OrderInterface {
     use \CFX\ResourceValidationsTrait;
@@ -245,6 +245,16 @@ class Order extends \CFX\JsonApi\AbstractResource implements OrderInterface {
 
     // Custom validators
 
+    /**
+     * Validate a price (high, low, or current)
+     *
+     * Ensures that the given value is numeric and greater than 0
+     *
+     * @param string $field The name of the field being validated
+     * @param mixed $val The value to validate
+     * @param bool $required Whether or not the value is required (this affects how `null` is handled)
+     * @return bool Whether or not the validation has passed
+     */
     protected function validatePrice($field, $val, $required) {
         if ($required) {
             if (!$this->validateRequired($field, $val)) {
@@ -272,6 +282,15 @@ class Order extends \CFX\JsonApi\AbstractResource implements OrderInterface {
     }
 
 
+    /**
+     * Validates that the current status permits edits
+     *
+     * If the order is actively listed, certain fields should not be editable. This checks the status and
+     * sets an error if the user is trying to edit fields that are not editable for the given status.
+     *
+     * @param string $field The name of the field being validated
+     * @return bool Whether or not the validation has passed
+     */
     protected function validateStatusActive($field) {
         if (!$this->initializing) {
             $passedStates = [
@@ -281,7 +300,7 @@ class Order extends \CFX\JsonApi\AbstractResource implements OrderInterface {
                 'expired' => ["Item Expired", "This intent has expired and cannot be altered"],
             ];
 
-            if (in_array($this->getStatus(), array_keys($passedStates))) {
+            if (in_array($this->getStatus(), array_keys($passedStates), true)) {
                 $e = $passedStates[$this->getStatus()];
                 $this->setError($field, 'immutableStatus', [
                     "title" => "Order Not Alterable",
