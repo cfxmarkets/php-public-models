@@ -66,7 +66,7 @@ class LegalEntityTest extends \PHPUnit\Framework\TestCase
                 if (is_string($expected)) {
                     $expected = new \DateTime($expected);
                 }
-                $this->assertEquals($expected->format("U"), $actual);
+                $this->assertEquals($expected->format("Y-m-d"), $actual);
             }
         });
         $this->assertChains($field);
