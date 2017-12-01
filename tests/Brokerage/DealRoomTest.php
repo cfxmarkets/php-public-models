@@ -70,17 +70,17 @@ class DealRoomTest extends \PHPUnit\Framework\TestCase
             $this->assertEquals($exp->format('YmdHis'), $actual->format('YmdHis'));
         });
         $this->assertInvalid($field, [ null, '', 0, ]);
-        $this->assertChanged($field, 55522233, "attributes", function($expected, $actual) {
+        $this->assertChanged($field, 55522233, "attributes", function($expected, $actual) use ($field) {
             if (is_int($expected)) {
                 $exp = new \DateTime("@".$expected);
             } else {
                 $exp = $expected;
             }
-            $this->assertInstanceOf('\\DateTime', $actual);
-            $this->assertEquals($exp->format('YmdHis'), $actual->format('YmdHis'));
+            $this->assertTrue(is_string($actual), "`$field` should have returned a string on serialize.");
+            $this->assertEquals($exp->format('Y-m-d H:i:s'), $actual);
         });
         $this->assertChains($field, 332233322);
-        $this->assertSerializesDateForSql($field, new \DateTime());
+        $this->assertSerializesDateForSql($field);
     }
 
     public function testCloseDate()
@@ -96,17 +96,17 @@ class DealRoomTest extends \PHPUnit\Framework\TestCase
             $this->assertEquals($exp->format('YmdHis'), $actual->format('YmdHis'));
         });
         $this->assertInvalid($field, [ null, '', 0, ]);
-        $this->assertChanged($field, 55522233, "attributes", function($expected, $actual) {
+        $this->assertChanged($field, 55522233, "attributes", function($expected, $actual) use ($field) {
             if (is_int($expected)) {
                 $exp = new \DateTime("@".$expected);
             } else {
                 $exp = $expected;
             }
-            $this->assertInstanceOf('\\DateTime', $actual);
-            $this->assertEquals($exp->format('YmdHis'), $actual->format('YmdHis'));
+            $this->assertTrue(is_string($actual), "`$field` should have returned a string on serialize.");
+            $this->assertEquals($exp->format('Y-m-d H:i:s'), $actual);
         });
         $this->assertChains($field, 332233322);
-        $this->assertSerializesDateForSql($field, new \DateTime());
+        $this->assertSerializesDateForSql($field);
     }
 
     public function testAccess()
@@ -171,9 +171,15 @@ class DealRoomTest extends \PHPUnit\Framework\TestCase
         $this->assertChains($field, null);
     }
 
-    public function assertSerializesDateForSql($field, \DateTime $datetime)
+    public function assertSerializesDateForSql($field)
     {
-        $this->fail("Still need to implement this assertion.");
+        $set = "set".ucfirst($field);
+        $date = new \DateTime();
+        $this->resource->$set($date);
+        $changes = $this->resource->getChanges();
+        $this->assertContains('attributes', array_keys($changes));
+        $this->assertContains($field, array_keys($changes['attributes']));
+        $this->assertEquals($date->format("Y-m-d H:i:s"), $changes['attributes'][$field]);
     }
 }
 

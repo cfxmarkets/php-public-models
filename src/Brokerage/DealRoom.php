@@ -126,7 +126,7 @@ class DealRoom extends \CFX\JsonApi\AbstractResource implements DealRoomInterfac
     {
         $val = $this->cleanStringValue($val);
         if ($this->validateRequired('title', $val)) {
-            $this->validateType('title', $val, 'string');
+            $this->validateType('title', $val, 'non-numeric string');
         }
         return $this->_setAttribute('title', $val);
     }
@@ -135,7 +135,7 @@ class DealRoom extends \CFX\JsonApi\AbstractResource implements DealRoomInterfac
     {
         $val = $this->cleanStringValue($val);
         if ($this->validateRequired('slug', $val)) {
-            $this->validateType('slug', $val, 'string');
+            $this->validateType('slug', $val, 'non-numeric string');
         }
         return $this->_setAttribute('slug', $val);
     }
@@ -144,7 +144,7 @@ class DealRoom extends \CFX\JsonApi\AbstractResource implements DealRoomInterfac
     {
         $val = $this->cleanStringValue($val);
         if ($this->validateRequired('summary', $val)) {
-            $this->validateType('summary', $val, 'string');
+            $this->validateType('summary', $val, 'non-numeric string');
         }
         return $this->_setAttribute('summary', $val);
     }
@@ -153,7 +153,7 @@ class DealRoom extends \CFX\JsonApi\AbstractResource implements DealRoomInterfac
     {
         $val = $this->cleanStringValue($val);
         if ($this->validateRequired('bodyText', $val)) {
-            $this->validateType('bodyText', $val, 'string');
+            $this->validateType('bodyText', $val, 'non-numeric string');
         }
         return $this->_setAttribute('bodyText', $val);
     }
@@ -223,6 +223,22 @@ class DealRoom extends \CFX\JsonApi\AbstractResource implements DealRoomInterfac
  	public function setExchange($val)
     {
         return $this->_setRelationship('exchange', $val);
+    }
+
+
+
+
+    protected function serializeAttribute($name)
+    {
+        if (
+            ($name === 'openDate' || $name === 'closeDate') &&
+            $this->attributes[$name] &&
+            $this->attributes[$name] instanceof \DateTime
+        ) {
+            return $this->attributes[$name]->format('Y-m-d H:i:s');
+        }
+
+        return parent::serializeAttribute($name);
     }
 }
 
