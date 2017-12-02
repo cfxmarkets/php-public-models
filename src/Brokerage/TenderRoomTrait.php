@@ -38,7 +38,7 @@ trait TenderRoomTrait
 
     public function removeTender(TenderInterface $val)
     {
-        return $this->remove2MRel('tender', $val);
+        return $this->remove2MRel('tenders', $val);
     }
 }
 

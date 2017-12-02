@@ -60,8 +60,8 @@ class DealRoomTest extends \PHPUnit\Framework\TestCase
     public function testOpenDate()
     {
         $field = 'openDate';
-        $this->assertValid($field, [ 1234567890, -12345566828, new \DateTime() ], function($expected, $actual) {
-            if (is_int($expected)) {
+        $this->assertValid($field, [ 1234567890, -12345566828, '12345', new \DateTime() ], function($expected, $actual) {
+            if (is_numeric($expected)) {
                 $exp = new \DateTime("@".$expected);
             } else {
                 $exp = $expected;
@@ -71,7 +71,7 @@ class DealRoomTest extends \PHPUnit\Framework\TestCase
         });
         $this->assertInvalid($field, [ null, '', 0, ]);
         $this->assertChanged($field, 55522233, "attributes", function($expected, $actual) use ($field) {
-            if (is_int($expected)) {
+            if (is_numeric($expected)) {
                 $exp = new \DateTime("@".$expected);
             } else {
                 $exp = $expected;
@@ -86,8 +86,8 @@ class DealRoomTest extends \PHPUnit\Framework\TestCase
     public function testCloseDate()
     {
         $field = 'closeDate';
-        $this->assertValid($field, [ 1234567890, -12345566828, new \DateTime() ], function($expected, $actual) {
-            if (is_int($expected)) {
+        $this->assertValid($field, [ 1234567890, -12345566828, '12345', new \DateTime() ], function($expected, $actual) {
+            if (is_numeric($expected)) {
                 $exp = new \DateTime("@".$expected);
             } else {
                 $exp = $expected;
@@ -97,7 +97,7 @@ class DealRoomTest extends \PHPUnit\Framework\TestCase
         });
         $this->assertInvalid($field, [ null, '', 0, ]);
         $this->assertChanged($field, 55522233, "attributes", function($expected, $actual) use ($field) {
-            if (is_int($expected)) {
+            if (is_numeric($expected)) {
                 $exp = new \DateTime("@".$expected);
             } else {
                 $exp = $expected;

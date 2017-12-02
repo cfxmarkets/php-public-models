@@ -5,7 +5,7 @@ class TenderRoomTest extends DealRoomTest
 {
     use \CFX\ResourceTestTrait;
 
-    protected $className = "\\CFX\\Brokerage\\TenderRoom";
+    protected $className = "\\CFX\\Brokerage\\Test\\TenderRoom";
 
     public function testResourceType()
     {
@@ -26,11 +26,27 @@ class TenderRoomTest extends DealRoomTest
     {
         $field = 'tenders';
         $this->assertValid($field, [ new \CFX\JsonApi\ResourceCollection() ]);
-        $this->assertInvalid($field, [ null ]);
         $this->assertChanged($field, new \CFX\JsonApi\ResourceCollection(), 'relationships');
         $this->assertChains($field, null);
+    }
 
-        $this->markTestIncomplete("Need to add tests for 'addTender', 'removeTender' and 'hasTender'");
+    public function testTendersExtended()
+    {
+        $tender = new Tender($this->datasource, ['id'=>'12345']);
+        $this->resource->addTender($tender);
+
+        $this->assertInstanceOf("\\CFX\\JsonApi\\ResourceCollectionInterface", $this->resource->getTenders());
+        $this->assertEquals(1, count($this->resource->getTenders()));
+        $this->assertInstanceOf("\\CFX\\Brokerage\\TenderInterface", $this->resource->getTenders()[0]);
+
+        $this->assertTrue($this->resource->hasTender($tender));
+        $this->assertFalse($this->resource->hasTender(new Tender($this->datasource, ['id'=>'67890'])));
+
+        $this->resource->removeTender($tender);
+
+        $this->assertInstanceOf("\\CFX\\JsonApi\\ResourceCollectionInterface", $this->resource->getTenders());
+        $this->assertFalse($this->resource->hasTender($tender));
+        $this->assertEquals(0, count($this->resource->getTenders()));
     }
 }
 
