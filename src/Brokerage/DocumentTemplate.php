@@ -11,7 +11,7 @@ class DocumentTemplate extends \CFX\JsonApi\AbstractResource implements Document
         'status' => 'new',
     ];
 
-    protected static function getValidStatuses()
+    public static function getValidStatuses()
     {
         return [
             'new',
