@@ -149,5 +149,13 @@ class OrderIntentTest extends \PHPUnit\Framework\TestCase
     {
         $this->markTestIncomplete();
     }
+
+    public function testTender()
+    {
+        $field = 'tender';
+        $this->assertValid($field, [ null, new Tender($this->datasource, ['id'=>'12345']) ]);
+        $this->assertChanged($field, new Tender($this->datasource, ['id'=>'67890']), 'relationships');
+        $this->assertChains($field, null);
+    }
 }
 

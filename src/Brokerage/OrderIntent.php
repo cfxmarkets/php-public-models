@@ -22,6 +22,7 @@ class OrderIntent extends \CFX\JsonApi\AbstractResource implements OrderIntentIn
         'bankAccount' => null,
         'agreement' => null,
         'ownershipDoc' => null,
+        'tender' => null,
     ];
 
     protected static $validTypes = ['sell', 'buy'];
@@ -80,6 +81,11 @@ class OrderIntent extends \CFX\JsonApi\AbstractResource implements OrderIntentIn
     public function getOwnershipDoc()
     {
         return $this->_getRelationshipValue('ownershipDoc');
+    }
+
+    public function getTender()
+    {
+        return $this->_getRelationshipValue('tender');
     }
 
 
@@ -321,6 +327,15 @@ class OrderIntent extends \CFX\JsonApi\AbstractResource implements OrderIntentIn
         }
         return $this->_setRelationship('ownershipDoc', $val);
     }
+
+    public function setTender(TenderInterface $val = null)
+    {
+        if ($val) {
+            //$this->validateRelatedResourceExists('tender', $val);
+        }
+        return $this->_setRelationship('tender', $val);
+    }
+
 
 
 
