@@ -12,6 +12,9 @@ trait TenderRoomTrait
 
     public function getTenders()
     {
+        if (!in_array('tenders', $this->initializedRelationships)) {
+            $this->initialize2MRel('tenders');
+        }
         return $this->_getRelationshipValue('tenders');
     }
 

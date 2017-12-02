@@ -15,7 +15,7 @@ class DocumentTemplateTest extends \PHPUnit\Framework\TestCase
     public function testUrl()
     {
         $field = 'url';
-        $this->assertValid($field, [ 'https://something.com/my/path/to/file.pdf', '/a/local/path/to/file.pdf', '/local/file/without/ext' ]);
+        $this->assertValid($field, [ 'https://something.com/my/path/to/file.pdf', '/a/local/path/to/file.pdf', '/local/file/without/ext', "https://new-tester.com/new/path/to/test/doc.pdf", "https://new_tester.com/path/to/file.pdf" ]);
         $this->assertInvalid($field, [ null, '', new \DateTime(), 0, 12345, true, false, 'custom:protocol/for/file.pdf' ]);
         $this->assertChanged($field, "/our/file.pdf", "attributes");
         $this->assertChains($field);

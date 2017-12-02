@@ -36,7 +36,7 @@ class DocumentTemplate extends \CFX\JsonApi\AbstractResource implements Document
         $val = $this->cleanStringValue($val);
         if ($this->validateRequired('url', $val)) {
             if ($this->validateType('url', $val, 'non-numeric string')) {
-                if (!preg_match("/^(?:https?:\/\/[\w]+[\w.-_]+)?\/.+$/", $val)) {
+                if (!preg_match("/^(?:https?:\/\/[\w]+[\w._-]+)?\/.+$/", $val)) {
                     $this->setError('url', 'valid', [
                         'title' => 'Invalid URL',
                         'detail' => 'You must send a valid value for attribute `url`. It may be a relative or absolute url, something like `http://www.url.com/path/to/file.pdf`, `https://www.url.com/path/to/file`, or `/path/to/my/file.pdf`.'

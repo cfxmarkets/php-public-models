@@ -129,7 +129,7 @@ class Document extends \CFX\JsonApi\AbstractResource implements DocumentInterfac
         $val = $this->cleanStringValue($val);
 
         if ($this->validateRequired('url', $val)) {
-            if (!preg_match("/^(?:https?:\/\/[\w]+[\w.-_]+)?\/.+$/", $val) && !preg_match("/^hellosign:.{20,}$/", $val)) {
+            if (!preg_match("/^(?:https?:\/\/[\w]+[\w._-]+)?\/.+$/", $val) && !preg_match("/^hellosign:.{20,}$/", $val)) {
 				$this->setError('url', 'valid', [
 					'title' => 'Invalid `url',
 					'detail' => 'You must send a valid value for attribute `url`. It should be in the following format, ex: [`http://www.url.com`] or [`https://www.url.com`].'

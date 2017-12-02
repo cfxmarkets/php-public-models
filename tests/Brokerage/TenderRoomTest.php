@@ -26,7 +26,7 @@ class TenderRoomTest extends DealRoomTest
     {
         $field = 'tenders';
         $this->assertValid($field, [ new \CFX\JsonApi\ResourceCollection() ]);
-        $this->assertChanged($field, new \CFX\JsonApi\ResourceCollection(), 'relationships');
+        $this->assertChanged($field, new \CFX\JsonApi\ResourceCollection([ new Tender($this->datasource, ['id' => '12345']) ]), 'relationships');
         $this->assertChains($field, null);
     }
 
