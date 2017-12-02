@@ -51,6 +51,15 @@ class OrderIntentTest extends \PHPUnit\Framework\TestCase
         $this->assertImmutableOnFinalStatus($field, 5);
     }
 
+    public function testReferralKey()
+    {
+        $field = 'referralKey';
+        $this->assertValid($field, [ null, '', '0123456789abcdeffedcba9876543210' ]);
+        $this->assertInvalid($field, [ '12345', 12345, new \DateTime(), [], true, false ]);
+        $this->assertChanged($field, '0123456789abcdeeeedcba9876543210', "attributes");
+        $this->assertChains($field);
+    }
+
     public function testStatus()
     {
         $field = 'status';
