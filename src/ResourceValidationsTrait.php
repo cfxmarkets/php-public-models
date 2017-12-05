@@ -20,12 +20,18 @@ trait ResourceValidationsTrait {
         if ($val !== null) {
             if ($type === 'string') {
                 $result = is_string($val);
+            } elseif ($type === 'non-numeric string') {
+                $result = is_string($val) && !is_numeric($val);
             } elseif ($type === 'int' || $type === 'integer') {
                 $result = is_int($val);
+            } elseif ($type === 'non-string numeric') {
+                $result = !is_string($val) && is_numeric($val);
             } elseif ($type === 'string or int') {
                 $result = is_string($val) || is_int($val);
             } elseif ($type === 'boolean' || $type === 'bool') {
                 $result = is_bool($val);
+            } elseif ($type === 'datetime') {
+                $result = ($val instanceof \DateTime);
             } else {
                 throw new \RuntimeException("Programmer: Don't know how to validate for type `$type`!");
             }
@@ -200,5 +206,30 @@ trait ResourceValidationsTrait {
         }
         return $val;
     }
+
+    /**
+     * Attempts to convert an integer or string into a DateTime object
+     *
+     * @param mixed $val The value to clean
+     * @return mixed A DateTime object or the original value, if not coercible
+     */
+    protected function cleanDateTimeValue($val)
+    {
+        if (!$val) {
+            return $val;
+        }
+
+        try {
+            if (is_numeric($val)) {
+                $val = new \DateTime("@".$val);
+            } else {
+                $val = new \DateTime($val);
+            }
+            return $val;
+        } catch (\Exception $e) {
+            return $val;
+        }
+    }
 }
+
 

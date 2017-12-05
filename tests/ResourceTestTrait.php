@@ -70,13 +70,14 @@ trait ResourceTestTrait {
     {
         $set = 'set'.ucfirst($field);
 
-        if (!in_array($type, ['attributes','relationships'])) {
+        if (!in_array($type, ['attributes','relationships'], true)) {
             throw new \RuntimeException("`\$type` must be either `attributes` or `relationships`");
         }
 
         $this->resource->$set($val);
         $changes = $this->resource->getChanges();
-        $this->assertNotNull($changes[$type]);
+        $this->assertTrue(array_key_exists($type, $changes), "You expected there to be changes to one or more $type, but there are none.");
+        $this->assertNotNull($changes[$type], "You expected there to be changes to one or more $type, but there are none.");
         $this->assertContains($field, array_keys($changes[$type]));
         if ($assertSame) {
             $assertSame($val, $changes[$type][$field]);

@@ -7,6 +7,7 @@ interface OrderIntentInterface extends \CFX\JsonApi\ResourceInterface {
     public function getNumShares();
     public function getPriceHigh();
     public function getPriceLow();
+    public function getReferralKey();
     public function getStatus();
     public function getUser();
     public function getAsset();
@@ -15,12 +16,14 @@ interface OrderIntentInterface extends \CFX\JsonApi\ResourceInterface {
     public function getBankAccount();
     public function getAgreement();
     public function getOwnershipDoc();
+    public function getTender();
 
     // Setters
     public function setType($val);
     public function setNumShares($val);
     public function setPriceHigh($val);
     public function setPriceLow($val);
+    public function setReferralKey($val);
     public function setStatus($val);
     public function setUser(UserInterface $user=null);
     public function setAsset(\CFX\Exchange\AssetInterface $asset=null);
@@ -29,6 +32,7 @@ interface OrderIntentInterface extends \CFX\JsonApi\ResourceInterface {
     public function setBankAccount(BankAccountInterface $bankAccount = null);
     public function setAgreement(DocumentInterface $val = null);
     public function setOwnershipDoc(DocumentInterface $val = null);
+    public function setTender(TenderInterface $val = null);
 }
 
 

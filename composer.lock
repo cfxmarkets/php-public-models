@@ -4,15 +4,15 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "facf3feb88100b7e7796970d13cd3441",
+    "content-hash": "31dbdf071b313730d8b8943d8ed53f28",
     "packages": [
         {
             "name": "cfxmarkets/php-jsonapi-objects",
-            "version": "v1.2.0",
+            "version": "v1.2.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/cfxmarkets/php-jsonapi-objects",
-                "reference": "4d9c67f3197f87a4672b19bb2cab97df7594b947"
+                "reference": "dd430bd6112d88ddc5a6649795128ca36bc2f598"
             },
             "require": {
                 "kael-shipman/php-std-traits": "~3.2",
@@ -51,7 +51,7 @@
                 "json",
                 "jsonapi"
             ],
-            "time": "2017-11-16T19:52:26+00:00"
+            "time": "2017-12-02T00:46:42+00:00"
         },
         {
             "name": "kael-shipman/php-std-traits",

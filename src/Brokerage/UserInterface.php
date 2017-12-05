@@ -9,7 +9,9 @@ interface UserInterface extends \CFX\JsonApi\ResourceInterface {
     public function getDisplayName();
     public function getTimezone();
     public function getLanguage();
+    public function getReferralKey();
     public function getOauthTokens();
+    public function getPersonEntity();
 
     // Setters
 
@@ -18,6 +20,8 @@ interface UserInterface extends \CFX\JsonApi\ResourceInterface {
     public function setDisplayName($val);
     public function setTimezone($val);
     public function setLanguage($val);
+    public function setReferralKey($val);
     public function setOAuthTokens(\CFX\JsonApi\ResourceCollectionInterface $tokens=null);
+    public function setPersonEntity(LegalEntityInterface $val = null);
 }
 
