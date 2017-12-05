@@ -60,6 +60,15 @@ class OrderIntentTest extends \PHPUnit\Framework\TestCase
         $this->assertChains($field);
     }
 
+    public function testIssuerAccountNum()
+    {
+        $field = 'issuerAccountNum';
+        $this->assertValid($field, [ null, '', '0123456789abcdef', 12345, 'asbasd-asdf_t123' ]);
+        $this->assertInvalid($field, [ new \DateTime(), [], true, false ]);
+        $this->assertChanged($field, '0123456789abcdeeeedcba9876543210', "attributes");
+        $this->assertChains($field);
+    }
+
     public function testStatus()
     {
         $field = 'status';

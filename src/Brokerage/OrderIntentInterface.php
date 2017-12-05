@@ -8,6 +8,7 @@ interface OrderIntentInterface extends \CFX\JsonApi\ResourceInterface {
     public function getPriceHigh();
     public function getPriceLow();
     public function getReferralKey();
+    public function getIssuerAccountNum();
     public function getStatus();
     public function getUser();
     public function getAsset();
@@ -24,6 +25,7 @@ interface OrderIntentInterface extends \CFX\JsonApi\ResourceInterface {
     public function setPriceHigh($val);
     public function setPriceLow($val);
     public function setReferralKey($val);
+    public function setIssuerAccountNum($val);
     public function setStatus($val);
     public function setUser(UserInterface $user=null);
     public function setAsset(\CFX\Exchange\AssetInterface $asset=null);
