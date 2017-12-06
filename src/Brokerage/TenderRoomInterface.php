@@ -4,6 +4,13 @@ namespace CFX\Brokerage;
 interface TenderRoomInterface extends DealRoomInterface
 {
     /**
+     * Get the Tender purchaser's name
+     *
+     * @return string|null
+     */
+    public function getPurchaserName();
+
+    /**
      * Get the Purchaser LegalEntity that's sponsoring the tender room
      *
      * @return LegalEntityInterface
@@ -18,6 +25,14 @@ interface TenderRoomInterface extends DealRoomInterface
     public function getTenders();
 
 
+
+    /**
+     * Set the Tender Purchaser's name
+     *
+     * @param string $val
+     * @return static
+     */
+    public function setPurchaserName($val);
 
     /**
      * Set the room's Purchaser
