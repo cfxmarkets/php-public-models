@@ -46,6 +46,13 @@ interface TenderInterface extends \CFX\JsonApi\ResourceInterface
     public function getCloseDate();
 
     /**
+     * Get the Tender purchaser's name
+     *
+     * @return string|null
+     */
+    public function getPurchaserName();
+
+    /**
      * Get the Tender's status
      *
      * @return string|null
@@ -140,6 +147,14 @@ interface TenderInterface extends \CFX\JsonApi\ResourceInterface
      * @return static
      */
     public function setCloseDate($val);
+
+    /**
+     * Set the Tender Purchaser's name
+     *
+     * @param string $val
+     * @return static
+     */
+    public function setPurchaserName($val);
 
     /**
      * Set the Tender's status

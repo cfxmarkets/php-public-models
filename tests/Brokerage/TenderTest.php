@@ -101,6 +101,15 @@ class TenderTest extends \PHPUnit\Framework\TestCase
         $this->assertSerializesDateForSql($field);
     }
 
+    public function testPurchaserName()
+    {
+        $field = 'purchaserName';
+        $this->assertValid($field, [ 'Purchaser', 'My Legal Entity' ]);
+        $this->assertInvalid($field, [ null, '', new \DateTime(), true, false, [], 12345, '12345', 1.55 ]);
+        $this->assertChanged($field, 'New Purchaser', 'attributes');
+        $this->assertChains($field, null);
+    }
+
     public function testStatus()
     {
         $field = 'status';

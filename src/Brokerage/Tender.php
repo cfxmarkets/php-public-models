@@ -14,6 +14,7 @@ class Tender extends \CFX\JsonApi\AbstractResource implements TenderInterface
         'minSharesThreshold' => null,
         'openDate' => null,
         'closeDate' => null,
+        'purchaserName' => null,
         'status' => 'new',
     ];
     protected $relationships = [
@@ -66,6 +67,11 @@ class Tender extends \CFX\JsonApi\AbstractResource implements TenderInterface
     public function getCloseDate()
     {
         return $this->_getAttributeValue('closeDate');
+    }
+
+    public function getPurchaserName()
+    {
+        return $this->_getAttributeValue('purchaserName');
     }
 
     public function getStatus()
@@ -194,6 +200,15 @@ class Tender extends \CFX\JsonApi\AbstractResource implements TenderInterface
             $this->validateType('closeDate', $val, 'datetime');
         }
         return $this->_setAttribute('closeDate', $val);
+    }
+
+    public function setPurchaserName($val)
+    {
+        $val = $this->cleanStringValue($val);
+        if ($this->validateRequired('purchaserName', $val)) {
+            $this->validateType('purchaserName', $val, 'non-numeric string');
+        }
+        return $this->_setAttribute('purchaserName', $val);
     }
 
     public function setStatus($val)
