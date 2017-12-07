@@ -43,7 +43,7 @@ class LegalEntityTest extends \PHPUnit\Framework\TestCase
         $this->assertInvalid($field, [ 'invalid' ]);
         $this->assertValid(
             $field,
-            [ new \DateTime(), '01/01/99', '01/01/1999', (time() - (60*60*24*365*20)), (time() - (60*60*24*365*80)), (string)(time() - (60*60*24*365*80)) ],
+            [ new \DateTime(), '2011-01-01', '01/01/99', '01/01/1999', (time() - (60*60*24*365*20)), (time() - (60*60*24*365*80)), (string)(time() - (60*60*24*365*80)) ],
             function($expected, $actual) {
                 if (is_int($expected) || is_numeric($expected)) {
                     $expected = new \DateTime("@$expected");
@@ -70,6 +70,19 @@ class LegalEntityTest extends \PHPUnit\Framework\TestCase
             }
         });
         $this->assertChains($field);
+    }
+
+    public function testDateOfBirthSerializesCorrectly()
+    {
+        $date = new \DateTime();
+        $this->resource->setDateOfBirth($date);
+        $data = json_decode(json_encode($this->resource), true);
+        $this->assertEquals($date->format("Y-m-d"), $data['attributes']['dateOfBirth']);
+
+        // Shouldn't choke when serializing bad values
+        $this->resource->setDateOfBirth("excalibur!!");
+        $data = json_decode(json_encode($this->resource), true);
+        $this->assertEquals("excalibur!!", $data['attributes']['dateOfBirth']);
     }
 
     public function testPlaceOfOrigin() {

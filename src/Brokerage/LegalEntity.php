@@ -411,7 +411,7 @@ class LegalEntity extends \CFX\JsonApi\AbstractResource implements LegalEntityIn
     {
         if ($name === 'dateOfBirth') {
             $val = $this->getDateOfBirth();
-            if ($val) {
+            if ($val instanceof \DateTime) {
                 return $val->format("Y-m-d");
             } else {
                 return $val;
