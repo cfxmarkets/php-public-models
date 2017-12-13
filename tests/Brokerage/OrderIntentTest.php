@@ -12,6 +12,11 @@ class OrderIntentTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals('order-intents', $this->resource->getResourceType());
     }
 
+    public function instantiatesWithoutErrors()
+    {
+        $this->assertFalse($this->resource->hasErrors(), 'Should not have errors on intantiation');
+    }
+
     public function testType()
     {
         $field = 'type';
