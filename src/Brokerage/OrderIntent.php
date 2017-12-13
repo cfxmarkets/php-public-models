@@ -211,7 +211,7 @@ class OrderIntent extends \CFX\JsonApi\AbstractResource implements OrderIntentIn
     {
         $val = $this->cleanNumberValue($val);
         if ($this->validateReadOnly('referenceNum', $val)) {
-            $this->validateType('referenceNum', $val, 'non-string numeric');
+            $this->validateType('referenceNum', $val, 'non-string numeric', false);
             $this->_setAttribute('referenceNum', $val);
         }
         return $this;
