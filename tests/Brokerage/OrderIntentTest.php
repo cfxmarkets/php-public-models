@@ -76,6 +76,13 @@ class OrderIntentTest extends \PHPUnit\Framework\TestCase
         $this->assertChains($field, null);
     }
 
+    public function testReferenceNum()
+    {
+        $field = 'referenceNum';
+        $this->assertReadOnly($field);
+        $this->assertChains($field, null);
+    }
+
     public function testUser()
     {
         $field = 'user';
