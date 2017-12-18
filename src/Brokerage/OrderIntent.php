@@ -13,6 +13,7 @@ class OrderIntent extends \CFX\JsonApi\AbstractResource implements OrderIntentIn
         'priceLow' => null,
         'referralKey' => null,
         'issuerAccountNum' => null,
+        'referenceNum' => null,
         'status' => 'new',
     ];
     protected $relationships = [
@@ -39,6 +40,9 @@ class OrderIntent extends \CFX\JsonApi\AbstractResource implements OrderIntentIn
         'sold_closed',
         'expired',
         'cancelled',
+        'expected',
+        'sent',
+        'sold_closed_paid',
     ];
 
 
@@ -70,6 +74,11 @@ class OrderIntent extends \CFX\JsonApi\AbstractResource implements OrderIntentIn
     public function getIssuerAccountNum()
     {
         return $this->_getAttributeValue('issuerAccountNum');
+    }
+
+    public function getReferenceNum()
+    {
+        return $this->_getAttributeValue('referenceNum');
     }
 
     public function getStatus() { return $this->_getAttributeValue('status'); }
@@ -198,6 +207,17 @@ class OrderIntent extends \CFX\JsonApi\AbstractResource implements OrderIntentIn
         $val = $this->cleanStringValue($val);
         $this->validateType('issuerAccountNum', $val, 'string', false);
         return $this->_setAttribute('issuerAccountNum', $val);
+    }
+
+
+    public function setReferenceNum($val)
+    {
+        $val = $this->cleanNumberValue($val);
+        if ($this->validateReadOnly('referenceNum', $val)) {
+            $this->validateType('referenceNum', $val, 'non-string numeric', false);
+            $this->_setAttribute('referenceNum', $val);
+        }
+        return $this;
     }
 
 
