@@ -40,6 +40,9 @@ class OrderIntent extends \CFX\JsonApi\AbstractResource implements OrderIntentIn
         'sold_closed',
         'expired',
         'cancelled',
+        'expected',
+        'sent',
+        'sold_closed_paid',
     ];
 
 
