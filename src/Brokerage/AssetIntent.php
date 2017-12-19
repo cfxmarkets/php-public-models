@@ -220,6 +220,10 @@ class AssetIntent extends \CFX\JsonApi\AbstractResource implements AssetIntentIn
     }
 
 
+    /**
+     * Check to see if the status of this asset intent permits further updates
+     * @return bool
+     */
     public function validateStatus() {
         if ($this->getStatus() === 'closed') {
             $this->setError('global', 'status-final', $this->getFactory()->newError([
