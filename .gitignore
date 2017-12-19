@@ -4,7 +4,5 @@
 config.local.php
 vendor
 error_log
-phpdoc.xml
-docs/api
-docs/.api-parsing
+docs
 

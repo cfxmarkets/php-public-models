@@ -67,3 +67,8 @@ Notice here that the majority of these calls are simple getters and setters. The
 
 Beyond that, there's not too much more to point out. From here, you should study up on the [API Docs](https://apis.cfxtrading.com/cfx-brokerage-api.v2.json), as mentioned, and start writing code!
 
+
+## Note About API Documentation
+
+We're hoping to launch a site (developers.cfxtrading.com) soon that will allow us to provide more comprehensive API documentation and other resources for developers. While this site is not live yet, you can still generate good API documentation for this library by cloning the library, installing [Sami](https://github.com/FriendsOfPHP/Sami), and running `sami.phar update sami.config.php`.
+
