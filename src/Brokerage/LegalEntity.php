@@ -31,6 +31,8 @@ class LegalEntity extends \CFX\JsonApi\AbstractResource implements LegalEntityIn
         return [
             "person",
             "company",
+            "company:ira",
+            "company:trust",
         ];
     }
 
