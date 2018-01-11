@@ -5,9 +5,9 @@ class OrderIntent extends \CFX\Brokerage\OrderIntent
 {
     public function forceSetStatus($val)
     {
-        $this->honorReadOnly = false;
-        parent::setStatus($val);
-        $this->honorReadOnly = true;
+        return $this->readOnlyOverride(function() use ($val) {
+            return parent::setStatus($val);
+        });
     }
 }
 

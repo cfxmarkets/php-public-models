@@ -226,7 +226,7 @@ trait ResourceValidationsTrait {
                 $val = new \DateTime($val);
             }
             return $val;
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             return $val;
         }
     }

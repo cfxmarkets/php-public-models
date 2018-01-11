@@ -11,12 +11,12 @@
     ],
     "require" : {
         "php" : ">=5.4.0",
-        "cfxmarkets/php-jsonapi-objects": "~1.1"
+        "cfxmarkets/php-jsonapi-objects": "1.4.x-dev"
     },
     "require-dev" : {
-        "phpunit/phpunit" : "~4.8.0",
+        "phpunit/phpunit" : ">=4.8.0",
         "phpdocumentor/phpdocumentor" : "~2.9",
-        "guzzlehttp/guzzle": "~5.0"
+        "guzzlehttp/guzzle": ">=5.0"
     },
     "autoload" : {
         "psr-4" : {
@@ -37,10 +37,6 @@
         },
         {
             "type": "git",
-            "url": "https://github.com/cfxmarkets/php-std-traits.git"
-        },
-        {
-            "type": "git",
             "url": "https://github.com/kael-shipman/psr7.git"
         }
     ],
@@ -49,7 +45,8 @@
             "dev-v1.0.x": "v1.0.x-dev",
             "dev-v1.1.x": "v1.1.x-dev",
             "dev-v1.2.x": "v1.2.x-dev",
-            "dev-v1.3.x": "v1.3.x-dev"
+            "dev-v1.3.x": "v1.3.x-dev",
+            "dev-v1.4.x": "v1.4.x-dev"
         }
     }
 }
