@@ -78,7 +78,8 @@ class User extends \CFX\JsonApi\AbstractResource implements UserInterface {
 
         if ($this->validateRequired('phoneNumber', $val)) {
             if ($this->validateType('phoneNumber', $val, 'string')) {
-                if (!preg_match("/^\(?[0-9]{3}\)?[-. ]?[0-9]{3}[-. ]?[0-9]{4}$/", $val)) {
+                 
+                if (!preg_match("/^[0-9]{5,}$/", $val)) {
                     $this->setError('phoneNumber', "valid", [
                         "title" => "Invalid Attribute Value for `phoneNumber`",
                         "detail" => "The phone number you've passed is invalid"

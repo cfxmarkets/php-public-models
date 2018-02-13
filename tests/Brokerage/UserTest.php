@@ -19,9 +19,9 @@ class UserTest extends \PHPUnit\Framework\TestCase
     public function testPhoneNumber()
     {
         $field = 'phoneNumber';
-        $this->assertValid($field, [ '888.222.1111', '8888888888', '123-456-2323', 1234567890 ]);
-        $this->assertInvalid($field, [ '1234', 'nothing', true, false, new \DateTime(), [], 12345 ]);
-        $this->assertChanged($field, "111.222.3333", "attributes");
+        $this->assertValid($field, [ '8882221111', '8888888888', '1234562323', 1234567890 ]);
+        $this->assertInvalid($field, [ '888.230.0000', '+1 888-555-2233', '1234', 'nothing', true, false, new \DateTime(), [], 1234 ]);
+        $this->assertChanged($field, "1112223333", "attributes");
         $this->assertChains($field);
     }
 
