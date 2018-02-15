@@ -170,6 +170,61 @@ class OrderIntentTest extends \PHPUnit\Framework\TestCase
         }
     }
 
+    public function testSuccessfullyInitializesAfterListed()
+    {
+        $this->datasource->setCurrentData([
+            'id' => '1234',
+            'type' => 'order-intents',
+            'attributes' => [
+                'type' => 'buy',
+                'numShares' => '12345',
+                'priceHigh' => 2.50,
+                'status' => 'listed',
+            ],
+            'relationships' => [
+                'user' => [
+                    'data' => [
+                        'id' => '1',
+                        'type' => 'users',
+                    ]
+                ],
+                'asset' => [
+                    'data' => [
+                        'id' => 'INVT001',
+                        'type' => 'assets',
+                    ]
+                ],
+                'assetOwner' => [
+                    'data' => [
+                        'id' => '1',
+                        'type' => 'legal-entities',
+                    ],
+                ],
+                'order' => [
+                    'data' => [
+                        'id' => '1',
+                        'type' => 'orders',
+                    ],
+                ],
+                'bankAccount' => [
+                    'data' => [
+                        'id' => '1',
+                        'type' => 'bank-accounts',
+                    ],
+                ],
+            ]
+        ]);
+        $this->datasource
+            ->addClassToCreate("\\CFX\\Brokerage\\User")
+            ->addClassToCreate("\\CFX\\Exchange\\Asset")
+            ->addClassToCreate("\\CFX\\Brokerage\\LegalEntity")
+            ->addClassToCreate("\\CFX\\Exchange\\Order")
+            ->addClassToCreate("\\CFX\\Brokerage\\BankAccount");
+        $intent = new \CFX\Brokerage\OrderIntent($this->datasource);
+
+        $this->assertEquals([], json_decode(json_encode($intent->getErrors()), true));
+    }
+
     public function testAgreement()
     {
         $this->markTestIncomplete();
