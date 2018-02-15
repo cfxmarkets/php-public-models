@@ -436,11 +436,11 @@ class OrderIntent extends \CFX\JsonApi\AbstractResource implements OrderIntentIn
 
     protected function validateStatusActive($field) {
         $passedStates = [
-            'listed' => ["Sale In Progress", "This intent has already passed to listing phase and cannot be altered"],
-            'sold' => ["Item Already Sold", "This intent has already been successfully executed and sold and cannot be altered"],
-            'sold_closed' => ["Item Closed", "This intent has been closed and cannot be altered"],
-            'expired' => ["Item Expired", "This intent has expired and cannot be altered"],
-            'cancelled' => ["Item Cancelled", "This intent has been cancelled and cannot be altered"],
+            'listed' => "Sale In Progress: This intent has already passed to listing phase and cannot be altered",
+            'sold' => "Item Already Sold: This intent has already been successfully executed and sold and cannot be altered",
+            'sold_closed' => "Item Closed: This intent has been closed and cannot be altered",
+            'expired' => "Item Expired: This intent has expired and cannot be altered",
+            'cancelled' => "Item Cancelled: This intent has been cancelled and cannot be altered",
         ];
 
         if (in_array($this->getStatus(), array_keys($passedStates))) {
