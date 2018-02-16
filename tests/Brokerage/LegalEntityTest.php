@@ -191,6 +191,8 @@ class LegalEntityTest extends \PHPUnit\Framework\TestCase
         $this->assertFalse($this->resource->hasErrors('idDocs'));
 
         $val = new \CFX\JsonApi\ResourceCollection();
+        $this->datasource->setRelated('idDocs', $val);
+
         $this->resource->setIdDocs($val);
         $this->assertFalse($this->resource->hasErrors('idDocs'));
         $this->assertEquals($val, $this->resource->getIdDocs());

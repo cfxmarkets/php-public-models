@@ -103,7 +103,7 @@ class LegalEntity extends \CFX\JsonApi\AbstractResource implements LegalEntityIn
 
     public function getIdDocs()
     {
-        return $this->_getRelationshipValue('idDocs');
+        return $this->get2MRel('idDocs');
     }
 
 
