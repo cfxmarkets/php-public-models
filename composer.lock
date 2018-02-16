@@ -8,11 +8,11 @@
     "packages": [
         {
             "name": "cfxmarkets/php-jsonapi-objects",
-            "version": "v1.4.1",
+            "version": "v1.4.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/cfxmarkets/php-jsonapi-objects",
-                "reference": "ef4a0bd26e5e8f2a5fb16b2d787a4070246081cf"
+                "reference": "67c6ae7d11432bd35b4df2203929190a7833ea38"
             },
             "require": {
                 "kael-shipman/php-std-traits": "^3.2.4",
@@ -53,7 +53,7 @@
                 "json",
                 "jsonapi"
             ],
-            "time": "2018-02-15T21:56:46+00:00"
+            "time": "2018-02-16T02:01:27+00:00"
         },
         {
             "name": "kael-shipman/php-std-traits",
