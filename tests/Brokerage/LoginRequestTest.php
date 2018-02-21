@@ -25,6 +25,17 @@ class LoginRequestTest extends \PHPUnit\Framework\TestCase
     {
         $this->markTestIncomplete();
     }
+
+    public function testExpirationIsReadOnly()
+    {
+        $r = new \CFX\Brokerage\LoginRequest($this->datasource, [
+            'attributes' => [
+                'expiration' => '12345667788',
+            ]
+        ]);
+        $this->assertTrue($r->hasErrors('expiration'));
+        $this->assertContains('readonly', array_keys($r->getErrors('expiration')));
+    }
 }
 
 

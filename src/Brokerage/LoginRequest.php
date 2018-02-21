@@ -36,11 +36,14 @@ class LoginRequest extends \CFX\JsonApi\AbstractResource implements LoginRequest
 
     protected function setExpiration($val = null): LoginRequestInterface
     {
-        $val = $this->cleanDateTimeValue($val);
-        if ($this->validateRequired('expiration', $val)) {
-            $this->validateType('expiration', $val, 'datetime');
+        if ($this->validateReadOnly('expiration', $val)) {
+            $val = $this->cleanDateTimeValue($val);
+            if ($this->validateRequired('expiration', $val)) {
+                $this->validateType('expiration', $val, 'datetime');
+            }
+            return $this->_setAttribute('expiration', $val);
         }
-        return $this->_setAttribute('expiration', $val);
+        return $this;
     }
 
     protected function serializeAttribute($name) {
