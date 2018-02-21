@@ -32,6 +32,8 @@ trait ResourceValidationsTrait {
                 $result = is_bool($val);
             } elseif ($type === 'datetime') {
                 $result = ($val instanceof \DateTime);
+            } elseif ($type === 'email') {
+                $result = preg_match("/^([a-z0-9\+_\-]+)(\.[a-z0-9\+_\-]+)*@([a-z0-9\-]+\.)+[a-z]{2,6}$/ix", $val);
             } else {
                 throw new \RuntimeException("Programmer: Don't know how to validate for type `$type`!");
             }
@@ -45,7 +47,7 @@ trait ResourceValidationsTrait {
         } else {
             $this->setError($field, 'validType', [
                 "title" => "Invalid Value for Field `$field`",
-                "detail" => "Field `$field` must be a $type value."
+                "detail" => "Field `$field` must be a(n) $type value."
             ]);
             return false;
         }
@@ -138,6 +140,28 @@ trait ResourceValidationsTrait {
                 "detail" => "The `$field` you've indicated for this order is not currently in our system."
             ]);
             return false;
+        }
+    }
+
+    /**
+     * Validates that the given value has not been changed since the first time it was set
+     *
+     * @param string $field The name of the field (attribute or relationship) being validated
+     * @param mixed $val The value to validate
+     * @param bool $required Whether or not the resource is required (this affects how `null` is handled)
+     * @return bool Whether or not the validation has passed
+     */
+    protected function validateImmutable($field, $val, $required = true)
+    {
+        if ($this->getInitial($field) && $this->valueDiffersFromInitial($field, $val)) {
+            $this->setError($field, 'immutable', [
+                "title" => "`$field` is Immutable",
+                "detail" => "You can't change the `$field` field of this resource once it's been set.",
+            ]);
+            return false;
+        } else {
+            $this->clearError($field, 'immutable');
+            return true;
         }
     }
 
