@@ -15,7 +15,6 @@
     },
     "require-dev" : {
         "phpunit/phpunit" : ">=4.8.0",
-        "phpdocumentor/phpdocumentor" : "~2.9",
         "guzzlehttp/guzzle": "^6.0.0"
     },
     "autoload" : {
@@ -42,11 +41,10 @@
     ],
     "extra": {
         "branch-alias": {
-            "dev-v1.0.x": "v1.0.x-dev",
-            "dev-v1.1.x": "v1.1.x-dev",
             "dev-v1.2.x": "v1.2.x-dev",
             "dev-v1.3.x": "v1.3.x-dev",
-            "dev-v1.4.x": "v1.4.x-dev"
+            "dev-v1.4.x": "v1.4.x-dev",
+            "dev-v1.5.x": "v1.5.x-dev"
         }
     }
 }

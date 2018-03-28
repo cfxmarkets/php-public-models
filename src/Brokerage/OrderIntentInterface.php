@@ -10,6 +10,8 @@ interface OrderIntentInterface extends \CFX\JsonApi\ResourceInterface {
     public function getReferralKey();
     public function getIssuerAccountNum();
     public function getReferenceNum();
+    public function getPaymentMethod();
+    public function getPaid();
     public function getStatus();
     public function getUser();
     public function getAsset();
@@ -28,6 +30,8 @@ interface OrderIntentInterface extends \CFX\JsonApi\ResourceInterface {
     public function setReferralKey($val);
     public function setIssuerAccountNum($val);
     public function setReferenceNum($val);
+    public function setPaymentMethod($val);
+    public function setPaid($val);
     public function setStatus($val);
     public function setUser(UserInterface $user=null);
     public function setAsset(\CFX\Exchange\AssetInterface $asset=null);

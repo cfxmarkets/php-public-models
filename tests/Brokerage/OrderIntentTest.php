@@ -88,6 +88,24 @@ class OrderIntentTest extends \PHPUnit\Framework\TestCase
         $this->assertChains($field, null);
     }
 
+    public function testPaymentMethod()
+    {
+        $field = 'paymentMethod';
+        $this->assertValid($field, [ null, '', "credit-card", "ach", "wire", "arbitrary method" ]);
+        $this->assertInvalid($field, [ new \DateTime(), 1234, true, false ]);
+        $this->assertChanged($field, "ach", "attributes");
+        $this->assertChains($field);
+    }
+
+    public function testPaid()
+    {
+        $field = 'paid';
+        $this->assertValid($field, [ true, false ]);
+        $this->assertInvalid($field, [ new \DateTime(), 1234, "paid" ]);
+        $this->assertChanged($field, true, "attributes");
+        $this->assertChains($field);
+    }
+
     public function testUser()
     {
         $field = 'user';
