@@ -14,6 +14,8 @@ class OrderIntent extends \CFX\JsonApi\AbstractResource implements OrderIntentIn
         'referralKey' => null,
         'issuerAccountNum' => null,
         'referenceNum' => null,
+        'paymentMethod' => null,
+        'paid' => false,
         'status' => 'new',
     ];
     protected $relationships = [
@@ -79,6 +81,16 @@ class OrderIntent extends \CFX\JsonApi\AbstractResource implements OrderIntentIn
     public function getReferenceNum()
     {
         return $this->_getAttributeValue('referenceNum');
+    }
+
+    public function getPaymentMethod()
+    {
+        return $this->_getAttributeValue('paymentMethod');
+    }
+
+    public function getPaid()
+    {
+        return $this->_getAttributeVAlue('paid');
     }
 
     public function getStatus() { return $this->_getAttributeValue('status'); }
@@ -220,6 +232,19 @@ class OrderIntent extends \CFX\JsonApi\AbstractResource implements OrderIntentIn
         return $this;
     }
 
+    public function setPaymentMethod($val)
+    {
+        $val = $this->cleanStringValue($val);
+        $this->validateType('paymentMethod', $val, 'non-numeric string', false);
+        return $this->_setAttribute('paymentMethod', $val);
+    }
+
+    public function setPaid($val)
+    {
+        $val = $this->cleanBooleanValue($val);
+        $this->validateType('paid', $val, 'bool', true);
+        return $this->_setAttribute('paid', $val);
+    }
 
     public function setStatus($val) {
         if ($this->validateReadOnly('status', $val)) {

@@ -201,7 +201,7 @@ trait ResourceValidationsTrait {
     protected function cleanBooleanValue($val)
     {
         if ($val !== null) {
-            if ($val == 1 || $val === 0 || $val === '0') {
+            if ($val === 1 || $val === '1' || $val === 0 || $val === '0') {
                 $val = (bool)$val;
             }
         }
