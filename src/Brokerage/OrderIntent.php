@@ -17,6 +17,7 @@ class OrderIntent extends \CFX\JsonApi\AbstractResource implements OrderIntentIn
         'paymentMethod' => null,
         'paid' => false,
         'status' => 'new',
+        'createdOn' => null,
     ];
     protected $relationships = [
         'user' => null,
@@ -90,7 +91,12 @@ class OrderIntent extends \CFX\JsonApi\AbstractResource implements OrderIntentIn
 
     public function getPaid()
     {
-        return $this->_getAttributeVAlue('paid');
+        return $this->_getAttributeValue('paid');
+    }
+
+    public function getCreatedOn()
+    {
+        return $this->_getAttributeValue('createdOn');
     }
 
     public function getStatus() { return $this->_getAttributeValue('status'); }
@@ -252,6 +258,13 @@ class OrderIntent extends \CFX\JsonApi\AbstractResource implements OrderIntentIn
             $this->_setAttribute('status', $val);
         }
         return $this;
+    }
+
+    public function setCreatedOn($val)
+    {
+        $val = $this->cleanDateTimeValue($val);
+        $this->validateReadOnly('createdOn', $val);
+        return $this->_setAttribute('createdOn', $val);
     }
 
 

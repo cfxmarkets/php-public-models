@@ -260,5 +260,35 @@ class OrderIntentTest extends \PHPUnit\Framework\TestCase
         $this->assertChanged($field, new Tender($this->datasource, ['id'=>'67890']), 'relationships');
         $this->assertChains($field, null);
     }
+
+    public function testCreatedOn()
+    {
+        $field = 'createdOn';
+        $this->assertReadOnly($field);
+        $this->assertChains($field, null);
+
+        $mock= new \CFX\JsonApi\Test\MockDatasource();
+
+        // Test that it can be successfully created without errors
+        $intent = $mock
+            ->addClassToCreate("\\CFX\\Brokerage\\OrderIntent")
+            ->create();
+
+        $this->assertFalse($intent->hasErrors('createdOn'));
+        $this->assertNull($intent->getCreatedOn());
+
+        // Test that it can be successfully inflated without errors
+        $intent = $mock
+            ->addClassToCreate("\\CFX\\Brokerage\\OrderIntent")
+            ->setCurrentData([
+                'id' => 12345,
+                'type' => 'order-intents',
+            ])
+            ->get("id=12345")
+        ;
+
+        $this->assertFalse($intent->hasErrors('createdOn'));
+        $this->assertNull($intent->getCreatedOn());
+    }
 }
 

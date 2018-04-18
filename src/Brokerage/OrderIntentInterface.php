@@ -13,6 +13,7 @@ interface OrderIntentInterface extends \CFX\JsonApi\ResourceInterface {
     public function getPaymentMethod();
     public function getPaid();
     public function getStatus();
+    public function getCreatedOn();
     public function getUser();
     public function getAsset();
     public function getAssetIntent();
