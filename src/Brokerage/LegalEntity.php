@@ -3,6 +3,7 @@ namespace CFX\Brokerage;
 
 class LegalEntity extends \CFX\JsonApi\AbstractResource implements LegalEntityInterface
 {
+    use \CFX\ResourceValidationsTrait;
     use \CFX\JsonApi\Rel2MTrait;
 
     protected $resourceType = 'legal-entities';
@@ -218,31 +219,9 @@ class LegalEntity extends \CFX\JsonApi\AbstractResource implements LegalEntityIn
 
     public function setDateOfBirth($val)
     {
-        if ($val) {
-            try {
-                if (is_numeric($val)) {
-                    $dob = "@$val";
-                } else {
-                    $dob = $val;
-                }
-                if (!($dob instanceof \DateTime)) {
-                    $dob = new \DateTime($dob);
-                }
-                $this->clearError('dateOfBirth', 'valid');
-            } catch (\Exception $e) {
-                $dob = $val;
-                $this->setError('dateOfBirth', 'valid', [
-                    "title" => "Invalid Value for `dateOfBirth`",
-                    "detail" => "Value for `dateOfBirth` field must either be an integer unix timestamp or some other date ".
-                    "value interpretable by PHP's `DateTime` constructor."
-                ]);
-            }
-        } else {
-            $this->clearError('dateOfBirth', 'valid');
-            $dob = $val;
-        }
-
-        return $this->_setAttribute('dateOfBirth', $dob);
+        $val = $this->cleanDateTimeValue($val);
+        $this->validateType('dateOfBirth', $val, 'datetime', false);
+        return $this->_setAttribute('dateOfBirth', $val);
     }
 
     public function setPlaceOfOrigin($val)

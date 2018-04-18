@@ -51,53 +51,14 @@ class TenderTest extends \PHPUnit\Framework\TestCase
     public function testOpenDate()
     {
         $field = 'openDate';
-        $this->assertValid($field, [ 1234567890, -12345566828, '12345', new \DateTime() ], function($expected, $actual) {
-            if (is_numeric($expected)) {
-                $exp = new \DateTime("@".$expected);
-            } else {
-                $exp = $expected;
-            }
-            $this->assertInstanceOf('\\DateTime', $actual);
-            $this->assertEquals( $exp->format('YmdHis'), $actual->format('YmdHis')
-            );
-        });
-        $this->assertInvalid($field, [ null, '', 0, false, true, 'the thirteenth' ]);
-        $this->assertChanged($field, 55522233, "attributes", function($expected, $actual) use ($field) {
-            if (is_numeric($expected)) {
-                $exp = new \DateTime("@".$expected);
-            } else {
-                $exp = $expected;
-            }
-            $this->assertTrue(is_string($actual), "`$field` should have returned a string on serialize.");
-            $this->assertEquals($exp->format('Y-m-d H:i:s'), $actual);
-        });
-        $this->assertChains($field, 332233322);
+        $this->_testDateField($field, true);
         $this->assertSerializesDateForSql($field);
     }
 
     public function testCloseDate()
     {
         $field = 'closeDate';
-        $this->assertValid($field, [ 1234567890, -12345566828, '12345', new \DateTime() ], function($expected, $actual) {
-            if (is_numeric($expected)) {
-                $exp = new \DateTime("@".$expected);
-            } else {
-                $exp = $expected;
-            }
-            $this->assertInstanceOf('\\DateTime', $actual);
-            $this->assertEquals($exp->format('YmdHis'), $actual->format('YmdHis'));
-        });
-        $this->assertInvalid($field, [ null, '', 0, false, true, 'the thirteenth' ]);
-        $this->assertChanged($field, 55522233, "attributes", function($expected, $actual) use ($field) {
-            if (is_numeric($expected)) {
-                $exp = new \DateTime("@".$expected);
-            } else {
-                $exp = $expected;
-            }
-            $this->assertTrue(is_string($actual), "`$field` should have returned a string on serialize.");
-            $this->assertEquals($exp->format('Y-m-d H:i:s'), $actual);
-        });
-        $this->assertChains($field, 332233322);
+        $this->_testDateField($field, true);
         $this->assertSerializesDateForSql($field);
     }
 
@@ -157,20 +118,6 @@ class TenderTest extends \PHPUnit\Framework\TestCase
         $this->assertInvalid($field, [ null ]);
         $this->assertChanged($field, new LegalEntity($this->datasource, ['id'=>'12345']), "relationships");
         $this->assertChains($field);
-    }
-
-
-
-
-    public function assertSerializesDateForSql($field)
-    {
-        $set = "set".ucfirst($field);
-        $date = new \DateTime();
-        $this->resource->$set($date);
-        $changes = $this->resource->getChanges();
-        $this->assertContains('attributes', array_keys($changes));
-        $this->assertContains($field, array_keys($changes['attributes']));
-        $this->assertEquals($date->format("Y-m-d H:i:s"), $changes['attributes'][$field]);
     }
 }
 

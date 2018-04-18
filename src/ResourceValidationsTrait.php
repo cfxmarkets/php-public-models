@@ -239,10 +239,17 @@ trait ResourceValidationsTrait {
      */
     protected function cleanDateTimeValue($val)
     {
-        if (!$val) {
+        // Uninterpretable values get returned as is
+        if ((is_string($val) && substr($val, 0, 4) === '0000') || $val === false) {
             return $val;
         }
 
+        // null and null-equivalent get returned as null
+        if ($val === '' || $val === null) {
+            return null;
+        }
+
+        // For everything else, we try to make a date out of it
         try {
             if (is_numeric($val)) {
                 $val = new \DateTime("@".$val);

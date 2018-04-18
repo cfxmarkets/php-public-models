@@ -39,36 +39,7 @@ class LegalEntityTest extends \PHPUnit\Framework\TestCase
 
     public function testDateOfBirth() {
         $field = 'dateOfBirth';
-
-        $this->assertInvalid($field, [ 'invalid' ]);
-        $this->assertValid(
-            $field,
-            [ new \DateTime(), '2011-01-01', '01/01/99', '01/01/1999', (time() - (60*60*24*365*20)), (time() - (60*60*24*365*80)), (string)(time() - (60*60*24*365*80)) ],
-            function($expected, $actual) {
-                if (is_int($expected) || is_numeric($expected)) {
-                    $expected = new \DateTime("@$expected");
-                } elseif (is_string($expected)) {
-                    $expected = new \DateTime($expected);
-                }
-
-                if ($actual === null) {
-                    $this->assertEquals($expected, $actual);
-                } else {
-                    $this->assertInstanceOf("\\DateTime", $actual);
-                    $this->assertEquals($expected->format("Ymd"), $actual->format("Ymd"));
-                }
-            }
-        );
-        $this->assertChanged($field, "01/01/2001", 'attributes', function($expected, $actual) {
-            if (!$actual) {
-                $this->assertEquals($expected, $actual);
-            } else {
-                if (is_string($expected)) {
-                    $expected = new \DateTime($expected);
-                }
-                $this->assertEquals($expected->format("Y-m-d"), $actual);
-            }
-        });
+        $this->_testDateField($field, false);
         $this->assertChains($field);
     }
 

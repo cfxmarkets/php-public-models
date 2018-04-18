@@ -123,33 +123,3 @@ class AssetIntentTest extends \PHPUnit\Framework\TestCase {
 
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
