@@ -18,6 +18,7 @@ class OrderIntent extends \CFX\JsonApi\AbstractResource implements OrderIntentIn
         'paid' => false,
         'status' => 'new',
         'createdOn' => null,
+        'investmentAccountUri' => null,
     ];
     protected $relationships = [
         'user' => null,
@@ -97,6 +98,11 @@ class OrderIntent extends \CFX\JsonApi\AbstractResource implements OrderIntentIn
     public function getCreatedOn()
     {
         return $this->_getAttributeValue('createdOn');
+    }
+
+    public function getInvestmentAccountUri()
+    {
+        return $this->_getAttributeValue('investmentAccountUri');
     }
 
     public function getStatus() { return $this->_getAttributeValue('status'); }
@@ -265,6 +271,13 @@ class OrderIntent extends \CFX\JsonApi\AbstractResource implements OrderIntentIn
         $val = $this->cleanDateTimeValue($val);
         $this->validateReadOnly('createdOn', $val);
         return $this->_setAttribute('createdOn', $val);
+    }
+
+    public function setInvestmentAccountUri($val)
+    {
+        $val = $this->cleanStringValue($val);
+        $this->validateType('investmentAccountUri', $val, 'string', false);
+        return $this->_setAttribute('investmentAccountUri', $val);
     }
 
 

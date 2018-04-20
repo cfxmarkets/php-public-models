@@ -307,5 +307,15 @@ class OrderIntentTest extends \PHPUnit\Framework\TestCase
         $this->assertInstanceOf("\\DateTimeInterface", $intent->getCreatedOn());
         $this->assertEquals('2018-01-01 00:00:00', $intent->getCreatedOn()->format('Y-m-d H:i:s'));
     }
+
+    public function testInvestmentAccountUri()
+    {
+        $field = "investmentAccountUri";
+        $this->assertValid($field, [ null, '', 'p2p://ethereum/abcde12345', 'something://else' ]);
+        $this->assertInvalid($field, [ true, false, 1.23, new \DateTime() ]);
+        $this->assertChanged($field, "p2p://new/address", "attributes");
+        $this->assertChains($field);
+        $this->markTestIncomplete("Should validate for well-formed uri");
+    }
 }
 
