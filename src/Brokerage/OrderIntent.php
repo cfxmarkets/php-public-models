@@ -440,6 +440,29 @@ class OrderIntent extends \CFX\JsonApi\AbstractResource implements OrderIntentIn
 
 
 
+    /**
+     * Serialize createdOn field to a value that SQL understands
+     *
+     * We have to do this here because when order intents are serialized that already have a createdOn date
+     * set, they end up sending malformed data to the API. This is because \DateTime actually does implement
+     * jsonSerialize, but in a way that breaks our implementation.
+     */
+    public function serializeAttribute($name)
+    {
+        if ($name === 'createdOn') {
+            $val = $this->getCreatedOn();
+            if ($val instanceof \DateTimeInterface) {
+                $val = $val->format("Y-m-d H:i:s");
+            }
+            return (string)$val;
+        }
+        return parent::serializeAttribute($name);
+    }
+
+
+
+
+
 
 
 
