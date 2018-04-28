@@ -329,7 +329,6 @@ class OrderIntent extends \CFX\JsonApi\AbstractResource implements OrderIntentIn
                         ]);
                     } else {
                         $this->clearError('assetOrAssetIntent', 'duplicate');
-                        $this->validateRelatedResourceExists('asset', $asset);
                         // Should add considerations for asset status (non-tradable assets shouldn't be valid)
                     }
                 }
@@ -370,7 +369,6 @@ class OrderIntent extends \CFX\JsonApi\AbstractResource implements OrderIntentIn
                         ]);
                     } else {
                         $this->clearError('assetOrAssetIntent', 'duplicate');
-                        $this->validateRelatedResourceExists('assetIntent', $assetIntent);
                     }
                 }
             }
@@ -382,57 +380,36 @@ class OrderIntent extends \CFX\JsonApi\AbstractResource implements OrderIntentIn
 
     public function setAssetOwner(\CFX\Brokerage\LegalEntityInterface $owner = null)
     {
-        if ($this->validateStatusActive('assetOwner')) {
-            if ($owner) {
-                $this->validateRelatedResourceExists('assetOwner', $owner);
-            }
-        }
+        $this->validateStatusActive('assetOwner');
         return $this->_setRelationship('assetOwner', $owner);
     }
 
 
     public function setOrder(\CFX\Exchange\OrderInterface $order=null) {
         if ($this->validateReadOnly('order', $order)) {
-            if (!$this->validateStatusActive('order')) {
-                if ($order) {
-                    $this->validateRelatedResourceExists('order', $order);
-                }
-            }
+            $this->validateStatusActive('order');
         }
         return $this->_setRelationship('order', $order);
     }
 
     public function setBankAccount(\CFX\Brokerage\BankAccountInterface $bankAccount = null)
     {
-        if ($this->validateStatusActive('bankAccount')) {
-            if ($bankAccount) {
-                $this->validateRelatedResourceExists('bankAccount', $bankAccount);
-            }
-        }
+        $this->validateStatusActive('bankAccount');
         return $this->_setRelationship('bankAccount', $bankAccount);
     }
 
     public function setAgreement(DocumentInterface $val = null)
     {
-        if ($val) {
-            //$this->validateRelatedResourceExists('agreement', $val);
-        }
         return $this->_setRelationship('agreement', $val);
     }
 
     public function setOwnershipDoc(DocumentInterface $val = null)
     {
-        if ($val) {
-            //$this->validateRelatedResourceExists('ownershipDoc', $val);
-        }
         return $this->_setRelationship('ownershipDoc', $val);
     }
 
     public function setTender(TenderInterface $val = null)
     {
-        if ($val) {
-            //$this->validateRelatedResourceExists('tender', $val);
-        }
         return $this->_setRelationship('tender', $val);
     }
 
