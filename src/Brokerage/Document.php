@@ -38,6 +38,8 @@ class Document extends \CFX\JsonApi\AbstractResource implements DocumentInterfac
         'id' => "Proof of Identity",
         'ownership' => "Proof of Ownership",
         'agreement' => "Signed Contract",
+        "accreditation" => "Proof of Accreditation",
+        "residency" => "Proof of Residency",
     ];
 
     /**
@@ -168,7 +170,7 @@ class Document extends \CFX\JsonApi\AbstractResource implements DocumentInterfac
             if ($val) {
                 $this->clearError('legalEntity', 'required');
 
-                if ($this->getType() !== 'id') {
+                if (!in_array($this->getType(), [ 'id', "accreditation", "residency" ], true)) {
                     $this->setError("legalEntity", "invalidForType", [
                         "title" => "Illegal Entity",
                         "detail" => "Documents of type `{$this->getType()}` cannot have LegalEntities associated with them."
@@ -177,7 +179,7 @@ class Document extends \CFX\JsonApi\AbstractResource implements DocumentInterfac
                     $this->clearError('legalEntity', "invalidForType");
                 }
             } else {
-                if ($this->getType() === 'id') {
+                if (in_array($this->getType(), [ 'id', "accreditation", "residency" ], true)) {
                     $this->setError("legalEntity", "required", [
                         "title" => "Field `legalEntity` Required",
                         "detail" => "Field `legalEntity` is required for documents of type `{$this->getType()}`",
@@ -199,7 +201,7 @@ class Document extends \CFX\JsonApi\AbstractResource implements DocumentInterfac
             if ($val) {
                 $this->clearError('orderIntent', 'required');
 
-                if (!in_array($this->getType(), [ 'agreement', 'ownership' ])) {
+                if (!in_array($this->getType(), [ 'agreement', 'ownership' ], true)) {
                     $this->setError("orderIntent", "invalidForType", [
                         "title" => "Illegal Order Intent",
                         "detail" => "Documents of type `{$this->getType()}` cannot have OrderIntents associated with them."
@@ -208,7 +210,7 @@ class Document extends \CFX\JsonApi\AbstractResource implements DocumentInterfac
                     $this->clearError('orderIntent', "invalidForType");
                 }
             } else {
-                if (in_array($this->getType(), [ 'agreement', 'ownership' ])) {
+                if (in_array($this->getType(), [ 'agreement', 'ownership' ], true)) {
                     $this->setError("orderIntent", "required", [
                         "title" => "Field `orderIntent` Required",
                         "detail" => "Field `orderIntent` is required for documents of type `{$this->getType()}`",
