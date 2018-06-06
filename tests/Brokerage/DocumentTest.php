@@ -21,6 +21,8 @@ class DocumentTest extends \PHPUnit\Framework\TestCase
             'id' => "Proof of Identity",
             'ownership' => "Proof of Ownership",
             'agreement' => "Signed Contract",
+            "accreditation" => "Proof of Accreditation",
+            "residency" => "Proof of Residency"
         ];
 
         $appTypes = Document::getValidTypes();
@@ -29,8 +31,8 @@ class DocumentTest extends \PHPUnit\Framework\TestCase
 
         $i = 0;
         foreach($types as $k => $v) {
-            $this->assertEquals($appKeys[$i], $k);
-            $this->assertEquals($appVals[$i], $v);
+            $this->assertEquals($k, $appKeys[$i]);
+            $this->assertEquals($v, $appVals[$i]);
             $i++;
         }
     }
@@ -101,20 +103,26 @@ class DocumentTest extends \PHPUnit\Framework\TestCase
         $this->assertFalse($this->resource->hasErrors("legalEntity"));
         $this->assertTrue($this->resource->hasErrors("type"));
 
+        // Agreement docs can't have legal entities
         $this->resource->setType('agreement');
         $this->assertTrue($this->resource->hasErrors('legalEntity'));
         $this->assertContains("invalidForType", array_keys($this->resource->getErrors('legalEntity')));
 
+        // Ownership docs can't have legal entities
         $this->resource->setType("ownership");
         $this->assertTrue($this->resource->hasErrors('legalEntity'));
         $this->assertContains("invalidForType", array_keys($this->resource->getErrors('legalEntity')));
 
-        $this->resource->setType("id");
-        $this->assertFalse($this->resource->hasErrors('legalEntity'));
+        // ID docs, Accreditation docs, and Residency docs MUST have LegalEntity
+        foreach ([ "id", "accreditation", "residency" ] as $type) {
+            $this->resource->setLegalEntity($entity);
+            $this->resource->setType($type);
+            $this->assertFalse($this->resource->hasErrors('legalEntity'), "$type documents should be valid with LegalEntities");
 
-        $this->resource->setLegalEntity(null);
-        $this->assertTrue($this->resource->hasErrors('legalEntity'));
-        $this->assertContains("required", array_keys($this->resource->getErrors('legalEntity')));
+            $this->resource->setLegalEntity(null);
+            $this->assertTrue($this->resource->hasErrors('legalEntity'), "$type documents should REQUIRE a LegalEntity");
+            $this->assertContains("required", array_keys($this->resource->getErrors('legalEntity')), "$type documents should REQUIRE a LegalEntity");
+        }
     }
 
     public function testOrderIntent()
@@ -128,19 +136,26 @@ class DocumentTest extends \PHPUnit\Framework\TestCase
         $this->assertFalse($this->resource->hasErrors("orderIntent"));
         $this->assertTrue($this->resource->hasErrors("type"));
 
+        // id docs can't have order intents
         $this->resource->setType("id");
         $this->assertTrue($this->resource->hasErrors('orderIntent'));
         $this->assertContains("invalidForType", array_keys($this->resource->getErrors('orderIntent')));
 
+        // agreement docs must have order intents
         $this->resource->setType('agreement');
         $this->assertFalse($this->resource->hasErrors('orderIntent'));
 
+        // ownership docs must have order intents
         $this->resource->setType("ownership");
         $this->assertFalse($this->resource->hasErrors('orderIntent'));
 
+        // ownership and agreement docs REQUIRE an OrderIntent
         $this->resource->setOrderIntent(null);
-        $this->assertTrue($this->resource->hasErrors('orderIntent'));
-        $this->assertContains("required", array_keys($this->resource->getErrors('orderIntent')));
+        foreach (["ownership", "agreement" ] as $type) {
+            $this->resource->setType($type);
+            $this->assertTrue($this->resource->hasErrors('orderIntent'));
+            $this->assertContains("required", array_keys($this->resource->getErrors('orderIntent')), "$type documents should require an OrderIntent");
+        }
     }
 
     public function testIntegration() {
