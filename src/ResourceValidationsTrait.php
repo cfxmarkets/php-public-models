@@ -203,6 +203,8 @@ trait ResourceValidationsTrait {
         if ($val !== null) {
             if ($val === 1 || $val === '1' || $val === 0 || $val === '0') {
                 $val = (bool)$val;
+            } elseif (is_string($val) && trim($val) === '') {
+                $val = null;
             }
         }
         return $val;
