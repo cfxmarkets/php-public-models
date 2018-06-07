@@ -12,36 +12,6 @@ class FundingSourceTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals('funding-sources', $this->resource->getResourceType());
     }
 
-    public function testType()
-    {
-        // Can only test type on _receipt_ of resource from datasource
-        $fundingSources = new \CFX\JsonApi\Test\MockDatasource();
-        $fundingSources
-            ->addClassToCreate("\\CFX\\Brokerage\\FundingSource")
-            ->addClassToCreate("\\CFX\\Brokerage\\LegalEntity")
-            ->setCurrentData([
-                "type" => "funding-sources",
-                "id" => "12345",
-                "attributes" => [
-                    "type" => "bank-accounts",
-                    "availableBalance" => 50000,
-                    "pendingBalance" => 3000,
-                ],
-                "relationships" => [
-                    "ownerEntity" => [
-                        "data" => [
-                            "type" => "legal-entities",
-                            "id" => "abcde",
-                        ]
-                    ]
-                ]
-            ])
-        ;
-
-        $fundingSource = $fundingSources->get("id=12345");
-        $this->assertEquals("bank-accounts", $fundingSource->getType());
-    }
-
     public function testAvailableBalance()
     {
         $field = 'availableBalance';

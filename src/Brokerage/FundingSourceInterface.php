@@ -3,12 +3,6 @@ namespace CFX\Brokerage;
 
 interface FundingSourceInterface  extends \CFX\JsonApi\ResourceInterface
 {
-    /**
-     * Get type
-     *
-     * @return string
-     */
- 	public function getType();
 
     /**
      * Get the available balance

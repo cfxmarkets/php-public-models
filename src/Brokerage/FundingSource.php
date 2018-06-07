@@ -8,7 +8,6 @@ class FundingSource extends \CFX\JsonApi\AbstractResource implements FundingSour
     protected $resourceType = 'funding-sources';
 
     protected $attributes = [
-        'type' => null,
         'availableBalance' => null,
         'pendingBalance' => null,
     ];
@@ -17,17 +16,6 @@ class FundingSource extends \CFX\JsonApi\AbstractResource implements FundingSour
         'ownerEntity' => null,
     ];
 
-    public static function getValidTypes()
-    {
-        return [
-            'bank-accounts',
-        ];
-    }
-
-    public function getType()
-    {
-        return $this->_getAttributeValue("type");
-    }
 
  	public function getAvailableBalance()
     {
@@ -45,14 +33,6 @@ class FundingSource extends \CFX\JsonApi\AbstractResource implements FundingSour
     }
 
 
-
-    protected function setType($val)
-    {
-        if ($this->validateAmong("type", $val, static::getValidTypes())) {
-            $this->_setAttribute("type", $val);
-        }
-        return $this;
-    }
 
     public function setAvailableBalance($val = null)
     {
