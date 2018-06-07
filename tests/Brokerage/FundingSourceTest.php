@@ -28,9 +28,9 @@ class FundingSourceTest extends \PHPUnit\Framework\TestCase
         $this->assertReadOnly($field, 1122);
     }
 
-    public function testOwnerEntity()
+    public function testOwner()
     {
-        $field = 'ownerEntity';
+        $field = 'owner';
         $this->assertValid($field, [ null ]);
         $this->assertChains($field, null);
     }

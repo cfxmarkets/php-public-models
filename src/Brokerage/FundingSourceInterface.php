@@ -23,7 +23,7 @@ interface FundingSourceInterface  extends \CFX\JsonApi\ResourceInterface
      *
      * @return \CFX\Brokerage\LegalEntityInterface
      */
- 	public function getOwnerEntity();
+ 	public function getOwner();
 
 
 
@@ -34,6 +34,6 @@ interface FundingSourceInterface  extends \CFX\JsonApi\ResourceInterface
      * @param \CFX\Brokerage\LegalEntityInterface $val
      * @return static
      */
- 	public function setOwnerEntity(?LegalEntityInterface $val);
+ 	public function setOwner(?LegalEntityInterface $val);
 }
 

@@ -13,7 +13,7 @@ class FundingSource extends \CFX\JsonApi\AbstractResource implements FundingSour
     ];
 
     protected $relationships = [
-        'ownerEntity' => null,
+        'owner' => null,
     ];
 
 
@@ -27,9 +27,9 @@ class FundingSource extends \CFX\JsonApi\AbstractResource implements FundingSour
         return $this->_getAttributeValue("pendingBalance");
     }
 
- 	public function getOwnerEntity()
+ 	public function getOwner()
     {
-        return $this->_getRelationshipValue("ownerEntity");
+        return $this->_getRelationshipValue("owner");
     }
 
 
@@ -50,9 +50,9 @@ class FundingSource extends \CFX\JsonApi\AbstractResource implements FundingSour
         return $this;
     }
 
-    public function setOwnerEntity(?LegalEntityInterface $val)
+    public function setOwner(?LegalEntityInterface $val)
     {
-        return $this->_setRelationship("ownerEntity", $val);
+        return $this->_setRelationship("owner", $val);
     }
 }
 
