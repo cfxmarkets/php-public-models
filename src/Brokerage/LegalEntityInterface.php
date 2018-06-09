@@ -11,6 +11,7 @@ interface LegalEntityInterface extends \CFX\JsonApi\ResourceInterface {
     public function getFinraStatusText();
     public function getNetWorth();
     public function getAnnualIncome();
+    public function getAccreditationStatus();
     public function getDateOfBirth();
     public function getPlaceOfOrigin();
     public function getCorporateStatus();
@@ -31,6 +32,7 @@ interface LegalEntityInterface extends \CFX\JsonApi\ResourceInterface {
     public function setFinraStatusText($val);
     public function setNetWorth($val);
     public function setAnnualIncome($val);
+    public function setAccreditationStatus($val);
     public function setDateOfBirth($val);
     public function setPlaceOfOrigin($val);
     public function setCorporateStatus($val);

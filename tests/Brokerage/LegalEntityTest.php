@@ -99,6 +99,13 @@ class LegalEntityTest extends \PHPUnit\Framework\TestCase
         $this->assertChains($field);
     }
 
+    public function testAccreditationStatus()
+    {
+        $field = "accreditationStatus";
+        $this->assertFalse($this->resource->hasErrors($field), "Should instantate cleanly");
+        $this->assertReadOnly($field, 2);
+    }
+
     public function testFinraStatusText()
     {
         $field = 'finraStatusText';
@@ -321,6 +328,8 @@ class LegalEntityTest extends \PHPUnit\Framework\TestCase
 
         $entity = new LegalEntity($this->datasource, $data);
         $this->assertFalse($entity->hasErrors());
+
+        $data["attributes"]["accreditationStatus"] = 0;
         $this->assertEquals($data, json_decode(json_encode($entity->getChanges()), true));
     }
 }
