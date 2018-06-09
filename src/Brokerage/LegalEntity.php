@@ -16,7 +16,7 @@ class LegalEntity extends \CFX\JsonApi\AbstractResource implements LegalEntityIn
         'finraStatusText' => null,
         'netWorth' => null,
         'annualIncome' => null,
-        'accreditationStatus' => 0,
+        'accreditationStatus' => "Not Submitted",
         'dateOfBirth' => null,
         'placeOfOrigin' => null,
         'corporateStatus' => null,
@@ -278,8 +278,16 @@ class LegalEntity extends \CFX\JsonApi\AbstractResource implements LegalEntityIn
 
     public function setAccreditationStatus($val)
     {
-        if ($this->validateReadOnly("accreditationStatus", $val)) {
-            $this->_setAttribute("accreditationStatus", $val);
+        $field = "accreditationStatus";
+        if ($this->validateReadOnly($field, $val)) {
+            $statuses = static::getValidAccreditationStatuses();
+            $statuses = array_merge($statuses, array_keys($statuses));
+            if ($this->validateAmong($field, $val, $statuses, true)) {
+                if (is_numeric($val)) {
+                    $val = $statuses[$val];
+                }
+            }
+            $this->_setAttribute($field, $val);
         }
         return $this;
     }
@@ -512,6 +520,9 @@ class LegalEntity extends \CFX\JsonApi\AbstractResource implements LegalEntityIn
             } else {
                 return $val;
             }
+        }
+        if ($name === "accreditationStatus" && !$this->hasErrors("accreditationStatus")) {
+            return array_search($this->getAccreditationStatus(), static::getValidAccreditationStatuses(), true);
         }
 
         return parent::serializeAttribute($name);

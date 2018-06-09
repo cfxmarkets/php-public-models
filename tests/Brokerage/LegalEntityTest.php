@@ -102,8 +102,34 @@ class LegalEntityTest extends \PHPUnit\Framework\TestCase
     public function testAccreditationStatus()
     {
         $field = "accreditationStatus";
-        $this->assertFalse($this->resource->hasErrors($field), "Should instantate cleanly");
+        $this->assertFalse($this->resource->hasErrors($field), "Should instantiate cleanly");
         $this->assertReadOnly($field, 2);
+        $this->assertEquals(LegalEntity::getValidAccreditationStatuses()[0], $this->resource->getAccreditationStatus());
+    }
+
+    public function testAccreditationStatusExtended()
+    {
+        $this->resource = new Test\LegalEntity($this->datasource);
+
+        $field = "accreditationStatus";
+        $statuses = LegalEntity::getValidAccreditationStatuses();
+        $statuses = array_merge($statuses, array_keys($statuses));
+        $this->assertValid($field, $statuses, function($expected, $actual) use ($field) {
+            $origExpected = $expected;
+            if (is_int($expected)) {
+                $expected = LegalEntity::getValidAccreditationStatuses()[$expected];
+            }
+            $this->assertEquals([], $this->resource->getErrors($field));
+            $this->assertEquals($expected, $actual, "Expected status '$expected' (from '$origExpected'), but got '$actual'");
+        });
+        $this->assertInvalid($field, [ "cool", "true", "false", [ "array-of-things" ], new \DateTime(), 3, -1 ]);
+        $this->assertChanged($field, "In Review", "attributes");
+        $this->assertChains($field);
+
+        // Test serialization
+        $this->resource->setAccreditationStatus(LegalEntity::getValidAccreditationStatuses()[2]);
+        $serialized = json_decode(json_encode($this->resource), true);
+        $this->assertEquals(2, $serialized["attributes"][$field], "Should have serialized to integer but didn't");
     }
 
     public function testFinraStatusText()
