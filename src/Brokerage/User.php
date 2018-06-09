@@ -13,6 +13,7 @@ class User extends \CFX\JsonApi\AbstractResource implements UserInterface {
         'timezone' => 'UM12',
         'language' => 'English',
         'referralKey' => null,
+        "selfAccredited" => null,
     ];
     protected $relationships = [
         'oAuthTokens' => null,
@@ -32,6 +33,11 @@ class User extends \CFX\JsonApi\AbstractResource implements UserInterface {
     public function getReferralKey()
     {
         return $this->_getAttributeValue('referralKey');
+    }
+
+    public function getSelfAccredited()
+    {
+        return $this->_getAttributeValue("selfAccredited");
     }
 
     public function getOauthTokens() { return $this->get2MRel('oAuthTokens'); }
@@ -126,6 +132,13 @@ class User extends \CFX\JsonApi\AbstractResource implements UserInterface {
             $this->clearError('referralKey');
         }
         return $this->_setAttribute('referralKey', $val);
+    }
+
+    public function setSelfAccredited($val)
+    {
+        $val = $this->cleanBooleanValue($val);
+        $this->validateType("selfAccredited", $val, "boolean", false);
+        return $this->_setAttribute("selfAccredited", $val);
     }
 
     public function setOAuthTokens(\CFX\JsonApi\ResourceCollectionInterface $tokens=null) {

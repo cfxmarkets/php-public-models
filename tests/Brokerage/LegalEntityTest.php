@@ -99,21 +99,6 @@ class LegalEntityTest extends \PHPUnit\Framework\TestCase
         $this->assertChains($field);
     }
 
-    public function testAccredited()
-    {
-        $field = "accredited";
-        $this->assertInvalid($field, [ "cool", "true", "false", [ "array-of-things" ], new \DateTime(), 25 ]);
-        $this->assertValid($field, [ null, '', true, false, 1, "1", 0, "0" ], function($expected, $actual) {
-            if ($expected === null) {
-                $this->assertNull($actual);
-            } else {
-                $this->assertEquals((bool)$expected, $actual);
-            }
-        });
-        $this->assertChanged($field, true, "attributes");
-        $this->assertChains($field);
-    }
-
     public function testFinraStatusText()
     {
         $field = 'finraStatusText';

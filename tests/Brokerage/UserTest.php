@@ -63,6 +63,22 @@ class UserTest extends \PHPUnit\Framework\TestCase
         $this->assertChains($field);
     }
 
+    public function testSelfAccredited()
+    {
+        $field = 'selfAccredited';
+        $this->assertValid($field, [ null, '', '1', 1, '0', 0, true, false ], function($expected, $actual) {
+            if ($expected === '') {
+                $expected = null;
+            } elseif (is_numeric($expected)) {
+                $expected = (bool)$expected;
+            }
+            $this->assertEquals($expected, $actual);
+        });
+        $this->assertInvalid($field, [ "true", "false", '12345', 12345, new \DateTime(), [ "array of values" ] ]);
+        $this->assertChanged($field, true, "attributes");
+        $this->assertChains($field);
+    }
+
     public function testOAuthTokens()
     {
         $field = 'oAuthTokens';

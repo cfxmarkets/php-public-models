@@ -16,7 +16,6 @@ class LegalEntity extends \CFX\JsonApi\AbstractResource implements LegalEntityIn
         'finraStatusText' => null,
         'netWorth' => null,
         'annualIncome' => null,
-        'accredited' => null,
         'dateOfBirth' => null,
         'placeOfOrigin' => null,
         'corporateStatus' => null,
@@ -76,11 +75,6 @@ class LegalEntity extends \CFX\JsonApi\AbstractResource implements LegalEntityIn
     public function getAnnualIncome()
     {
         return $this->_getAttributeValue("annualIncome");
-    }
-
-    public function getAccredited()
-    {
-        return $this->_getAttributeValue("accredited");
     }
 
     public function getDateOfBirth()
@@ -265,13 +259,6 @@ class LegalEntity extends \CFX\JsonApi\AbstractResource implements LegalEntityIn
         $val = $this->cleanNumberValue($val);
         $this->validateType("annualIncome", $val, "integer", false);
         return $this->_setAttribute("annualIncome", $val);
-    }
-
-    public function setAccredited($val)
-    {
-        $val = $this->cleanBooleanValue($val);
-        $this->validateType("accredited", $val, "boolean", false);
-        return $this->_setAttribute("accredited", $val);
     }
 
     public function setDateOfBirth($val)
