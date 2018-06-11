@@ -113,10 +113,10 @@ class LegalEntityTest extends \PHPUnit\Framework\TestCase
 
         $field = "accreditationStatus";
         $statuses = LegalEntity::getValidAccreditationStatuses();
-        $statuses = array_merge($statuses, array_keys($statuses));
+        $statuses = array_merge($statuses, array_keys($statuses), [ "0", "1", "2" ]);
         $this->assertValid($field, $statuses, function($expected, $actual) use ($field) {
             $origExpected = $expected;
-            if (is_int($expected)) {
+            if (is_numeric($expected)) {
                 $expected = LegalEntity::getValidAccreditationStatuses()[$expected];
             }
             $this->assertEquals([], $this->resource->getErrors($field));
