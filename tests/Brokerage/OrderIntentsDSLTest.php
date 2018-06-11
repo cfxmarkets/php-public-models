@@ -25,6 +25,13 @@ class OrderIntentsDSLTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals("`user_guid` = ? and `lead_status` = ?", $q->getWhere());
         $this->assertEquals([ "abcde12345", "listed" ], $q->getParams());
 
+        $q = OrderIntentsDSLQuery::parse("userId=abcde12345 and status = 'not listed'");
+        $this->assertEquals("`user_guid` = ? and `lead_status` = ?", $q->getWhere());
+        $this->assertEquals([ "abcde12345", "not listed" ], $q->getParams());
+
+        $q = OrderIntentsDSLQuery::parse("userId=abcde12345 and status=\"not listed\"");
+        $this->assertEquals("`user_guid` = ? and `lead_status` = ?", $q->getWhere());
+        $this->assertEquals([ "abcde12345", "not listed" ], $q->getParams());
     }
 }
 

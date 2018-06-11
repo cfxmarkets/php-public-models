@@ -61,12 +61,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/cfxmarkets/php-persistence.git",
-                "reference": "093fb43bc682f0c0dcdf2ad6c6ec084dd051c5c8"
+                "reference": "0eebe147253c0a608bf873baf443457bc7853f14"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/cfxmarkets/php-persistence/zipball/093fb43bc682f0c0dcdf2ad6c6ec084dd051c5c8",
-                "reference": "093fb43bc682f0c0dcdf2ad6c6ec084dd051c5c8",
+                "url": "https://api.github.com/repos/cfxmarkets/php-persistence/zipball/0eebe147253c0a608bf873baf443457bc7853f14",
+                "reference": "0eebe147253c0a608bf873baf443457bc7853f14",
                 "shasum": ""
             },
             "require": {
@@ -105,7 +105,7 @@
                 "datasource",
                 "persistence"
             ],
-            "time": "2018-06-11T04:03:31+00:00"
+            "time": "2018-06-11T22:14:57+00:00"
         },
         {
             "name": "guzzlehttp/guzzle",
@@ -864,16 +864,16 @@
         },
         {
             "name": "phpunit/php-file-iterator",
-            "version": "2.0.0",
+            "version": "2.0.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/php-file-iterator.git",
-                "reference": "e20525b0c2945c7c317fff95660698cb3d2a53bc"
+                "reference": "cecbc684605bb0cc288828eb5d65d93d5c676d3c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/php-file-iterator/zipball/e20525b0c2945c7c317fff95660698cb3d2a53bc",
-                "reference": "e20525b0c2945c7c317fff95660698cb3d2a53bc",
+                "url": "https://api.github.com/repos/sebastianbergmann/php-file-iterator/zipball/cecbc684605bb0cc288828eb5d65d93d5c676d3c",
+                "reference": "cecbc684605bb0cc288828eb5d65d93d5c676d3c",
                 "shasum": ""
             },
             "require": {
@@ -907,7 +907,7 @@
                 "filesystem",
                 "iterator"
             ],
-            "time": "2018-05-28T12:13:49+00:00"
+            "time": "2018-06-11T11:44:00+00:00"
         },
         {
             "name": "phpunit/php-text-template",
