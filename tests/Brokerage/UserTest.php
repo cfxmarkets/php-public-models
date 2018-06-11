@@ -77,6 +77,10 @@ class UserTest extends \PHPUnit\Framework\TestCase
         $this->assertInvalid($field, [ "true", "false", '12345', 12345, new \DateTime(), [ "array of values" ] ]);
         $this->assertChanged($field, true, "attributes");
         $this->assertChains($field);
+
+        // Test that it serializes to ints
+        $data = $this->resource->jsonSerialize();
+        $this->assertTrue(is_int($data["attributes"]["selfAccredited"]), "Should have serialized to integer");
     }
 
     public function testOAuthTokens()

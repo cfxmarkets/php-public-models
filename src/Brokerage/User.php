@@ -155,6 +155,16 @@ class User extends \CFX\JsonApi\AbstractResource implements UserInterface {
         }
         return $this;
     }
+
+    protected function serializeAttribute($name)
+    {
+        if ($name === "selfAccredited") {
+            if (is_bool($this->getSelfAccredited())) {
+                return (int)$this->getSelfAccredited();
+            }
+        }
+        return parent::serializeAttribute($name);
+    }
 }
 
 

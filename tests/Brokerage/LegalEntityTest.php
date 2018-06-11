@@ -107,9 +107,13 @@ class LegalEntityTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals(LegalEntity::getValidAccreditationStatuses()[0], $this->resource->getAccreditationStatus());
     }
 
-    public function testAccreditationStatusExtended()
+    public function testAccreditationStatusExtended(LegalEntityInterface $resource = null)
     {
-        $this->resource = new Test\LegalEntity($this->datasource);
+        if ($resource) {
+            $this->resource = $resource;
+        } else {
+            $this->resource = new Test\LegalEntity($this->datasource);
+        }
 
         $field = "accreditationStatus";
         $statuses = LegalEntity::getValidAccreditationStatuses();
