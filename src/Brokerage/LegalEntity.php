@@ -49,6 +49,8 @@ class LegalEntity extends \CFX\JsonApi\AbstractResource implements LegalEntityIn
             0, //=> "Not Submitted"
             1, //=> "In Review"
             2, //=> "Verified"
+            -1, //=> "Rejected"
+            -2, //=> "Invalidated"
         ];
     }
 
