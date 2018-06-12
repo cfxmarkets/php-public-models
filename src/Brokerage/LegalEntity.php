@@ -278,6 +278,7 @@ class LegalEntity extends \CFX\JsonApi\AbstractResource implements LegalEntityIn
 
     public function setAccreditationStatus($val)
     {
+        $val = $this->cleanNumberValue($val);
         $field = "accreditationStatus";
         if ($this->validateReadOnly($field, $val)) {
             $this->validateAmong($field, $val, static::getValidAccreditationStatuses(), true);

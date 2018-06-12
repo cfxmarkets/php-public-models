@@ -116,7 +116,7 @@ class LegalEntityTest extends \PHPUnit\Framework\TestCase
         }
 
         $field = "accreditationStatus";
-        $this->assertValid($field, LegalEntity::getValidAccreditationStatuses());
+        $this->assertValid($field, array_merge(LegalEntity::getValidAccreditationStatuses(), [ "0", "1", "2" ]));
         $this->assertInvalid($field, [ "cool", "true", "false", [ "array-of-things" ], new \DateTime(), 3, -1 ]);
         $this->assertChanged($field, 1, "attributes");
         $this->assertChains($field);
