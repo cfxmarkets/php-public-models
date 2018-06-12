@@ -135,19 +135,17 @@ class OrderIntent extends \CFX\JsonApi\AbstractResource implements OrderIntentIn
     // Setters
 
     public function setType($val) {
-        if ($this->validateStatusActive('type')) {
-            $val = $this->cleanStringValue($val);
-
-            $initial = $this->getInitial('type');
-            if ($initial !== null && $val !== $initial) {
-                $this->setError('type', 'immutable', [
-                    'title' => 'Immutable Attribute `type`',
-                    'detail' => 'The `type` attribute can\'t be changed, once set. If you need to change the type of this intent, please delete this intent and create a new one.',
-                ]);
-            } else {
-                $this->clearError('type', 'immutable');
-
-                if ($this->validateRequired('type', $val)) {
+        $val = $this->cleanStringValue($val);
+        if ($this->validateRequired('type', $val)) {
+            if ($this->validateStatusActive('type')) {
+                $initial = $this->getInitial('type');
+                if ($initial !== null && $val !== $initial) {
+                    $this->setError('type', 'immutable', [
+                        'title' => 'Immutable Attribute `type`',
+                        'detail' => 'The `type` attribute can\'t be changed, once set. If you need to change the type of this intent, please delete this intent and create a new one.',
+                    ]);
+                } else {
+                    $this->clearError('type', 'immutable');
                     $this->validateAmong('type', $val, $this::getValidTypes());
                 }
             }
@@ -158,12 +156,11 @@ class OrderIntent extends \CFX\JsonApi\AbstractResource implements OrderIntentIn
 
 
     public function setNumShares($val) {
-        if ($this->validateStatusActive('numShares')) {
-            $val = $this->cleanNumberValue($val);
-
-            if ($this->validateRequired('numShares', $val)) {
+        $val = $this->cleanNumberValue($val);
+        if ($this->validateRequired('numShares', $val)) {
+            if ($this->validateStatusActive('numShares')) {
                 if ($this->validateNumeric('numShares', $val)) {
-                    if ($val < 1) {
+                    if ($val <= 0) {
                         $this->setError('numShares', 'qty', [
                             "title" => "Invalid Attribute Value for `numShares`",
                             "detail" => "You can't enter orders for less than a single share on our system."
@@ -269,8 +266,8 @@ class OrderIntent extends \CFX\JsonApi\AbstractResource implements OrderIntentIn
 
 
     public function setUser(UserInterface $user=null) {
-        if ($this->validateStatusActive('user')) {
-            if ($this->validateRequired('user', $user)) {
+        if ($this->validateRequired('user', $user)) {
+            if ($this->validateStatusActive('user')) {
                 // User is immutable
                 if ($this->getInitial('user') && $this->valueDiffersFromInitial('user', $user)) {
                     $this->setError('user', 'immutable', [
@@ -300,6 +297,29 @@ class OrderIntent extends \CFX\JsonApi\AbstractResource implements OrderIntentIn
 
 
     public function setAsset(\CFX\Exchange\AssetInterface $asset=null) {
+        if (!$asset) {
+            if (!$this->getAssetIntent()) {
+                $this->setError('assetOrAssetIntent', 'required', [
+                    'title' => 'Asset or AssetIntent Required',
+                    'detail' => 'You must set either and Asset or an AssetIntent for this order intent to be valid.',
+                ]);
+            } else {
+                $this->clearError('assetOrAssetIntent', 'required');
+            }
+        } else {
+            $this->clearError('assetOrAssetIntent', 'required');
+
+            if ($this->getAssetIntent()) {
+                $this->setError('assetOrAssetIntent', 'duplicate', [
+                    'title' => "Conflicting Asset and AssetIntent",
+                    "detail" => "You can't have both an asset and an asset intent for this order intent to be valid.",
+                ]);
+            } else {
+                $this->clearError('assetOrAssetIntent', 'duplicate');
+                // Should add considerations for asset status (non-tradable assets shouldn't be valid)
+            }
+        }
+
         if ($this->validateStatusActive('asset')) {
             if ($this->getInitial('asset') && $this->valueDiffersFromInitial('asset', $asset)) {
                 $this->setError('asset', 'immutable', [
@@ -309,29 +329,6 @@ class OrderIntent extends \CFX\JsonApi\AbstractResource implements OrderIntentIn
                 ]);
             } else {
                 $this->clearError('asset','immutable');
-
-                if (!$asset) {
-                    if (!$this->getAssetIntent()) {
-                        $this->setError('assetOrAssetIntent', 'required', [
-                            'title' => 'Asset or AssetIntent Required',
-                            'detail' => 'You must set either and Asset or an AssetIntent for this order intent to be valid.',
-                        ]);
-                    } else {
-                        $this->clearError('assetOrAssetIntent', 'required');
-                    }
-                } else {
-                    $this->clearError('assetOrAssetIntent', 'required');
-
-                    if ($this->getAssetIntent()) {
-                        $this->setError('assetOrAssetIntent', 'duplicate', [
-                            'title' => "Conflicting Asset and AssetIntent",
-                            "detail" => "You can't have both an asset and an asset intent for this order intent to be valid.",
-                        ]);
-                    } else {
-                        $this->clearError('assetOrAssetIntent', 'duplicate');
-                        // Should add considerations for asset status (non-tradable assets shouldn't be valid)
-                    }
-                }
             }
         }
 
@@ -340,6 +337,28 @@ class OrderIntent extends \CFX\JsonApi\AbstractResource implements OrderIntentIn
 
 
     public function setAssetIntent(\CFX\Brokerage\AssetIntentInterface $assetIntent=null) {
+        if (!$assetIntent) {
+            if (!$this->getAsset()) {
+                $this->setError('assetOrAssetIntent', 'required', [
+                    'title' => 'Asset or AssetIntent Required',
+                    'detail' => 'You must set either and Asset or an AssetIntent for this order intent to be valid.',
+                ]);
+            } else {
+                $this->clearError('assetOrAssetIntent', 'required');
+            }
+        } else {
+            $this->clearError('assetOrAssetIntent', 'required');
+
+            if ($this->getAsset()) {
+                $this->setError('assetOrAssetIntent', 'duplicate', [
+                    'title' => "Conflicting Asset and AssetIntent",
+                    "detail" => "You can't have both an assetIntent and an assetIntent intent for this order intent to be valid.",
+                ]);
+            } else {
+                $this->clearError('assetOrAssetIntent', 'duplicate');
+            }
+        }
+
         if ($this->validateStatusActive('assetIntent')) {
             if ($this->getInitial('assetIntent') !== null && $this->valueDiffersFromInitial('assetIntent', $assetIntent)) {
                 $this->setError('assetIntent', 'immutable', [
@@ -349,28 +368,6 @@ class OrderIntent extends \CFX\JsonApi\AbstractResource implements OrderIntentIn
                 ]);
             } else {
                 $this->clearError('assetIntent','immutable');
-
-                if (!$assetIntent) {
-                    if (!$this->getAsset()) {
-                        $this->setError('assetOrAssetIntent', 'required', [
-                            'title' => 'Asset or AssetIntent Required',
-                            'detail' => 'You must set either and Asset or an AssetIntent for this order intent to be valid.',
-                        ]);
-                    } else {
-                        $this->clearError('assetOrAssetIntent', 'required');
-                    }
-                } else {
-                    $this->clearError('assetOrAssetIntent', 'required');
-
-                    if ($this->getAsset()) {
-                        $this->setError('assetOrAssetIntent', 'duplicate', [
-                            'title' => "Conflicting Asset and AssetIntent",
-                            "detail" => "You can't have both an assetIntent and an assetIntent intent for this order intent to be valid.",
-                        ]);
-                    } else {
-                        $this->clearError('assetOrAssetIntent', 'duplicate');
-                    }
-                }
             }
         }
 
