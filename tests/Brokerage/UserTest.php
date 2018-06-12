@@ -79,6 +79,7 @@ class UserTest extends \PHPUnit\Framework\TestCase
         $this->assertChains($field);
 
         // Test that it serializes to ints
+        $this->resource->setSelfAccredited(true);
         $data = $this->resource->jsonSerialize();
         $this->assertTrue(is_int($data["attributes"]["selfAccredited"]), "Should have serialized to integer");
     }
