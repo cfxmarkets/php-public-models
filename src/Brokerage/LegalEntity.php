@@ -16,7 +16,7 @@ class LegalEntity extends \CFX\JsonApi\AbstractResource implements LegalEntityIn
         'finraStatusText' => null,
         'netWorth' => null,
         'annualIncome' => null,
-        'accreditationStatus' => "Not Submitted",
+        'accreditationStatus' => 0, 
         'dateOfBirth' => null,
         'placeOfOrigin' => null,
         'corporateStatus' => null,
@@ -46,9 +46,9 @@ class LegalEntity extends \CFX\JsonApi\AbstractResource implements LegalEntityIn
     public static function getValidAccreditationStatuses()
     {
         return [
-            0 => "Not Submitted",
-            1 => "In Review",
-            2 => "Verified",
+            0, //=> "Not Submitted"
+            1, //=> "In Review"
+            2, //=> "Verified"
         ];
     }
 
@@ -280,11 +280,7 @@ class LegalEntity extends \CFX\JsonApi\AbstractResource implements LegalEntityIn
     {
         $field = "accreditationStatus";
         if ($this->validateReadOnly($field, $val)) {
-            $statuses = static::getValidAccreditationStatuses();
-            if (is_numeric($val) && array_key_exists($val, $statuses)) {
-                $val = $statuses[$val];
-            }
-            $this->validateAmong($field, $val, $statuses, true);
+            $this->validateAmong($field, $val, static::getValidAccreditationStatuses(), true);
             $this->_setAttribute($field, $val);
         }
         return $this;
@@ -518,9 +514,6 @@ class LegalEntity extends \CFX\JsonApi\AbstractResource implements LegalEntityIn
             } else {
                 return $val;
             }
-        }
-        if ($name === "accreditationStatus" && !$this->hasErrors("accreditationStatus")) {
-            return array_search($this->getAccreditationStatus(), static::getValidAccreditationStatuses(), true);
         }
 
         return parent::serializeAttribute($name);

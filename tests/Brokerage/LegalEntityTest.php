@@ -116,22 +116,13 @@ class LegalEntityTest extends \PHPUnit\Framework\TestCase
         }
 
         $field = "accreditationStatus";
-        $statuses = LegalEntity::getValidAccreditationStatuses();
-        $statuses = array_merge($statuses, array_keys($statuses), [ "0", "1", "2" ]);
-        $this->assertValid($field, $statuses, function($expected, $actual) use ($field) {
-            $origExpected = $expected;
-            if (is_numeric($expected)) {
-                $expected = LegalEntity::getValidAccreditationStatuses()[$expected];
-            }
-            $this->assertEquals([], $this->resource->getErrors($field));
-            $this->assertEquals($expected, $actual, "Expected status '$expected' (from '$origExpected'), but got '$actual'");
-        });
+        $this->assertValid($field, LegalEntity::getValidAccreditationStatuses());
         $this->assertInvalid($field, [ "cool", "true", "false", [ "array-of-things" ], new \DateTime(), 3, -1 ]);
-        $this->assertChanged($field, "In Review", "attributes");
+        $this->assertChanged($field, 1, "attributes");
         $this->assertChains($field);
 
         // Test serialization
-        $this->resource->setAccreditationStatus(LegalEntity::getValidAccreditationStatuses()[2]);
+        $this->resource->setAccreditationStatus(2);
         $serialized = json_decode(json_encode($this->resource), true);
         $this->assertEquals(2, $serialized["attributes"][$field], "Should have serialized to integer but didn't");
     }
@@ -332,6 +323,7 @@ class LegalEntityTest extends \PHPUnit\Framework\TestCase
                 "type" => "person",
                 "legalId" => "111223333",
                 "legalName" => "My Person",
+                "accreditationStatus" => 0,
             ],
             "relationships" => [
                 "primaryAddress" => [
@@ -351,16 +343,35 @@ class LegalEntityTest extends \PHPUnit\Framework\TestCase
             ],
         ];
 
-        $this->datasource
+
+        // Test creating new
+
+        $entity = $this->datasource
+            ->addClassToCreate("\\CFX\\Brokerage\\LegalEntity")
             ->addClassToCreate("\\CFX\\Brokerage\\Address")
             ->addClassToCreate("\\CFX\\Brokerage\\Document")
+            ->create($data)
         ;
 
-        $entity = new LegalEntity($this->datasource, $data);
         $this->assertFalse($entity->hasErrors());
 
         $data["attributes"]["accreditationStatus"] = 0;
         $this->assertEquals($data, json_decode(json_encode($entity->getChanges()), true));
+
+
+        // Test inflating
+        $data["id"] = "abcde12345";
+        $data["attributes"]["accreditationStatus"] = LegalEntity::getValidAccreditationStatuses()[1];
+        $entity = $this->datasource
+            ->addClassToCreate("\\CFX\\Brokerage\\LegalEntity")
+            ->addClassToCreate("\\CFX\\Brokerage\\Address")
+            ->addClassToCreate("\\CFX\\Brokerage\\Document")
+            ->setCurrentData($data)
+            ->get("id=abcde12345")
+        ;
+
+        $this->assertFalse($entity->hasErrors());
+        $this->assertFalse($entity->hasChanges());
     }
 }
 
