@@ -277,7 +277,7 @@ class OrderIntentTest extends \PHPUnit\Framework\TestCase
         $this->assertFalse($intent->hasErrors('createdOn'));
         $this->assertNull($intent->getCreatedOn());
 
-        // Test that it can be successfully inflated without errors
+        // Test that it can be successfully inflated with null value without errors
         $intent = $mock
             ->addClassToCreate("\\CFX\\Brokerage\\OrderIntent")
             ->setCurrentData([
@@ -289,6 +289,33 @@ class OrderIntentTest extends \PHPUnit\Framework\TestCase
 
         $this->assertFalse($intent->hasErrors('createdOn'));
         $this->assertNull($intent->getCreatedOn());
+
+        // Test that it can be successfully inflated with non-null value without errors
+        $intent = $mock
+            ->addClassToCreate("\\CFX\\Brokerage\\OrderIntent")
+            ->setCurrentData([
+                'id' => 12345,
+                'type' => 'order-intents',
+                'attributes' => [
+                    'createdOn' => '2018-01-01 00:00:00',
+                ],
+            ])
+            ->get("id=12345")
+        ;
+
+        $this->assertFalse($intent->hasErrors('createdOn'));
+        $this->assertInstanceOf("\\DateTimeInterface", $intent->getCreatedOn());
+        $this->assertEquals('2018-01-01 00:00:00', $intent->getCreatedOn()->format('Y-m-d H:i:s'));
+    }
+
+    public function testInvestmentAccountUri()
+    {
+        $field = "investmentAccountUri";
+        $this->assertValid($field, [ null, '', 'p2p://ethereum/abcde12345', 'something://else' ]);
+        $this->assertInvalid($field, [ true, false, 1.23, new \DateTime() ]);
+        $this->assertChanged($field, "p2p://new/address", "attributes");
+        $this->assertChains($field);
+        $this->markTestIncomplete("Should validate for well-formed uri");
     }
 }
 
