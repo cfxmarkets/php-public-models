@@ -10,7 +10,7 @@ class FundsTransfer extends \CFX\JsonApi\AbstractResource implements FundsTransf
         "type" => null,
         "amount" => null,
         "idpKey" => null,
-        "status" => "pending",
+        "status" => 1,
         "createdOn" => null,
     ];
     protected $relationships = [
