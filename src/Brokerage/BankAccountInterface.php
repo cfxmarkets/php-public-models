@@ -1,7 +1,7 @@
 <?php
 namespace CFX\Brokerage;
 
-interface BankAccountInterface extends \CFX\JsonApi\ResourceInterface
+interface BankAccountInterface extends FundingSourceInterface
 {
     /**
      * Get the account's informal, user-specified label
@@ -58,14 +58,6 @@ interface BankAccountInterface extends \CFX\JsonApi\ResourceInterface
      * @return bool
      */
     public function getStatus();
-
-    /**
-     * Get the account's owner (the user that created the account)
-     *
-     * @return LegalEntityInterface
-     */
-    public function getOwner();
-
 
 
     /**
@@ -133,13 +125,5 @@ interface BankAccountInterface extends \CFX\JsonApi\ResourceInterface
      * @return static
      */
     public function setStatus($val);
-
-    /**
-     * Set the account's owner (defaults to the creator if owner not specified)
-     *
-     * @param LegalEntityInterface|null $owner
-     * @return static
-     */
-    public function setOwner(LegalEntityInterface $owner = null);
 }
 

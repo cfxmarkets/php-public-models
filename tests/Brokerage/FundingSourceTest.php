@@ -31,8 +31,10 @@ class FundingSourceTest extends \PHPUnit\Framework\TestCase
     public function testOwner()
     {
         $field = 'owner';
-        $this->assertValid($field, [ null ]);
-        $this->assertChains($field, null);
+        $this->assertValid($field, [ new LegalEntity($this->datasource) ]);
+        $this->assertInvalid($field, [ null ]);
+        $this->assertChanged($field, (new LegalEntity($this->datasource))->setId("12345"), "relationships");
+        $this->assertChains($field);
     }
 }
 

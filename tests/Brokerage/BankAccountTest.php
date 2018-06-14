@@ -1,11 +1,8 @@
 <?php 
 namespace CFX\Brokerage;
 
-
-class BankAccountTest extends \PHPUnit\Framework\TestCase
+class BankAccountTest extends FundingSourceTest
 {
-    use \CFX\ResourceTestTrait;
-
     protected $className = "\\CFX\\Brokerage\\BankAccount";
 
     public function testResourceType()
@@ -80,15 +77,6 @@ class BankAccountTest extends \PHPUnit\Framework\TestCase
     {
         $field = 'status';
         $this->assertReadOnly($field, "approved");
-    }
-
-    public function testOwner()
-    {
-        $field = 'owner';
-        $this->assertValid($field, [ new LegalEntity($this->datasource) ]);
-        $this->assertInvalid($field, [ null ]);
-        $this->assertChanged($field, (new LegalEntity($this->datasource))->setId("12345"), "relationships");
-        $this->assertChains($field);
     }
 }
 

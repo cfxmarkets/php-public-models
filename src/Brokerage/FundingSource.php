@@ -52,7 +52,8 @@ class FundingSource extends \CFX\JsonApi\AbstractResource implements FundingSour
 
     public function setOwner(?LegalEntityInterface $val)
     {
-        return $this->_setRelationship("owner", $val);
+        $this->validateRequired('owner', $val);
+        return $this->_setRelationship('owner', $val);
     }
 }
 
