@@ -13,6 +13,7 @@ class LegalEntityTest extends \PHPUnit\Framework\TestCase
     public function testGetAmlKycStatus()
     {
         $this->assertEquals(0, $this->resource->getAmlKycStatus());
+        $this->datasource->setRelated('idDocs', new \CFX\JsonApi\ResourceCollection());
         $this->resource
             ->setLegalId("123456789")
             ->setDateOfBirth(time() - (18400*365*50))
