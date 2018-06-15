@@ -54,6 +54,21 @@ class LegalEntity extends \CFX\JsonApi\AbstractResource implements LegalEntityIn
         ];
     }
 
+    public function getAmlKycStatus()
+    {
+        $status = 0;
+        if (
+            $this->getLegalId() &&
+            $this->getDateOfBirth() &&
+            $this->getPrimaryAddress() &&
+            count($this->getIdDocs()) > 0
+        ) {
+            $status += 1;
+        }
+
+        return $status;
+    }
+
     public function getType()
     {
         return $this->_getAttributeValue('type');

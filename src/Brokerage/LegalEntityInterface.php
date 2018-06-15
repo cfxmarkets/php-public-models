@@ -4,6 +4,17 @@ namespace CFX\Brokerage;
 interface LegalEntityInterface extends \CFX\JsonApi\ResourceInterface {
     public static function getValidTypes();
 
+    /**
+     * Bitmask
+     *
+     * 0 = Not enough data
+     * 1 = Data sufficient, but not submitted
+     * 2 = Submitted
+     * 4 = Approved
+     * 8 = Rejected
+     */
+    public function getAmlKycStatus();
+
     public function getType();
     public function getLegalId();
     public function getLegalName();

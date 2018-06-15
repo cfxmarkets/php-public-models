@@ -10,6 +10,18 @@ class LegalEntityTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals('legal-entities', $this->resource->getResourceType());
     }
 
+    public function testGetAmlKycStatus()
+    {
+        $this->assertEquals(0, $this->resource->getAmlKycStatus());
+        $this->resource
+            ->setLegalId("123456789")
+            ->setDateOfBirth(time() - (18400*365*50))
+            ->setPrimaryAddress(new Address($this->datasource))
+            ->addIdDoc(new Document($this->datasource))
+        ;
+        $this->assertEquals(1, $this->resource->getAmlKycStatus());
+    }
+
     public function testType() {
         $field = 'type';
 
