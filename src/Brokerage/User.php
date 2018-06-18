@@ -13,6 +13,7 @@ class User extends \CFX\JsonApi\AbstractResource implements UserInterface {
         'timezone' => 'UM12',
         'language' => 'English',
         'referralKey' => null,
+        "authId" => null,
         "selfAccredited" => null,
     ];
     protected $relationships = [
@@ -33,6 +34,11 @@ class User extends \CFX\JsonApi\AbstractResource implements UserInterface {
     public function getReferralKey()
     {
         return $this->_getAttributeValue('referralKey');
+    }
+
+    public function getAuthId()
+    {
+        return $this->_getAttributeValue('authId');
     }
 
     public function getSelfAccredited()
@@ -132,6 +138,23 @@ class User extends \CFX\JsonApi\AbstractResource implements UserInterface {
             $this->clearError('referralKey');
         }
         return $this->_setAttribute('referralKey', $val);
+    }
+
+    public function setAuthId($val) {
+        $val = $this->cleanStringValue($val);
+        if ($val !== null) {
+            if (!is_string($val) || !preg_match("/^[A-Za-z0-9-]{36}$/", $val)) {
+                $this->setError("authId", "format", [
+                    "title" => "Invalid authId format",
+                    "detail" => "AuthID must be a standard 36-character UUID with only alpha-numerics and dashes"
+                ]);
+            } else {
+                $this->clearError("authId", "format");
+            }
+        } else {
+            $this->clearError("authId", "format");
+        }
+        return $this->_setAttribute('authId', $val);
     }
 
     public function setSelfAccredited($val)
