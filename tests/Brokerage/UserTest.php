@@ -66,10 +66,7 @@ class UserTest extends \PHPUnit\Framework\TestCase
     public function testAuthId()
     {
         $field = 'authId';
-        $this->assertValid($field, [ null, '', 'aaaa-bbbccccddd-ee111-22223333444-55' ]);
-        $this->assertInvalid($field, [ '12345', 12345, new \DateTime(), [], true, false, md5(uniqid()) ]);
-        $this->assertChanged($field, 'zzzz-bbbccccddd-ee111-22223333444-55', "attributes");
-        $this->assertChains($field);
+        $this->assertReadOnly($field, 'aaaa-bbbccccddd-ee111-22223333444-55');
     }
 
     public function testSelfAccredited()

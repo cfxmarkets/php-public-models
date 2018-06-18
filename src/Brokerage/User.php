@@ -141,20 +141,10 @@ class User extends \CFX\JsonApi\AbstractResource implements UserInterface {
     }
 
     public function setAuthId($val) {
-        $val = $this->cleanStringValue($val);
-        if ($val !== null) {
-            if (!is_string($val) || !preg_match("/^[A-Za-z0-9-]{36}$/", $val)) {
-                $this->setError("authId", "format", [
-                    "title" => "Invalid authId format",
-                    "detail" => "AuthID must be a standard 36-character UUID with only alpha-numerics and dashes"
-                ]);
-            } else {
-                $this->clearError("authId", "format");
-            }
-        } else {
-            $this->clearError("authId", "format");
+        if ($this->validateReadOnly("authId", $val)) {
+            $this->_setAttribute("authId", $val);
         }
-        return $this->_setAttribute('authId', $val);
+        return $this;
     }
 
     public function setSelfAccredited($val)
