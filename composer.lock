@@ -61,12 +61,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/cfxmarkets/php-persistence.git",
-                "reference": "0eebe147253c0a608bf873baf443457bc7853f14"
+                "reference": "6b9dc2b553c44faa722ff88bb385394b6fa3aa83"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/cfxmarkets/php-persistence/zipball/0eebe147253c0a608bf873baf443457bc7853f14",
-                "reference": "0eebe147253c0a608bf873baf443457bc7853f14",
+                "url": "https://api.github.com/repos/cfxmarkets/php-persistence/zipball/6b9dc2b553c44faa722ff88bb385394b6fa3aa83",
+                "reference": "6b9dc2b553c44faa722ff88bb385394b6fa3aa83",
                 "shasum": ""
             },
             "require": {
@@ -105,7 +105,7 @@
                 "datasource",
                 "persistence"
             ],
-            "time": "2018-06-11T22:14:57+00:00"
+            "time": "2018-06-19T22:15:39+00:00"
         },
         {
             "name": "guzzlehttp/guzzle",
@@ -436,16 +436,16 @@
         },
         {
             "name": "myclabs/deep-copy",
-            "version": "1.8.0",
+            "version": "1.8.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/myclabs/DeepCopy.git",
-                "reference": "478465659fd987669df0bd8a9bf22a8710e5f1b6"
+                "reference": "3e01bdad3e18354c3dce54466b7fbe33a9f9f7f8"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/myclabs/DeepCopy/zipball/478465659fd987669df0bd8a9bf22a8710e5f1b6",
-                "reference": "478465659fd987669df0bd8a9bf22a8710e5f1b6",
+                "url": "https://api.github.com/repos/myclabs/DeepCopy/zipball/3e01bdad3e18354c3dce54466b7fbe33a9f9f7f8",
+                "reference": "3e01bdad3e18354c3dce54466b7fbe33a9f9f7f8",
                 "shasum": ""
             },
             "require": {
@@ -480,7 +480,7 @@
                 "object",
                 "object graph"
             ],
-            "time": "2018-05-29T17:25:09+00:00"
+            "time": "2018-06-11T23:09:50+00:00"
         },
         {
             "name": "phar-io/manifest",
@@ -1179,16 +1179,16 @@
         },
         {
             "name": "sebastian/comparator",
-            "version": "3.0.0",
+            "version": "3.0.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/comparator.git",
-                "reference": "ed5fd2281113729f1ebcc64d101ad66028aeb3d5"
+                "reference": "591a30922f54656695e59b1f39501aec513403da"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/comparator/zipball/ed5fd2281113729f1ebcc64d101ad66028aeb3d5",
-                "reference": "ed5fd2281113729f1ebcc64d101ad66028aeb3d5",
+                "url": "https://api.github.com/repos/sebastianbergmann/comparator/zipball/591a30922f54656695e59b1f39501aec513403da",
+                "reference": "591a30922f54656695e59b1f39501aec513403da",
                 "shasum": ""
             },
             "require": {
@@ -1239,7 +1239,7 @@
                 "compare",
                 "equality"
             ],
-            "time": "2018-04-18T13:33:00+00:00"
+            "time": "2018-06-14T15:05:28+00:00"
         },
         {
             "name": "sebastian/diff",

@@ -48,6 +48,11 @@ class UsersDSLQuery extends \CFX\Persistence\GenericDSLQuery {
     public function requestingCollection() {
         return parent::requestingCollection() && !$this->includes('email') && !$this->includes("authId");
     }
+
+    public static function getLogicalOperators()
+    {
+        return [ "and", "or" ];
+    }
 }
 
 
