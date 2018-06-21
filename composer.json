@@ -11,7 +11,8 @@
     ],
     "require" : {
         "php" : ">=5.4.0",
-        "cfxmarkets/php-jsonapi-objects": "^1.4.0"
+        "cfxmarkets/php-jsonapi-objects": "^1.4.0",
+        "cfxmarkets/php-persistence": "^0.3.2"
     },
     "require-dev" : {
         "phpunit/phpunit" : ">=4.8.0",

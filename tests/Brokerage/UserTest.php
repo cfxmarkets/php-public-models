@@ -63,6 +63,33 @@ class UserTest extends \PHPUnit\Framework\TestCase
         $this->assertChains($field);
     }
 
+    public function testAuthId()
+    {
+        $field = 'authId';
+        $this->assertReadOnly($field, 'aaaa-bbbccccddd-ee111-22223333444-55');
+    }
+
+    public function testSelfAccredited()
+    {
+        $field = 'selfAccredited';
+        $this->assertValid($field, [ null, '', '1', 1, '0', 0, true, false ], function($expected, $actual) {
+            if ($expected === '') {
+                $expected = null;
+            } elseif (is_numeric($expected)) {
+                $expected = (bool)$expected;
+            }
+            $this->assertEquals($expected, $actual);
+        });
+        $this->assertInvalid($field, [ "true", "false", '12345', 12345, new \DateTime(), [ "array of values" ] ]);
+        $this->assertChanged($field, true, "attributes");
+        $this->assertChains($field);
+
+        // Test that it serializes to ints
+        $this->resource->setSelfAccredited(true);
+        $data = $this->resource->jsonSerialize();
+        $this->assertTrue(is_int($data["attributes"]["selfAccredited"]), "Should have serialized to integer");
+    }
+
     public function testOAuthTokens()
     {
         $field = 'oAuthTokens';

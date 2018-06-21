@@ -10,6 +10,19 @@ class LegalEntityTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals('legal-entities', $this->resource->getResourceType());
     }
 
+    public function testGetAmlKycStatus()
+    {
+        $this->assertEquals(0, $this->resource->getAmlKycStatus());
+        $this->datasource->setRelated('idDocs', new \CFX\JsonApi\ResourceCollection());
+        $this->resource
+            ->setLegalId("123456789")
+            ->setDateOfBirth(time() - (18400*365*50))
+            ->setPrimaryAddress(new Address($this->datasource))
+            ->addIdDoc(new Document($this->datasource))
+        ;
+        $this->assertEquals(1, $this->resource->getAmlKycStatus());
+    }
+
     public function testType() {
         $field = 'type';
 
@@ -81,6 +94,52 @@ class LegalEntityTest extends \PHPUnit\Framework\TestCase
         $this->assertChains($field);
     }
 
+    public function testNetWorth()
+    {
+        $field = "netWorth";
+        $this->assertValid($field, [ 1234555, "500000", 0, null, '' ]);
+        $this->assertInvalid($field, [ "cool", true, false, [ "array-of-things" ], new \DateTime() ]);
+        $this->assertChanged($field, 300000, "attributes");
+        $this->assertChains($field);
+    }
+
+    public function testAnnualIncome()
+    {
+        $field = "annualIncome";
+        $this->assertValid($field, [ 1234555, "500000", 0, null, '' ]);
+        $this->assertInvalid($field, [ "cool", true, false, [ "array-of-things" ], new \DateTime() ]);
+        $this->assertChanged($field, 300000, "attributes");
+        $this->assertChains($field);
+    }
+
+    public function testAccreditationStatus()
+    {
+        $field = "accreditationStatus";
+        $this->assertFalse($this->resource->hasErrors($field), "Should instantiate cleanly");
+        $this->assertReadOnly($field, 2);
+        $this->assertEquals(LegalEntity::getValidAccreditationStatuses()[0], $this->resource->getAccreditationStatus());
+    }
+
+    public function testAccreditationStatusExtended(LegalEntityInterface $resource = null)
+    {
+        if ($resource) {
+            $this->resource = $resource;
+        } else {
+            $this->resource = new Test\LegalEntity($this->datasource);
+        }
+
+        $field = "accreditationStatus";
+        $this->assertValid($field, array_merge(LegalEntity::getValidAccreditationStatuses(), [ "-2", "-1", "0", "1", "2" ]));
+        $this->assertInvalid($field, [ "cool", "true", "false", [ "array-of-things" ], new \DateTime(), 3, -3 ]);
+        $this->assertChanged($field, 1, "attributes");
+        $this->assertChains($field);
+
+        // Test serialization
+        $this->resource->setAccreditationStatus(2);
+        $serialized = json_decode(json_encode($this->resource), true);
+        $this->assertEquals(2, $serialized["attributes"][$field], "Should have serialized to integer but didn't");
+    }
+
     public function testFinraStatusText()
     {
         $field = 'finraStatusText';
@@ -137,6 +196,12 @@ class LegalEntityTest extends \PHPUnit\Framework\TestCase
         $this->assertChains($field);
     }
 
+    public function testWalletAccount()
+    {
+        $field = "walletAccount";
+        $this->assertReadOnly($field, (new WalletAccount($this->datasource))->setId("12345"));
+    }
+
     public function testPrimaryAddress() {
         // Assert field NOT required
         $this->assertFalse($this->resource->hasErrors('primaryAddress'));
@@ -177,9 +242,6 @@ class LegalEntityTest extends \PHPUnit\Framework\TestCase
         $this->assertSame($this->resource, $this->resource->setIdDocs($val));
 
         // AddIdDoc
-        $this->markTestIncomplete();
-        /*
-         * NOT possible with generic MockDatasource
         $doc = new Document($this->datasource);
         $this->resource->addIdDoc($doc);
         $this->assertFalse($this->resource->hasErrors('idDocs'));
@@ -192,21 +254,90 @@ class LegalEntityTest extends \PHPUnit\Framework\TestCase
         $this->resource->removeIdDoc($doc);
         $this->assertFalse($this->resource->hasErrors('idDocs'));
         $this->assertEquals(0, count($this->resource->getIdDocs()));
-         */
+    }
+
+    public function testAccreditationDocs() {
+        $field = "accreditationDocs";
+
+        // Assert field NOT required
+        $this->assertFalse($this->resource->hasErrors($field));
+
+        $val = new \CFX\JsonApi\ResourceCollection();
+        $this->datasource->setRelated($field, $val);
+
+        $this->resource->setAccreditationDocs($val);
+        $this->assertFalse($this->resource->hasErrors($field));
+        $this->assertEquals($val, $this->resource->getAccreditationDocs());
+
+        // Assert changed
+        $changes = $this->resource->getChanges();
+        $this->assertContains($field, array_keys($changes['relationships']));
+        $this->assertSame($val, $changes['relationships'][$field]->getData());
+
+        // Assert chaining
+        $this->assertSame($this->resource, $this->resource->setAccreditationDocs($val));
+
+        // AddDoc
+        $doc = new Document($this->datasource);
+        $this->resource->addAccreditationDoc($doc);
+        $this->assertFalse($this->resource->hasErrors($field));
+        $this->assertEquals(1, count($this->resource->getAccreditationDocs()));
+
+        // HasDoc
+        $this->assertTrue($this->resource->hasAccreditationDoc($doc));
+
+        // RemoveDoc
+        $this->resource->removeAccreditationDoc($doc);
+        $this->assertFalse($this->resource->hasErrors($field));
+        $this->assertEquals(0, count($this->resource->getAccreditationDocs()));
+    }
+
+    public function testResidencyDocs() {
+        $field = "residencyDocs";
+
+        // Assert field NOT required
+        $this->assertFalse($this->resource->hasErrors($field));
+
+        $val = new \CFX\JsonApi\ResourceCollection();
+        $this->datasource->setRelated($field, $val);
+
+        $this->resource->setResidencyDocs($val);
+        $this->assertFalse($this->resource->hasErrors($field));
+        $this->assertEquals($val, $this->resource->getResidencyDocs());
+
+        // Assert changed
+        $changes = $this->resource->getChanges();
+        $this->assertContains($field, array_keys($changes['relationships']));
+        $this->assertSame($val, $changes['relationships'][$field]->getData());
+
+        // Assert chaining
+        $this->assertSame($this->resource, $this->resource->setResidencyDocs($val));
+
+        // AddDoc
+        $doc = new Document($this->datasource);
+        $this->resource->addResidencyDoc($doc);
+        $this->assertFalse($this->resource->hasErrors($field));
+        $this->assertEquals(1, count($this->resource->getResidencyDocs()));
+
+        // HasDoc
+        $this->assertTrue($this->resource->hasResidencyDoc($doc));
+
+        // RemoveDoc
+        $this->resource->removeResidencyDoc($doc);
+        $this->assertFalse($this->resource->hasErrors($field));
+        $this->assertEquals(0, count($this->resource->getResidencyDocs()));
     }
 
 
     public function testIntegration() {
-        $this->markTestIncomplete();
         $data = [
             "type" => "legal-entities",
             "attributes" => [
-                "label" => "Me",
                 "type" => "person",
                 "legalId" => "111223333",
                 "legalName" => "My Person",
+                "accreditationStatus" => 0,
             ],
-                /*
             "relationships" => [
                 "primaryAddress" => [
                     "data" => [
@@ -223,12 +354,37 @@ class LegalEntityTest extends \PHPUnit\Framework\TestCase
                     ],
                 ],
             ],
-                 */
         ];
 
-        $document = new LegalEntity($this->datasource, $data);
-        $this->assertFalse($document->hasErrors());
-        $this->assertEquals($data, $document->getChanges());
+
+        // Test creating new
+
+        $entity = $this->datasource
+            ->addClassToCreate("\\CFX\\Brokerage\\LegalEntity")
+            ->addClassToCreate("\\CFX\\Brokerage\\Address")
+            ->addClassToCreate("\\CFX\\Brokerage\\Document")
+            ->create($data)
+        ;
+
+        $this->assertFalse($entity->hasErrors());
+
+        $data["attributes"]["accreditationStatus"] = 0;
+        $this->assertEquals($data, json_decode(json_encode($entity->getChanges()), true));
+
+
+        // Test inflating
+        $data["id"] = "abcde12345";
+        $data["attributes"]["accreditationStatus"] = LegalEntity::getValidAccreditationStatuses()[1];
+        $entity = $this->datasource
+            ->addClassToCreate("\\CFX\\Brokerage\\LegalEntity")
+            ->addClassToCreate("\\CFX\\Brokerage\\Address")
+            ->addClassToCreate("\\CFX\\Brokerage\\Document")
+            ->setCurrentData($data)
+            ->get("id=abcde12345")
+        ;
+
+        $this->assertFalse($entity->hasErrors());
+        $this->assertFalse($entity->hasChanges());
     }
 }
 
