@@ -279,30 +279,9 @@ class OrderIntent extends \CFX\JsonApi\AbstractResource implements OrderIntentIn
 
 
     public function setUser(UserInterface $user=null) {
-        if ($this->validateRequired('user', $user)) {
-            if ($this->validateStatusActive('user')) {
-                // User is immutable
-                if ($this->getInitial('user') && $this->valueDiffersFromInitial('user', $user)) {
-                    $this->setError('user', 'immutable', [
-                        "title" => "Immutable Relationship `user`",
-                        "detail" => "You cannot edit the `user` relationship of an order intent. If you'd like to change the user, you should delete this intent using the DELETE /exchange/api/v2/order-intents/".$this->getId()." endpoint and then create a new one",
-                    ]);
-                } else {
-                    $this->clearError('user', 'immutable');
-
-                    try {
-                        $user->initialize();
-                        $this->clearError('user', 'valid');
-                    } catch (\CFX\Persistence\ResourceNotFoundException $e) {
-                        $this->setError('user', 'valid', [
-                            "title" => "Invalid Relationship `user`",
-                            "detail" => "The user you've specified doesn't appear to be in our database."
-                        ]); 
-                    }
-                }
-            }
+        if ($this->validateStatusActive('user')) {
+            $this->validateImmutable("user", $user);
         }
-
         return $this->_setRelationship('user', $user);
     }
 
