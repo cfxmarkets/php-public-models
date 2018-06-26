@@ -46,6 +46,13 @@ interface BankAccountInterface extends FundingSourceInterface
     public function getAccountNum();
 
     /**
+     * Get the bank's SWIFT code
+     *
+     * @return string|null
+     */
+    public function getSwiftCode();
+
+    /**
      * Get the bank's address
      *
      * @return string
@@ -109,6 +116,13 @@ interface BankAccountInterface extends FundingSourceInterface
      * @return static
      */
     public function setAccountNum($val);
+
+    /**
+     * Set the bank's SWIFT code
+     *
+     * @return string|null
+     */
+    public function setSwiftCode($val);
 
     /**
      * Set the bank's address

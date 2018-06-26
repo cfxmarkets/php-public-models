@@ -64,6 +64,19 @@ class BankAccountTest extends FundingSourceTest
         $this->assertChains($field);
     }
 
+    public function testSwiftCode()
+    {
+        $field = "swiftCode";
+        $this->assertValid($field, [ null, "", "DEUTDEFF", "NEDSZAJJXXX", "DEUTDEFF500" ]);
+        $this->assertInvalid($field, [ "11112222", "111122223333", "D3UTDEFF5X0", "D3UTDEFF500", true, false, new \DateTime(), [ ] ]);
+        $this->assertChanged($field, "DABADKKK", "attributes");
+        $this->assertChains($field);
+
+        // Should normalize input
+        $this->resource->setSwiftCode("DeuTdEFFxxx");
+        $this->assertEquals("DEUTDEFFXXX", $this->resource->getSwiftCode());
+    }
+
     public function testBankAddress()
     {
         $field = 'bankAddress';
