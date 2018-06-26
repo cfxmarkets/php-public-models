@@ -135,7 +135,7 @@ trait BankAccountTrait {
         $field = "swiftCode";
         $val = $this->cleanStringValue($val);
         if ($this->validateType($field, $val, "non-numeric string", false)) {
-            if ($this->validateFormat($field, $val, "/^[A-Za-z]{6}[A-Za-z0-9]{2}(?:[0-9]{3}|[Xx]{3})?$/", false)) {
+            if ($this->validateFormat($field, $val, "swiftCode", false)) {
                 if ($val) {
                     $val = strtoupper($val);
                 }

@@ -314,7 +314,7 @@ trait ResourceValidationsTrait {
     {
         $knownFormats = [
             "email" => "/^([a-z0-9\+_\-]+)(\.[a-z0-9\+_\-]+)*@([a-z0-9\-]+\.)+[a-z]{2,6}$/ix",
-            "swiftCode" => "",
+            "swiftCode" => "/^[A-Za-z]{6}[A-Za-z0-9]{2}(?:[0-9]{3}|[Xx]{3})?$/",
         ];
 
         if (array_key_exists($formatName, $knownFormats)) {
