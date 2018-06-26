@@ -2,6 +2,8 @@
 namespace CFX\Brokerage;
 
 class Address extends \CFX\JsonApi\AbstractResource implements AddressInterface {
+    use \CFX\ResourceValidationsTrait;
+
     protected $resourceType = 'addresses';
     protected $attributes = [
         'label' => null,
@@ -58,9 +60,9 @@ class Address extends \CFX\JsonApi\AbstractResource implements AddressInterface 
 
     public function setState($val)
     {
-        $this->_setAttribute('state', $val);
-        $this->validateRequired('state', $val);
-        return $this;
+        $val = $this->cleanStringValue($val);
+        $this->validateType("state", $val, "non-numeric string", false);
+        return $this->_setAttribute('state', $val);
     }
 
     public function setZip($val)
