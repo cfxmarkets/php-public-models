@@ -111,11 +111,19 @@ trait BankAccountTrait {
     public function setRoutingNum($val)
     {
         $val = $this->cleanStringValue($val);
-
-        if ($this->validateRequired('routingNum', $val)) {
-            $this->validateType('routingNum', $val, 'string or int');
+        if (!$val) {
+            if (!$this->getSwiftCode()) {
+                $this->setError('swiftOrRouting', 'required', [
+                    'title' => 'Swift Code or Routing Number Required',
+                    'detail' => 'You must set either at least a Swift Code or a Routing Number for bank account to be valid.',
+                ]);
+            } else {
+                $this->clearError('swiftOrRouting', 'required');
+            }
+        } else {
+            $this->clearError('swiftOrRouting', 'required');
+            $this->validateType('routingNum', $val, 'string or int', false);
         }
-
         return $this->_setAttribute('routingNum', $val);
     }
 
@@ -134,10 +142,22 @@ trait BankAccountTrait {
     {
         $field = "swiftCode";
         $val = $this->cleanStringValue($val);
-        if ($this->validateType($field, $val, "non-numeric string", false)) {
-            if ($this->validateFormat($field, $val, "swiftCode", false)) {
-                if ($val) {
-                    $val = strtoupper($val);
+        if (!$val) {
+            if (!$this->getRoutingNum()) {
+                $this->setError('swiftOrRouting', 'required', [
+                    'title' => 'Swift Code or Routing Number Required',
+                    'detail' => 'You must set either at least a Swift Code or a Routing Number for bank account to be valid.',
+                ]);
+            } else {
+                $this->clearError('swiftOrRouting', 'required');
+            }
+        } else {
+            $this->clearError('swiftOrRouting', 'required');
+            if ($this->validateType($field, $val, "non-numeric string", false)) {
+                if ($this->validateFormat($field, $val, "swiftCode", false)) {
+                    if ($val) {
+                        $val = strtoupper($val);
+                    }
                 }
             }
         }
