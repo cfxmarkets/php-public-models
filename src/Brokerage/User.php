@@ -87,6 +87,9 @@ class User extends \CFX\JsonApi\AbstractResource implements UserInterface {
 
     public function setPhoneNumber($val) {
         $val = $this->cleanStringValue($val);
+        if (is_string($val)) {
+            $val = preg_replace("/[ .-]/", "", $val);
+        }
 
         if ($this->validateType('phoneNumber', $val, 'string', false)) {
             if ($val !== null && !preg_match("/^\+?[0-9]{5,}$/", $val)) {

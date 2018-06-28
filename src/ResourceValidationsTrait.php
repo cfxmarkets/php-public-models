@@ -33,7 +33,7 @@ trait ResourceValidationsTrait {
             } elseif ($type === 'datetime') {
                 $result = ($val instanceof \DateTime);
             } elseif ($type === 'email') {
-                $result = preg_match("/^([a-z0-9\+_\-]+)(\.[a-z0-9\+_\-]+)*@([a-z0-9\-]+\.)+[a-z]{2,6}$/ix", $val);
+                $result = preg_match($this->getKnownFormat("email"), $val);
             } else {
                 throw new \RuntimeException("Programmer: Don't know how to validate for type `$type`!");
             }
@@ -52,6 +52,46 @@ trait ResourceValidationsTrait {
             return false;
         }
     }
+
+
+    /**
+     * Validates that the value for a given field is of the specified format
+     *
+     * @param string $field The name of the field (attribute or relationship) being validated
+     * @param mixed $val The value to validate
+     * @param string $format Either a named format or regexp string
+     * @param bool $required Whether or not the value is required (this affects how `null` is handled)
+     * @return bool Whether or not the validation has passed
+     */
+    protected function validateFormat($field, $val, $format, $required = true)
+    {
+        if ($val !== null) {
+            $regexp = $this->getKnownFormat($format);
+            if (!$regexp) {
+                $regexp = $format;
+            }
+            $result = preg_match($regexp, $val);
+        } else {
+            $result = !$required;
+        }
+
+        if ($result) {
+            $this->clearError($field, 'validFormat');
+            return true;
+        } else {
+            $error = [
+                "title" => "Invalid Format for Field `$field`",
+                "detail" => "Value for field `$field` must be a(n) $format."
+            ];
+            if ($format === $regexp) {
+                $error["detail"] = "Valud for field `$field` must match $format.";
+            }
+            $this->setError($field, 'validFormat', $error);
+            return false;
+        }
+    }
+
+
 
     /**
      * Validates that the value for a given field is in the given array of valid options
@@ -261,6 +301,26 @@ trait ResourceValidationsTrait {
             return $val;
         } catch (\Throwable $e) {
             return $val;
+        }
+    }
+
+    /**
+     * Returns a list of known formats for validation
+     *
+     * @param string $formatName The name of the format to get
+     * @return string|null The regexp string representing the requested format, or null if format is not known
+     */
+    protected function getKnownFormat(string $formatName)
+    {
+        $knownFormats = [
+            "email" => "/^([a-z0-9\+_\-]+)(\.[a-z0-9\+_\-]+)*@([a-z0-9\-]+\.)+[a-z]{2,6}$/ix",
+            "swiftCode" => "/^[A-Za-z]{6}[A-Za-z0-9]{2}(?:[0-9]{3}|[Xx]{3})?$/",
+        ];
+
+        if (array_key_exists($formatName, $knownFormats)) {
+            return $knownFormats[$formatName];
+        } else {
+            return null;
         }
     }
 }

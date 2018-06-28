@@ -16,6 +16,7 @@ class BankAccount extends FundingSource implements BankAccountInterface
             'holderName' => null,
             'routingNum' => null,
             'accountNum' => null,
+            "swiftCode" => null,
             'bankAddress' => null,
             'status' => false,
         ];

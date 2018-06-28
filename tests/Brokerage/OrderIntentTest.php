@@ -109,7 +109,7 @@ class OrderIntentTest extends \PHPUnit\Framework\TestCase
     public function testUser()
     {
         $field = 'user';
-        $this->assertValid($field, [ new User($this->datasource) ]);
+        $this->assertValid($field, [ null, new User($this->datasource) ]);
         $this->assertChanged($field, (new User($this->datasource))->setId("12345"), "relationships");
         $this->assertChains($field);
         $this->assertImmutableOnFinalStatus($field, (new User($this->datasource))->setId("54321"));

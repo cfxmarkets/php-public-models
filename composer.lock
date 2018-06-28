@@ -1,21 +1,27 @@
 {
     "_readme": [
         "This file locks the dependencies of your project to a known state",
-        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
+        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "a1a49774ca55c14827bf68a1816f0201",
+    "content-hash": "b38889aa9702eab8dfe5546bbe4fdf2b",
     "packages": [
         {
             "name": "cfxmarkets/php-jsonapi-objects",
-            "version": "v1.4.3",
+            "version": "v1.4.5",
             "source": {
                 "type": "git",
-                "url": "https://github.com/cfxmarkets/php-jsonapi-objects",
-                "reference": "2fbaba39141a93b7fef5d56582650251d8355e53"
+                "url": "https://github.com/cfxmarkets/php-jsonapi-objects.git",
+                "reference": "f64e0531698e7e702c70e7af9ce3e74f1ba7d8e8"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/cfxmarkets/php-jsonapi-objects/zipball/f64e0531698e7e702c70e7af9ce3e74f1ba7d8e8",
+                "reference": "f64e0531698e7e702c70e7af9ce3e74f1ba7d8e8",
+                "shasum": ""
             },
             "require": {
-                "kael-shipman/php-std-traits": "^3.2.4",
+                "kael-shipman/php-std-traits": "^7.0.0",
                 "php": ">=5.4"
             },
             "require-dev": {
@@ -38,6 +44,7 @@
                     "src/Exceptions.php"
                 ]
             },
+            "notification-url": "https://packagist.org/downloads/",
             "license": [
                 "MIT"
             ],
@@ -53,26 +60,20 @@
                 "json",
                 "jsonapi"
             ],
-            "time": "2018-04-23T16:33:52+00:00"
+            "time": "2018-06-28T00:37:13+00:00"
         },
         {
             "name": "cfxmarkets/php-persistence",
-            "version": "v0.3.2",
+            "version": "v0.3.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/cfxmarkets/php-persistence.git",
-                "reference": "abefb0dbef94076afc1880ab3f76544cf3bcda72"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/cfxmarkets/php-persistence/zipball/abefb0dbef94076afc1880ab3f76544cf3bcda72",
-                "reference": "abefb0dbef94076afc1880ab3f76544cf3bcda72",
-                "shasum": ""
+                "reference": "d469feee76dcd1503172cda3ce8ba81e5c332c8a"
             },
             "require": {
-                "cfxmarkets/php-jsonapi-objects": "^1.4.0",
+                "cfxmarkets/php-jsonapi-objects": "^1.4.5",
                 "guzzlehttp/guzzle": "^6.3.0",
-                "kael-shipman/php-std-traits": "^3.2.1",
+                "kael-shipman/php-std-traits": "^7.0.0",
                 "php": ">=5.5"
             },
             "require-dev": {
@@ -87,7 +88,6 @@
                     "src/Exceptions.php"
                 ]
             },
-            "notification-url": "https://packagist.org/downloads/",
             "license": [
                 "MIT"
             ],
@@ -99,13 +99,13 @@
             ],
             "description": "A library providing abstract implementations of various persistence layers based on JSON API relational resource concepts.",
             "keywords": [
-                "Context",
+                "context",
                 "database",
                 "datacontext",
                 "datasource",
                 "persistence"
             ],
-            "time": "2018-06-21T08:21:59+00:00"
+            "time": "2018-06-28T00:39:18+00:00"
         },
         {
             "name": "guzzlehttp/guzzle",
@@ -283,16 +283,16 @@
         },
         {
             "name": "kael-shipman/php-std-traits",
-            "version": "v3.2.6",
+            "version": "v7.0.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/kael-shipman/php-std-traits.git",
-                "reference": "a661ea6698a672a3c7d6f63a91f832018caee223"
+                "reference": "86127b3ad21aeb9b5beec2677ec69d26fcb079aa"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/kael-shipman/php-std-traits/zipball/a661ea6698a672a3c7d6f63a91f832018caee223",
-                "reference": "a661ea6698a672a3c7d6f63a91f832018caee223",
+                "url": "https://api.github.com/repos/kael-shipman/php-std-traits/zipball/86127b3ad21aeb9b5beec2677ec69d26fcb079aa",
+                "reference": "86127b3ad21aeb9b5beec2677ec69d26fcb079aa",
                 "shasum": ""
             },
             "require": {
@@ -326,7 +326,7 @@
             "keywords": [
                 "traits"
             ],
-            "time": "2018-01-12T10:22:22+00:00"
+            "time": "2018-04-19T16:32:56+00:00"
         },
         {
             "name": "psr/http-message",
@@ -1050,16 +1050,16 @@
         },
         {
             "name": "phpunit/phpunit",
-            "version": "7.2.5",
+            "version": "7.2.6",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/phpunit.git",
-                "reference": "1dbfbe286dbbc194bb81b4a120415ebdf7db42c3"
+                "reference": "400a3836ee549ae6f665323ac3f21e27eac7155f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/1dbfbe286dbbc194bb81b4a120415ebdf7db42c3",
-                "reference": "1dbfbe286dbbc194bb81b4a120415ebdf7db42c3",
+                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/400a3836ee549ae6f665323ac3f21e27eac7155f",
+                "reference": "400a3836ee549ae6f665323ac3f21e27eac7155f",
                 "shasum": ""
             },
             "require": {
@@ -1130,7 +1130,7 @@
                 "testing",
                 "xunit"
             ],
-            "time": "2018-06-21T04:05:21+00:00"
+            "time": "2018-06-21T13:13:39+00:00"
         },
         {
             "name": "sebastian/code-unit-reverse-lookup",

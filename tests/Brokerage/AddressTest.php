@@ -55,16 +55,11 @@ class AddressTest extends \PHPUnit\Framework\TestCase
     }
 
     public function testState() {
-        // Assert required
-        $val = "";
-        $this->resource->setState($val);
-        $this->assertTrue($this->resource->hasErrors('state'));
-        $this->assertEquals($val, $this->resource->getState());
-
-        $val = "PA";
-        $this->resource->setState($val);
-        $this->assertFalse($this->resource->hasErrors('state'));
-        $this->assertEquals($val, $this->resource->getState());
+        $field = "state";
+        $this->assertValid($field, [ null, "", "AL", "Berlin" ]);
+        $this->assertInvalid($field, [ 12345, new \DateTime(), [ ], true, false ]);
+        $this->assertChanged($field, "IL", "attributes");
+        $this->assertChains($field);
     }
 
     public function testZip() {
