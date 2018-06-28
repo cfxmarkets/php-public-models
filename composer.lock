@@ -1,18 +1,24 @@
 {
     "_readme": [
         "This file locks the dependencies of your project to a known state",
-        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
+        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "302b782f120b85aed9017f804f13932b",
+    "content-hash": "b38889aa9702eab8dfe5546bbe4fdf2b",
     "packages": [
         {
             "name": "cfxmarkets/php-jsonapi-objects",
-            "version": "v1.4.x-dev",
+            "version": "v1.4.5",
             "source": {
                 "type": "git",
-                "url": "https://github.com/cfxmarkets/php-jsonapi-objects",
-                "reference": "34cdc59caa5eafe8167d19872f222aa24d195eab"
+                "url": "https://github.com/cfxmarkets/php-jsonapi-objects.git",
+                "reference": "f64e0531698e7e702c70e7af9ce3e74f1ba7d8e8"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/cfxmarkets/php-jsonapi-objects/zipball/f64e0531698e7e702c70e7af9ce3e74f1ba7d8e8",
+                "reference": "f64e0531698e7e702c70e7af9ce3e74f1ba7d8e8",
+                "shasum": ""
             },
             "require": {
                 "kael-shipman/php-std-traits": "^7.0.0",
@@ -38,6 +44,7 @@
                     "src/Exceptions.php"
                 ]
             },
+            "notification-url": "https://packagist.org/downloads/",
             "license": [
                 "MIT"
             ],
@@ -53,24 +60,18 @@
                 "json",
                 "jsonapi"
             ],
-            "time": "2018-06-23T21:59:27+00:00"
+            "time": "2018-06-28T00:37:13+00:00"
         },
         {
             "name": "cfxmarkets/php-persistence",
-            "version": "v0.3.x-dev",
+            "version": "v0.3.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/cfxmarkets/php-persistence.git",
-                "reference": "542352048ab7478894a4c27a4c71e39048d06d2c"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/cfxmarkets/php-persistence/zipball/542352048ab7478894a4c27a4c71e39048d06d2c",
-                "reference": "542352048ab7478894a4c27a4c71e39048d06d2c",
-                "shasum": ""
+                "reference": "d469feee76dcd1503172cda3ce8ba81e5c332c8a"
             },
             "require": {
-                "cfxmarkets/php-jsonapi-objects": "^1.4.5@dev",
+                "cfxmarkets/php-jsonapi-objects": "^1.4.5",
                 "guzzlehttp/guzzle": "^6.3.0",
                 "kael-shipman/php-std-traits": "^7.0.0",
                 "php": ">=5.5"
@@ -87,7 +88,6 @@
                     "src/Exceptions.php"
                 ]
             },
-            "notification-url": "https://packagist.org/downloads/",
             "license": [
                 "MIT"
             ],
@@ -99,13 +99,13 @@
             ],
             "description": "A library providing abstract implementations of various persistence layers based on JSON API relational resource concepts.",
             "keywords": [
-                "Context",
+                "context",
                 "database",
                 "datacontext",
                 "datasource",
                 "persistence"
             ],
-            "time": "2018-06-23T22:01:52+00:00"
+            "time": "2018-06-28T00:39:18+00:00"
         },
         {
             "name": "guzzlehttp/guzzle",
@@ -1788,10 +1788,7 @@
     ],
     "aliases": [],
     "minimum-stability": "stable",
-    "stability-flags": {
-        "cfxmarkets/php-jsonapi-objects": 20,
-        "cfxmarkets/php-persistence": 20
-    },
+    "stability-flags": [],
     "prefer-stable": false,
     "prefer-lowest": false,
     "platform": {
