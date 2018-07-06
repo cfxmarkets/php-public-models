@@ -23,6 +23,7 @@ class LegalEntity extends \CFX\JsonApi\AbstractResource implements LegalEntityIn
         'corporateStatusText' => null,
         'custodianName' => null,
         'custodianAccountNum' => null,
+        "investmentAccountUri" => null,
     ];
 
     protected $relationships = [
@@ -142,6 +143,11 @@ class LegalEntity extends \CFX\JsonApi\AbstractResource implements LegalEntityIn
     public function getCustodianAccountNum()
     {
         return $this->_getAttributeValue('custodianAccountNum');
+    }
+
+    public function getInvestmentAccountUri()
+    {
+        return $this->_getAttributeVAlue("investmentAccountUri");
     }
 
     public function getWalletAccount()
@@ -415,6 +421,31 @@ class LegalEntity extends \CFX\JsonApi\AbstractResource implements LegalEntityIn
         }
 
         return $this->_setAttribute("custodianAccountNum", $val);
+    }
+
+    public function setInvestmentAccountUri($val)
+    {
+        $val = $this->cleanStringValue($val);
+        if ($this->validateImmutable("investmentAccountUri", $val, false)) {
+            if ($this->validateType("investmentAccountUri", $val, "non-numeric string", false)) {
+                if ($val !== null) {
+                    if (!preg_match("#^(p2p|trad)://[a-z]+/[^ \\t\\n]+$#", $val)) {
+                        $this->setError("investmentAccountUri", "format", [
+                            "title" => "Invalid URI Format for `investmentAccountUri`",
+                            "detail" => "`investmentAccountUri` must match the following format: `[scheme]://[brand]/[accountNum]`, where `[scheme]` must be either 'p2p' or 'trad' (lowercase), `[brand]` must be something like 'ethereum' or 'inventrust' (also lowercase), and `[accountNum]` is the unique number or address of the account (may be anything that's not a whitespace character).",
+                            "meta" => [
+                                "regex" => "^(p2p|trad)://[a-z]+/[^ \\t\\n]+$"
+                            ],
+                        ]);
+                    } else {
+                        $this->clearError("investmentAccountUri", "format");
+                    }
+                } else {
+                    $this->clearError("investmentAccountUri", "format");
+                }
+            }
+        }
+        return $this->_setAttribute("investmentAccountUri", $val);
     }
 
     public function setWalletAccount(WalletAccountInterface $val = null)

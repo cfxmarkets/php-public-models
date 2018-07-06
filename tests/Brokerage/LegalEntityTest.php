@@ -196,6 +196,43 @@ class LegalEntityTest extends \PHPUnit\Framework\TestCase
         $this->assertChains($field);
     }
 
+    public function testInvestmentAccountUri()
+    {
+        $field = 'investmentAccountUri';
+
+        $this->assertValid($field, [ null, '', "p2p://ethereum/0x1383838383AAbcdeEef", 'trad://inventrust/123456' ]);
+        $this->assertInvalid($field, [ true, false, new \DateTime(), [], "https://not-valid.com/not-valid" ]);
+        $this->assertChanged($field, 'p2p://ethereum/0x12344444', 'attributes');
+        $this->assertChains($field);
+    }
+
+    public function testInvestmentAccountUriIsImmutable()
+    {
+        $data = [
+            "id" => "abcde12345",
+            "type" => "legal-entities",
+            "attributes" => [
+                "type" => "person",
+                "legalId" => "111223333",
+                "legalName" => "My Person",
+                "investmentAccountUri" => "p2p://ethereum/0xabcdef0123456789",
+            ],
+        ];
+
+        $entity = $this->datasource
+            ->addClassToCreate("\\CFX\\Brokerage\\LegalEntity")
+            ->setCurrentData($data)
+            ->get("id=abcde12345")
+        ;
+
+        $this->assertFalse($entity->hasChanges());
+        $this->assertFalse($entity->hasErrors("investmentAccountUri"));
+
+        $entity->setInvestmentAccountUri("p2p://ethereum/0x9876543210fedcba");
+        $this->assertTrue($entity->hasErrors("investmentAccountUri"));
+        $this->assertContains("immutable", array_keys($entity->getErrors("investmentAccountUri")));
+    }
+
     public function testWalletAccount()
     {
         $field = "walletAccount";
