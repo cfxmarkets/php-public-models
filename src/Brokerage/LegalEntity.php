@@ -24,7 +24,7 @@ class LegalEntity extends \CFX\JsonApi\AbstractResource implements LegalEntityIn
         'custodianName' => null,
         'custodianAccountNum' => null,
         "investmentAccountUri" => null,
-        "verificationStatus" => null,
+        "verificationStatus" => 0,
     ];
 
     protected $relationships = [
@@ -46,6 +46,17 @@ class LegalEntity extends \CFX\JsonApi\AbstractResource implements LegalEntityIn
     }
 
     public static function getValidAccreditationStatuses()
+    {
+        return [
+            0, //=> "Not Submitted"
+            1, //=> "In Review"
+            2, //=> "Verified"
+            -1, //=> "Rejected"
+            -2, //=> "Invalidated"
+        ];
+    }
+
+    public static function getValidVerificationStatuses()
     {
         return [
             0, //=> "Not Submitted"
@@ -456,8 +467,11 @@ class LegalEntity extends \CFX\JsonApi\AbstractResource implements LegalEntityIn
 
     public function setVerificationStatus($val)
     {
-        if ($this->validateReadOnly("verificationStatus", $val)) {
-            $this->_setAttribute("verificationStatus", $val);
+        $val = $this->cleanNumberValue($val);
+        $field = "verificationStatus";
+        if ($this->validateReadOnly($field, $val)) {
+            $this->validateAmong($field, $val, static::getValidVerificationStatuses(), true);
+            $this->_setAttribute($field, $val);
         }
         return $this;
     }

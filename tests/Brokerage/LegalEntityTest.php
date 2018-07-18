@@ -236,8 +236,29 @@ class LegalEntityTest extends \PHPUnit\Framework\TestCase
     public function testVerificationStatus()
     {
         $field = "verificationStatus";
+        $this->assertFalse($this->resource->hasErrors($field), "Should instantiate cleanly");
         $this->assertReadOnly($field, 2);
-        $this->assertChains($field, 1);
+        $this->assertEquals(LegalEntity::getValidVerificationStatuses()[0], $this->resource->getVerificationStatus());
+    }
+
+    public function testVerificationStatusExtended(LegalEntityInterface $resource = null)
+    {
+        if ($resource) {
+            $this->resource = $resource;
+        } else {
+            $this->resource = new Test\LegalEntity($this->datasource);
+        }
+
+        $field = "verificationStatus";
+        $this->assertValid($field, array_merge(LegalEntity::getValidVerificationStatuses(), [ "-2", "-1", "0", "1", "2" ]));
+        $this->assertInvalid($field, [ "cool", "true", "false", [ "array-of-things" ], new \DateTime(), 3, -3 ]);
+        $this->assertChanged($field, 1, "attributes");
+        $this->assertChains($field);
+
+        // Test serialization
+        $this->resource->setVerificationStatus(2);
+        $serialized = json_decode(json_encode($this->resource), true);
+        $this->assertEquals(2, $serialized["attributes"][$field], "Should have serialized to integer but didn't");
     }
 
     public function testWalletAccount()
@@ -413,6 +434,7 @@ class LegalEntityTest extends \PHPUnit\Framework\TestCase
         $this->assertFalse($entity->hasErrors());
 
         $data["attributes"]["accreditationStatus"] = 0;
+        $data["attributes"]["verificationStatus"] = 0;
         $this->assertEquals($data, json_decode(json_encode($entity->getChanges()), true));
 
 

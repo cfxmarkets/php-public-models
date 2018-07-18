@@ -9,6 +9,12 @@ class LegalEntity extends \CFX\Brokerage\LegalEntity
             return parent::setAccreditationStatus($val);
         });
     }
+    public function setVerificationStatus($val)
+    {
+        return $this->readOnlyOverride(function() use ($val) {
+            return parent::setVerificationStatus($val);
+        });
+    }
 }
 
 
