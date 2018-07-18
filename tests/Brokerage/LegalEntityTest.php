@@ -233,6 +233,13 @@ class LegalEntityTest extends \PHPUnit\Framework\TestCase
         $this->assertContains("immutable", array_keys($entity->getErrors("investmentAccountUri")));
     }
 
+    public function testVerificationStatus()
+    {
+        $field = "verificationStatus";
+        $this->assertReadOnly($field, 2);
+        $this->assertChains($field, 1);
+    }
+
     public function testWalletAccount()
     {
         $field = "walletAccount";

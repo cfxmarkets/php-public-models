@@ -24,6 +24,7 @@ class LegalEntity extends \CFX\JsonApi\AbstractResource implements LegalEntityIn
         'custodianName' => null,
         'custodianAccountNum' => null,
         "investmentAccountUri" => null,
+        "verificationStatus" => null,
     ];
 
     protected $relationships = [
@@ -147,7 +148,12 @@ class LegalEntity extends \CFX\JsonApi\AbstractResource implements LegalEntityIn
 
     public function getInvestmentAccountUri()
     {
-        return $this->_getAttributeVAlue("investmentAccountUri");
+        return $this->_getAttributeValue("investmentAccountUri");
+    }
+
+    public function getVerificationStatus()
+    {
+        return $this->_getAttributeValue("verificationStatus");
     }
 
     public function getWalletAccount()
@@ -446,6 +452,14 @@ class LegalEntity extends \CFX\JsonApi\AbstractResource implements LegalEntityIn
             }
         }
         return $this->_setAttribute("investmentAccountUri", $val);
+    }
+
+    public function setVerificationStatus($val)
+    {
+        if ($this->validateReadOnly("verificationStatus", $val)) {
+            $this->_setAttribute("verificationStatus", $val);
+        }
+        return $this;
     }
 
     public function setWalletAccount(WalletAccountInterface $val = null)

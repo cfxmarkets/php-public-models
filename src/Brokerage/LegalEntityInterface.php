@@ -30,6 +30,7 @@ interface LegalEntityInterface extends \CFX\JsonApi\ResourceInterface {
     public function getCustodianName();
     public function getCustodianAccountNum();
     public function getInvestmentAccountUri();
+    public function getVerificationStatus();
     public function getPrimaryAddress();
     public function getIdDocs();
     public function getAccreditationDocs();
@@ -52,6 +53,7 @@ interface LegalEntityInterface extends \CFX\JsonApi\ResourceInterface {
     public function setCustodianName($val);
     public function setCustodianAccountNum($val);
     public function setInvestmentAccountUri($val);
+    public function setVerificationStatus($val);
     public function setPrimaryAddress(AddressInterface $val = null);
     public function setWalletAccount(WalletAccountInterface $val = null);
     public function setIdDocs(\CFX\JsonApi\ResourceCollectionInterface $val = null);
