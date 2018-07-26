@@ -16,46 +16,35 @@ class AddressTest extends \PHPUnit\Framework\TestCase
     }
 
     public function testStreet1() {
-        // Assert required
-        $val = "";
-        $this->resource->setStreet1($val);
-        $this->assertTrue($this->resource->hasErrors('street1'));
-        $this->assertEquals($val, $this->resource->getStreet1());
-
-        $val = "555 N Address Pt.";
-        $this->resource->setStreet1($val);
-        $this->assertFalse($this->resource->hasErrors('street1'));
-        $this->assertEquals($val, $this->resource->getStreet1());
+        $field = "street1";
+        $this->assertInstantiatesInvalidly($field, "required");
+        $this->assertValid($field, [ "555 N Address Pt.", "5 N. Main St." ]);
+        $this->assertInvalid($field, [ null, "", 12345, new \DateTime(), [ ], true, false ]);
+        $this->assertChanged($field, "123 W Kinzie St", "attributes");
+        $this->assertChains($field);
     }
 
     public function testStreet2() {
-        // Assert not required
-        $val = "";
-        $this->resource->setStreet2($val);
-        $this->assertFalse($this->resource->hasErrors('street2'));
-        $this->assertEquals($val, $this->resource->getStreet2());
-
-        $val = "#5523";
-        $this->resource->setStreet2($val);
-        $this->assertFalse($this->resource->hasErrors('street2'));
-        $this->assertEquals($val, $this->resource->getStreet2());
+        $field = "street2";
+        $this->assertInstantiatesValidly($field);
+        $this->assertValid($field, [ null, "", "123", "#4242", "Apt. 55" ]);
+        $this->assertInvalid($field, [ new \DateTime(), [ ], true, false ]);
+        $this->assertChanged($field, "Atp. 110", "attributes");
+        $this->assertChains($field);
     }
 
     public function testCity() {
-        // Assert required
-        $val = "";
-        $this->resource->setCity($val);
-        $this->assertTrue($this->resource->hasErrors('city'));
-        $this->assertEquals($val, $this->resource->getCity());
-
-        $val = "Philadelphia";
-        $this->resource->setCity($val);
-        $this->assertFalse($this->resource->hasErrors('city'));
-        $this->assertEquals($val, $this->resource->getCity());
+        $field = "city";
+        $this->assertInstantiatesInvalidly($field, "required");
+        $this->assertValid($field, [ "Philadelphia", "Potosí" ]);
+        $this->assertInvalid($field, [ null, "", new \DateTime(), [ ], true, false ]);
+        $this->assertChanged($field, "Guadalajara", "attributes");
+        $this->assertChains($field);
     }
 
     public function testState() {
         $field = "state";
+        $this->assertInstantiatesValidly($field);
         $this->assertValid($field, [ null, "", "AL", "Berlin" ]);
         $this->assertInvalid($field, [ 12345, new \DateTime(), [ ], true, false ]);
         $this->assertChanged($field, "IL", "attributes");
@@ -63,54 +52,37 @@ class AddressTest extends \PHPUnit\Framework\TestCase
     }
 
     public function testZip() {
-        // Assert required
-        $val = "";
-        $this->resource->setZip($val);
-        $this->assertTrue($this->resource->hasErrors('zip'));
-        $this->assertEquals($val, $this->resource->getZip());
-
-        $val = "6622ZD0";
-        $this->resource->setZip($val);
-        $this->assertFalse($this->resource->hasErrors('zip'));
-        $this->assertEquals($val, $this->resource->getZip());
+        $field = "zip";
+        $this->assertInstantiatesInvalidly($field, "required");
+        $this->assertValid($field, [ "1123", "60654", "60654-1234", "6622ZD0" ]);
+        $this->assertInvalid($field, [ null, "", new \DateTime(), [ ], true, false ]);
+        $this->assertChanged($field, "1234", "attributes");
+        $this->assertChains($field);
     }
 
     public function testCountry() {
-        // Assert required
-        $val = "";
-        $this->resource->setCountry($val);
-        $this->assertTrue($this->resource->hasErrors('country'));
-        $this->assertEquals($val, $this->resource->getCountry());
-
-        $val = "US";
-        $this->resource->setCountry($val);
-        $this->assertFalse($this->resource->hasErrors('country'));
-        $this->assertEquals($val, $this->resource->getCountry());
+        $field = "country";
+        $this->assertInstantiatesInvalidly($field, "required");
+        $this->assertValid($field, [ "US", "AU", "GB" ]);
+        $this->assertInvalid($field, [ null, "", "United States", "Australia", "USA", "AU8", 12345, new \DateTime(), [ ], true, false ]);
+        $this->assertChanged($field, "CN", "attributes");
+        $this->assertChains($field);
     }
 
     public function testMeta() {
-        $this->assertFalse($this->resource->hasErrors('meta'));
-        $this->assertEquals(null, $this->resource->getMeta());
+        $assertSame = function($expected, $actual) {
+            if (is_string($expected)) {
+                $expected = json_decode($expected, true);
+            }
+            $this->assertEquals($expected, $actual, "Expecting value `".json_encode($expected)."`, but got `".json_encode($actual)."`");
+        };
 
-        $val = ["extra" => "some extra data"];
-        $this->resource->setMeta($val);
-        $this->assertFalse($this->resource->hasErrors('meta'));
-        $this->assertEquals($val, $this->resource->getMeta());
-
-        $val = "some extra data";
-        $this->resource->setMeta($val);
-        $this->assertTrue($this->resource->hasErrors('meta'));
-        $this->assertEquals($val, $this->resource->getMeta());
-
-        $val = '{"extra":"some extra data"}';
-        $this->resource->setMeta($val);
-        $this->assertFalse($this->resource->hasErrors('meta'));
-        $this->assertEquals(["extra" => "some extra data"], $this->resource->getMeta());
-
-        // Messed up json
-        $val = '{"extra":some extra data"}';
-        $this->resource->setMeta($val);
-        $this->assertTrue($this->resource->hasErrors('meta'));
+        $field = "meta";
+        $this->assertInstantiatesValidly($field);
+        $this->assertValid($field, [ null, "", ["extra" => "some extra data"], '{"extra":"some extra data"}' ], $assertSame);
+        $this->assertInvalid($field, [ "some extra data", '{"extra":some extra data"}' ]);
+        $this->assertChanged($field, '{"new":"value"}', "attributes", $assertSame);
+        $this->assertChains($field);
     }
 
     public function testIntegration() {
@@ -132,21 +104,6 @@ class AddressTest extends \PHPUnit\Framework\TestCase
         $this->assertFalse($address->hasErrors());
         $this->assertEquals(["extra" => "some extra data"], $address->getMeta());
         $this->assertEquals($data, $address->getChanges());
-    }
-
-    public function testMethodChaining() {
-        $json = $this->resource
-            ->setLabel('My Address')
-            ->setStreet1('12345')
-            ->setStreet2('#223')
-            ->setCity('Philly')
-            ->setState('CA')
-            ->setZip('22222')
-            ->setCountry('US')
-            ->setMeta(['test' => 'value'])
-            ->jsonSerialize();
-
-        $this->assertEquals('12345', $json['attributes']['street1']);
     }
 }
 

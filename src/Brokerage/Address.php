@@ -34,28 +34,34 @@ class Address extends \CFX\JsonApi\AbstractResource implements AddressInterface 
 
     public function setLabel($val=null)
     {
-        $this->_setAttribute('label', $val);
-        return $this;
+        $val = $this->cleanStringValue($val);
+        $this->validateType("label", $val, "non-numeric string", false);
+        return $this->_setAttribute('label', $val);
     }
 
     public function setStreet1($val)
     {
-        $this->_setAttribute('street1', $val);
-        $this->validateRequired('street1', $val);
-        return $this;
+        $val = $this->cleanStringValue($val);
+        if ($this->validateRequired("street1", $val)) {
+            $this->validateType("street1", $val, "non-numeric string");
+        }
+        return $this->_setAttribute('street1', $val);
     }
 
     public function setStreet2($val=null)
     {
-        $this->_setAttribute('street2', $val);
-        return $this;
+        $val = $this->cleanStringValue($val);
+        $this->validateType("street2", $val, "string or int", false);
+        return $this->_setAttribute('street2', $val);
     }
 
     public function setCity($val)
     {
-        $this->_setAttribute('city', $val);
-        $this->validateRequired('city', $val);
-        return $this;
+        $val = $this->cleanStringValue($val);
+        if ($this->validateRequired("city", $val)) {
+            $this->validateType("city", $val, "non-numeric string");
+        }
+        return $this->_setAttribute('city', $val);
     }
 
     public function setState($val)
@@ -67,26 +73,49 @@ class Address extends \CFX\JsonApi\AbstractResource implements AddressInterface 
 
     public function setZip($val)
     {
-        $this->_setAttribute('zip', $val);
-        $this->validateRequired('zip', $val);
-        return $this;
+        $val = $this->cleanStringValue($val);
+        if ($this->validateRequired("zip", $val)) {
+            $this->validateType("zip", $val, "string or int");
+        }
+        return $this->_setAttribute('zip', $val);
     }
 
     public function setCountry($val)
     {
-        $this->_setAttribute('country', $val);
-        $this->validateRequired('country', $val);
-        return $this;
+        $val = $this->cleanStringValue($val);
+        if ($this->validateRequired("country", $val)) {
+            if ($this->validateType("country", $val, "non-numeric string")) {
+                if (!preg_match("/^[A-Z]{2}$/", $val)) {
+                    $this->setError("country", "iso", [
+                        "title" => "Invalid Country Code",
+                        "detail" => "Country must be a valid 2-digit ISO country code."
+                    ]);
+                } else {
+                    $this->clearError("country", "iso");
+                }
+            } else {
+                $this->clearError("country", "iso");
+            }
+        } else {
+            $this->clearError("country", "iso");
+            $this->clearError("country", "validType");
+        }
+        return $this->_setAttribute('country', $val);
     }
 
     public function setMeta($val)
     {
         $valid = false;
         if (is_string($val)) {
-            $inflated = json_decode($val, true);
-            if ($inflated !== null || $val === 'null') {
-                $val = $inflated;
+            if ($val === "") {
+                $val = null;
                 $valid = true;
+            } else {
+                $inflated = json_decode($val, true);
+                if ($inflated !== null || $val === 'null') {
+                    $val = $inflated;
+                    $valid = true;
+                }
             }
         } elseif (is_array($val) || $val === null) {
             $valid = true;

@@ -19,6 +19,19 @@ trait ResourceTestTrait {
         $this->resource = new $class($this->datasource);
     }
 
+    protected function assertInstantiatesValidly($field)
+    {
+        $this->assertFalse($this->resource->hasErrors($field), "Field `$field` should have been valid on instantiate, but contains errors:\n\n".json_encode($this->resource->getErrors($field), JSON_PRETTY_PRINT));
+    }
+
+    protected function assertInstantiatesInvalidly(string $field, string $contains)
+    {
+        $this->assertTrue($this->resource->hasErrors($field), "Field `$field` should have been invalid on instantiate, but is valid.");
+        if ($contains) {
+            $this->assertContains($contains, json_encode($this->resource->getErrors($field)), "Errors for field `$field` on instantiate should contain '$contains', but don't.");
+        }
+    }
+
     protected function assertInvalid($field, $invalids, $assertSame = null)
     {
         foreach ($invalids as $val) {
