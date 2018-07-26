@@ -138,7 +138,7 @@ class Address extends \CFX\JsonApi\AbstractResource implements AddressInterface 
 
     protected function serializeAttribute($name)
     {
-        if ($name === 'meta') {
+        if ($name === 'meta' && $this->attributes[$name] !== null) {
             return json_encode($this->attributes[$name]);
         }
         return parent::serializeAttribute($name);
