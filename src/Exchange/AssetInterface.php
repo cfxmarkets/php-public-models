@@ -49,6 +49,27 @@ interface AssetInterface extends \CFX\JsonApi\ResourceInterface {
      */
     public function getDescription();
 
+    /**
+     * Get the asset's platform (for p2p assets)
+     *
+     * @return string|null
+     */
+    public function getPlatform();
+
+    /**
+     * Get platform version (for p2p assets)
+     *
+     * @return string|null
+     */
+    public function getPlatformVersion();
+
+    /**
+     * Get the URI where the asset can be resolved to (usually for p2p)
+     *
+     * @return string|null
+     */
+    public function getResolutionUri();
+
 
 
 
@@ -99,6 +120,30 @@ interface AssetInterface extends \CFX\JsonApi\ResourceInterface {
      * @return static
      */
     public function setDescription($val);
+
+    /**
+     * Set the asset's platform (for p2p assets)
+     *
+     * @param mixed $val
+     * @return static
+     */
+    public function setPlatform($val);
+
+    /**
+     * Set platform version (for p2p assets)
+     *
+     * @param mixed $val
+     * @return static
+     */
+    public function setPlatformVersion($val);
+
+    /**
+     * Set the URI where the asset can be resolved to (usually for p2p)
+     *
+     * @param mixed $val
+     * @return static
+     */
+    public function setResolutionUri($val);
 }
 
 
