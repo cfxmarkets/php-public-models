@@ -63,7 +63,7 @@ trait ResourceValidationsTrait {
      * @param bool $required Whether or not the value is required (this affects how `null` is handled)
      * @return bool Whether or not the validation has passed
      */
-    protected function validateFormat($field, $val, $format, $required = true)
+    protected function validateFormat($field, ?string $val, $format, $required = true)
     {
         if ($val !== null) {
             $regexp = $this->getKnownFormat($format);
@@ -84,7 +84,7 @@ trait ResourceValidationsTrait {
                 "detail" => "Value for field `$field` must be a(n) $format."
             ];
             if ($format === $regexp) {
-                $error["detail"] = "Valud for field `$field` must match $format.";
+                $error["detail"] = "Value for field `$field` must match $format.";
             }
             $this->setError($field, 'validFormat', $error);
             return false;

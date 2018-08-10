@@ -69,7 +69,17 @@ trait ResourceTestTrait {
         if ($has) {
             $this->assertTrue($this->resource->hasErrors($field), "Value $displayVal for field `$field` should have produced errors, but didn't.");
         } else {
-            $this->assertFalse($this->resource->hasErrors($field), "Value $displayVal for field `$field` shouldn't have produced errors, but did.");
+            if ($this->resource->hasErrors($field)) {
+                $errors = $this->resource->getErrors($field);
+                $errstr = [];
+                foreach ($errors as $key => $val) {
+                    $errstr[] = "$key: {$val->getDetail()}";
+                }
+                $errstr = "'".implode("', '", $errstr)."'";
+            } else {
+                $errstr = "";
+            }
+            $this->assertFalse($this->resource->hasErrors($field), "Value $displayVal for field `$field` shouldn't have produced errors, but did ($errstr).");
         }
 
         if ($assertSame) {
