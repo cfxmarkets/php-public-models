@@ -10,6 +10,7 @@ class UsersDSLQuery extends \CFX\Persistence\GenericDSLQuery {
 
     public function setEmail($operator, $val) {
         return $this->setExpressionValue('email', [
+            "table" => "bf_users",
             'field' => 'email',
             'operator' => $operator,
             'value' => $val,
