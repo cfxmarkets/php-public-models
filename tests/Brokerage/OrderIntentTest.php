@@ -36,6 +36,13 @@ class OrderIntentTest extends \PHPUnit\Framework\TestCase
         $this->assertImmutableOnFinalStatus($field, 5555);
     }
 
+    public function testSharesFilled()
+    {
+        $field = "sharesFilled";
+        $this->assertReadOnly($field);
+        $this->assertChains($field, null);
+    }
+
     public function testPriceHigh()
     {
         $field = 'priceHigh';

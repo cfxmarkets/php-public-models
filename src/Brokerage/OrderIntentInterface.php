@@ -5,6 +5,7 @@ interface OrderIntentInterface extends \CFX\JsonApi\ResourceInterface {
     // Getters
     public function getType();
     public function getNumShares();
+    public function getSharesFilled();
     public function getPriceHigh();
     public function getPriceLow();
     public function getReferralKey();
@@ -26,6 +27,7 @@ interface OrderIntentInterface extends \CFX\JsonApi\ResourceInterface {
     // Setters
     public function setType($val);
     public function setNumShares($val);
+    public function setSharesFilled($val);
     public function setPriceHigh($val);
     public function setPriceLow($val);
     public function setReferralKey($val);

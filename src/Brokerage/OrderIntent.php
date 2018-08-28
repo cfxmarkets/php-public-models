@@ -9,6 +9,7 @@ class OrderIntent extends \CFX\JsonApi\AbstractResource implements OrderIntentIn
     protected $attributes = [
         'type' => null,
         'numShares' => null,
+        "sharesFilled" => 0,
         'priceHigh' => null,
         'priceLow' => null,
         'referralKey' => null,
@@ -67,6 +68,12 @@ class OrderIntent extends \CFX\JsonApi\AbstractResource implements OrderIntentIn
 
     public function getType() { return $this->_getAttributeValue('type'); }
     public function getNumShares() { return $this->_getAttributeValue('numShares'); }
+
+    public function getSharesFilled()
+    {
+        return $this->_getAttributeValue("sharesFilled");
+    }
+
     public function getPriceHigh() { return $this->_getAttributeValue('priceHigh'); }
     public function getPriceLow() { return $this->_getAttributeValue('priceLow'); }
 
@@ -179,6 +186,17 @@ class OrderIntent extends \CFX\JsonApi\AbstractResource implements OrderIntentIn
         }
 
         return $this->_setAttribute('numShares', $val);
+    }
+
+    public function setSharesFilled($val)
+    {
+        $field = "sharesFilled";
+        $val = $this->cleanNumberValue($val);
+        if ($this->validateReadOnly($field, $val)) {
+            $this->validateType($field, $val, "non-string numeric", false);
+        }
+        $this->_setAttribute($field, $val);
+        return $this;
     }
 
 
