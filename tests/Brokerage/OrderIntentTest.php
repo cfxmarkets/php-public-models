@@ -39,6 +39,7 @@ class OrderIntentTest extends \PHPUnit\Framework\TestCase
     public function testSharesFilled()
     {
         $field = "sharesFilled";
+        $this->assertInstantiatesValidly($field);
         $this->assertReadOnly($field);
         $this->assertChains($field, null);
     }
