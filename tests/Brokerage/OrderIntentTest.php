@@ -108,7 +108,13 @@ class OrderIntentTest extends \PHPUnit\Framework\TestCase
     public function testPaid()
     {
         $field = 'paid';
-        $this->assertValid($field, [ true, false ]);
+        $this->assertInstantiatesValidly($field);
+        $this->assertValid($field, [ true, false, 0, 1 ], function($expected, $actual) {
+            if (is_int($expected)) {
+                $expected = (bool)$expected;
+            }
+            $this->assertEquals($expected, $actual);
+        });
         $this->assertInvalid($field, [ new \DateTime(), 1234, "paid" ]);
         $this->assertChanged($field, true, "attributes");
         $this->assertChains($field);
