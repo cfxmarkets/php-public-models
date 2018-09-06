@@ -124,7 +124,7 @@ class Fill extends \CFX\JsonApi\AbstractResource implements FillInterface {
     }
 
 
-    public function setOrder(?OrderIntentInterface $val)
+    public function setOrder(?\CFX\Exchange\OrderInterface $val)
     {
         $field = "order";
         $this->validateRequired($field, $val);
@@ -178,39 +178,6 @@ class Fill extends \CFX\JsonApi\AbstractResource implements FillInterface {
         }
 
         return true;
-    }
-
-
-    /**
-     * Validates that the current status permits edits
-     *
-     * If the order is actively listed, certain fields should not be editable. This checks the status and
-     * sets an error if the user is trying to edit fields that are not editable for the given status.
-     *
-     * @param string $field The name of the field being validated
-     * @return bool Whether or not the validation has passed
-     */
-    protected function validateStatusActive($field) {
-        if (!$this->initializing) {
-            $passedStates = [
-                'active' => ["Order Active", "This order is currently active and cannot be altered"],
-                'cancelled' => ["Item Cancelled", "This order has been cancelled and cannot be altered"],
-                'matched' => ["Item Sold", "This order has already been successfully executed and sold and cannot be altered"],
-                'expired' => ["Item Expired", "This intent has expired and cannot be altered"],
-            ];
-
-            if (in_array($this->getStatus(), array_keys($passedStates), true)) {
-                $e = $passedStates[$this->getStatus()];
-                $this->setError($field, 'immutableStatus', [
-                    "title" => "Order Not Alterable",
-                    "detail" => $e[1],
-                ]);
-                return false;
-            } else {
-                $this->clearError($field, 'immutableStatus');
-                return true;
-            }
-        }
     }
 }
 

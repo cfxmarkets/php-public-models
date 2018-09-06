@@ -60,9 +60,9 @@ class FillTest extends \PHPUnit\Framework\TestCase
     {
         $field = "order";
         $this->assertInstantiatesInvalidly($field, "required");
-        $this->assertValid($field, [ (new OrderIntent($this->datasource))->setId("12345") ]);
+        $this->assertValid($field, [ (new \CFX\Exchange\Order($this->datasource))->setId("12345") ]);
         $this->assertInvalid($field, [ null ]);
-        $this->assertChanged($field, (new OrderIntent($this->datasource))->setId("65432"), "relationships");
+        $this->assertChanged($field, (new \CFX\Exchange\Order($this->datasource))->setId("65432"), "relationships");
         $this->assertChains($field, null);
     }
 

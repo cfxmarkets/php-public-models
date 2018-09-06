@@ -86,10 +86,10 @@ interface FillInterface extends \CFX\JsonApi\ResourceInterface {
     /**
      * Set the order for the fill
      *
-     * @param OrderIntentInterface|null $val
+     * @param \CFX\Exchange\OrderInterface|null $val
      * @return static
      */
-    public function setOrder(?OrderIntentInterface $val);
+    public function setOrder(?\CFX\Exchange\OrderInterface $val);
 
     /**
      * Set the security for the fill
