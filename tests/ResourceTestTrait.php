@@ -102,7 +102,7 @@ trait ResourceTestTrait {
         $changes = $this->resource->getChanges();
         $this->assertTrue(array_key_exists($type, $changes), "You expected there to be changes to one or more $type, but there are none.");
         $this->assertNotNull($changes[$type], "You expected there to be changes to one or more $type, but there are none.");
-        $this->assertContains($field, array_keys($changes[$type]));
+        $this->assertContains($field, array_keys($changes[$type]), "'$field' is not among the changed fields for this object");
         if ($assertSame) {
             $assertSame($val, $this->resource->$get());
         } else {
