@@ -19,6 +19,41 @@ interface FundingSourceInterface  extends \CFX\JsonApi\ResourceInterface
  	public function getPendingBalance();
 
     /**
+     * Get the subnet routing number (ach)
+     *
+     * @return string | null
+     */
+    public function getSubnetRoutingNumberAch();
+
+    /**
+     * Get the subnet routing number (wire)
+     *
+     * @return string | null
+     */
+    public function getSubnetRoutingNumberWire();
+
+    /**
+     * Get the subnet account number
+     *
+     * @return string | null
+     */
+    public function getSubnetAccountNumber();
+
+    /**
+     * Get the subnet eth address
+     *
+     * @return string | null
+     */
+    public function getSubnetEthAddress();
+
+    /**
+     * Get the subnet btc address
+     *
+     * @return string | null
+     */
+    public function getSubnetBtcAddress();
+
+    /**
      * Get the legal entity that owns this funding source
      *
      * @return \CFX\Brokerage\LegalEntityInterface

@@ -10,6 +10,11 @@ class FundingSource extends \CFX\JsonApi\AbstractResource implements FundingSour
     protected $attributes = [
         'availableBalance' => null,
         'pendingBalance' => null,
+        'subnetRoutingNumberAch' => null,
+        'subnetRoutingNumberWire' => null,
+        'subnetAccountNumber' => null,
+        'subnetEthAddress' => null,
+        'subnetBtcAddress' => null,
     ];
 
     protected $relationships = [
@@ -25,6 +30,31 @@ class FundingSource extends \CFX\JsonApi\AbstractResource implements FundingSour
  	public function getPendingBalance()
     {
         return $this->_getAttributeValue("pendingBalance");
+    }
+
+    public function getSubnetRoutingNumberAch()
+    {
+        return $this->_getAttributeValue("subnetRoutingNumberAch");
+    }
+
+    public function getSubnetRoutingNumberWire()
+    {
+        return $this->_getAttributeValue("subnetRoutingNumberWire");
+    }
+
+    public function getSubnetAccountNumber()
+    {
+        return $this->_getAttributeValue("subnetAccountNumber");
+    }
+
+    public function getSubnetEthAddress()
+    {
+        return $this->_getAttributeValue("subnetEthAddress");
+    }
+
+    public function getSubnetBtcAddress()
+    {
+        return $this->_getAttributeValue("subnetBtcAddress");
     }
 
  	public function getOwner()
