@@ -274,9 +274,18 @@ class OrderIntent extends \CFX\JsonApi\AbstractResource implements OrderIntentIn
     }
 
     public function setStatus($val) {
-        if ($this->validateReadOnly('status', $val)) {
-            $this->validateAmong('status', $val, $this::getValidStatuses());
+        $val = $this->cleanStringValue($val);
+        if ($val === "cancelled") {
+            $this->clearError("status", "readonly");
+            if ($this->validateStatusActive("status", [ "sold", "sold_closed", "expired" ])) {
+                $this->validateAmong('status', $val, $this::getValidStatuses());
+            }
             $this->_setAttribute('status', $val);
+        } else {
+            if ($this->validateReadOnly('status', $val)) {
+                $this->validateAmong('status', $val, $this::getValidStatuses());
+                $this->_setAttribute('status', $val);
+            }
         }
         return $this;
     }
@@ -479,7 +488,7 @@ class OrderIntent extends \CFX\JsonApi\AbstractResource implements OrderIntentIn
     }
 
 
-    protected function validateStatusActive($field) {
+    protected function validateStatusActive($field, $invalidStates = [ "listed", "sold", "sold_closed", "expired", "cancelled" ]) {
         if (!$this->initializing) {
             $passedStates = [
                 'listed' => "Sale In Progress: This intent has already passed to listing phase and cannot be altered",
@@ -489,7 +498,7 @@ class OrderIntent extends \CFX\JsonApi\AbstractResource implements OrderIntentIn
                 'cancelled' => "Item Cancelled: This intent has been cancelled and cannot be altered",
             ];
 
-            if (in_array($this->getStatus(), array_keys($passedStates))) {
+            if (in_array($this->getStatus(), $invalidStates)) {
                 $this->setError($field, 'immutableStatus', [
                     "title" => "Order Intent Not Alterable",
                     "detail" => $passedStates[$this->getStatus()],

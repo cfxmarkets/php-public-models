@@ -85,8 +85,22 @@ class OrderIntentTest extends \PHPUnit\Framework\TestCase
     public function testStatus()
     {
         $field = 'status';
+
+        // First check normal operation
         $this->assertReadOnly($field);
         $this->assertChains($field, null);
+
+        // Now make sure we can set it to cancelled
+        $this->assertValid($field, [ "cancelled" ]);
+
+        // And make sure we can't set it to cancelled after it's closed
+        foreach ([ "sold", "sold_closed", "expired" ] as $passedStatus) {
+            $this->resource->forceSetStatus($passedStatus);
+            $this->assertEquals([], $this->resource->getErrors("status"), "Shouldn't have errors yet for status '$passedStatus'");
+            $this->resource->setStatus("cancelled");
+            $this->assertEquals(["immutableStatus"], array_keys($this->resource->getErrors("status")), "Should have immutableStatus error for '$passedStatus'");
+            $this->resource->setStatus("cancelled");
+        }
     }
 
     public function testReferenceNum()
