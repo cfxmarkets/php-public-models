@@ -22,6 +22,9 @@ interface UserInterface extends \CFX\JsonApi\ResourceInterface {
     public function getEmployerName();
     public function getConsultsAdvisor();
     public function getConsultsAccountant();
+    public function getAgreedTOS();
+    public function getAgreedDTA();
+    public function getAgreedDTAArbitration();
     public function getInvestmentProfile();
     public function getRiskTolerance();
     public function getOauthTokens();
@@ -47,6 +50,9 @@ interface UserInterface extends \CFX\JsonApi\ResourceInterface {
     public function setEmployerName($val);
     public function setConsultsAdvisor($val);
     public function setConsultsAccountant($val);
+    public function setAgreedTOS($val);
+    public function setAgreedDTA($val);
+    public function setAgreedDTAArbitration($val);
     public function setInvestmentProfile($val);
     public function setRiskTolerance($val);
     public function setOAuthTokens(\CFX\JsonApi\ResourceCollectionInterface $tokens=null);

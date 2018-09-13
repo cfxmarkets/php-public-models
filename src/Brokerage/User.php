@@ -25,6 +25,9 @@ class User extends \CFX\JsonApi\AbstractResource implements UserInterface {
         "employerName" => null,
         "consultsAdvisor" => null,
         "consultsAccountant" => null,
+        "agreedTOS" => false,
+        "agreedDTA" => false,
+        "agreedDTAArbitration" => false,
         "investmentProfile" => null,
         "riskTolerance" => null,
     ];
@@ -116,6 +119,21 @@ class User extends \CFX\JsonApi\AbstractResource implements UserInterface {
     public function getConsultsAdvisor()
     {
         return $this->_getAttributeValue("consultsAdvisor");
+    }
+
+    public function getAgreedTOS()
+    {
+        return $this->_getAttributeValue("agreedTOS");
+    }
+
+    public function getAgreedDTA()
+    {
+        return $this->_getAttributeValue("agreedDTA");
+    }
+
+    public function getAgreedDTAArbitration()
+    {
+        return $this->_getAttributeValue("agreedDTAArbitration");
     }
 
     public function getConsultsAccountant()
@@ -309,6 +327,30 @@ class User extends \CFX\JsonApi\AbstractResource implements UserInterface {
         $val = $this->cleanBooleanValue($val);
         $this->validateType("consultsAdvisor", $val, "boolean", false);
         return $this->_setAttribute("consultsAdvisor", $val);
+    }
+
+    public function setAgreedTOS($val)
+    {
+        $field = "agreedTOS";
+        $val = $this->cleanBooleanValue($val);
+        $this->validateType($field, $val, "boolean", false);
+        return $this->_setAttribute($field, $val);
+    }
+
+    public function setAgreedDTA($val)
+    {
+        $field = "agreedDTA";
+        $val = $this->cleanBooleanValue($val);
+        $this->validateType($field, $val, "boolean", false);
+        return $this->_setAttribute($field, $val);
+    }
+
+    public function setAgreedDTAArbitration($val)
+    {
+        $field = "agreedDTAArbitration";
+        $val = $this->cleanBooleanValue($val);
+        $this->validateType($field, $val, "boolean", false);
+        return $this->_setAttribute($field, $val);
     }
 
     public function setConsultsAccountant($val)

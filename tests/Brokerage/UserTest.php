@@ -193,6 +193,36 @@ class UserTest extends \PHPUnit\Framework\TestCase
         $this->assertChains($field);
     }
 
+    public function testAgreedTOS()
+    {
+        $field = "agreedTOS";
+        $this->assertInstantiatesValidly($field);
+        $this->assertValid($field, [ null, "", true, false ]);
+        $this->assertInvalid($field, [ "true", "false", '12345', 12345, new \DateTime(), [ "array of values" ] ]);
+        $this->assertChanged($field, true, "attributes");
+        $this->assertChains($field);
+    }
+
+    public function testAgreedDTA()
+    {
+        $field = "agreedDTA";
+        $this->assertInstantiatesValidly($field);
+        $this->assertValid($field, [ null, "", true, false ]);
+        $this->assertInvalid($field, [ "true", "false", '12345', 12345, new \DateTime(), [ "array of values" ] ]);
+        $this->assertChanged($field, true, "attributes");
+        $this->assertChains($field);
+    }
+
+    public function testAgreedDTAArbitration()
+    {
+        $field = "agreedDTAArbitration";
+        $this->assertInstantiatesValidly($field);
+        $this->assertValid($field, [ null, "", true, false ]);
+        $this->assertInvalid($field, [ "true", "false", '12345', 12345, new \DateTime(), [ "array of values" ] ]);
+        $this->assertChanged($field, true, "attributes");
+        $this->assertChains($field);
+    }
+
     public function testInvestmentProfile()
     {
         $field = "investmentProfile";
