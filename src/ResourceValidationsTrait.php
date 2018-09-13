@@ -24,6 +24,8 @@ trait ResourceValidationsTrait {
                 $result = is_string($val) && !is_numeric($val);
             } elseif ($type === 'int' || $type === 'integer') {
                 $result = is_int($val);
+            } elseif ($type === "numeric") {
+                $result = is_numeric($val);
             } elseif ($type === 'non-string numeric') {
                 $result = !is_string($val) && is_numeric($val);
             } elseif ($type === 'string or int') {
