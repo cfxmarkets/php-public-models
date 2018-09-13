@@ -29,6 +29,13 @@ interface FillInterface extends \CFX\JsonApi\ResourceInterface {
     public function getPrice();
 
     /**
+     * Get the fees for the fill
+     *
+     * @return float
+     */
+    public function getFees();
+
+    /**
      * Get the timestamp of the fill
      *
      * @return float
@@ -74,6 +81,14 @@ interface FillInterface extends \CFX\JsonApi\ResourceInterface {
      * @return static
      */
     public function setPrice($val);
+
+    /**
+     * Set the fees for the fill
+     *
+     * @param float|int|null $val
+     * @return static
+     */
+    public function setFees($val);
 
     /**
      * Set the timestamp for the fill
