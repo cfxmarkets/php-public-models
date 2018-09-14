@@ -11,7 +11,7 @@ class FundingInterfacesDSLQuery extends \CFX\Persistence\GenericDSLQuery
     public function setFundingSourceId($operator, $val)
     {
         return $this->setExpressionValue('fundingSourceId', [
-            "field" => $this->primaryKey,
+            "field" => "fundingSourceId",
             "operator" => $operator,
             "value" => $val,
         ]);
