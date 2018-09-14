@@ -4,6 +4,7 @@ namespace CFX\Brokerage;
 class FundingSource extends \CFX\JsonApi\AbstractResource implements FundingSourceInterface
 {
     use \CFX\ResourceValidationsTrait;
+    use \CFX\JsonApi\Rel2MTrait;
 
     protected $resourceType = 'funding-sources';
 
@@ -14,6 +15,7 @@ class FundingSource extends \CFX\JsonApi\AbstractResource implements FundingSour
 
     protected $relationships = [
         'owner' => null,
+        "fundingInterfaces" => null,
     ];
 
 
@@ -30,6 +32,11 @@ class FundingSource extends \CFX\JsonApi\AbstractResource implements FundingSour
  	public function getOwner()
     {
         return $this->_getRelationshipValue("owner");
+    }
+
+ 	public function getFundingInterfaces()
+    {
+        return $this->_getRelationshipValue("fundingInterfaces");
     }
 
 
@@ -54,6 +61,26 @@ class FundingSource extends \CFX\JsonApi\AbstractResource implements FundingSour
     {
         $this->validateRequired('owner', $val);
         return $this->_setRelationship('owner', $val);
+    }
+
+    protected function setFundingInterfaces(\CFX\JsonApi\ResourceCollectionInterface $val = null)
+    {
+        return $this->_setRelationship('fundingInterfaces', $val);
+    }
+
+    public function addFundingInterface(FundingInterfaceInterface $val)
+    {
+        return $this->add2MRel("fundingInterfaces", $val);
+    }
+
+    public function hasFundingInterface(FundingInterfaceInterface $val)
+    {
+        return $this->has2MRel("fundingInterfaces", $val);
+    }
+
+    public function removeFundingInterface(FundingInterfaceInterface $val)
+    {
+        return $this->remove2MRel("fundingInterfaces", $val);
     }
 }
 

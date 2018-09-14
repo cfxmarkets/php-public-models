@@ -5,7 +5,7 @@ class FundingSourceTest extends \PHPUnit\Framework\TestCase
 {
     use \CFX\ResourceTestTrait;
 
-    protected $className = "\\CFX\\Brokerage\\FundingSource";
+    protected $className = "\\CFX\\Brokerage\\Test\\FundingSource";
 
     public function testResourceType()
     {
@@ -36,5 +36,42 @@ class FundingSourceTest extends \PHPUnit\Framework\TestCase
         $this->assertChanged($field, (new LegalEntity($this->datasource))->setId("12345"), "relationships");
         $this->assertChains($field);
     }
+
+    public function testFundingInterfaces() {
+        $field = "fundingInterfaces";
+
+        // Assert field NOT required
+        $this->assertFalse($this->resource->hasErrors("fundingInterfaces"));
+
+        $val = new \CFX\JsonApi\ResourceCollection();
+        $this->datasource->setRelated("fundingInterfaces", $val);
+
+        $this->resource->forceSetFundingInterfaces($val);
+        $this->assertFalse($this->resource->hasErrors("fundingInterfaces"));
+        $this->assertEquals($val, $this->resource->getFundingInterfaces());
+
+        // Assert changed
+        $changes = $this->resource->getChanges();
+        $this->assertContains("fundingInterfaces", array_keys($changes['relationships']));
+        $this->assertSame($val, $changes['relationships']["fundingInterfaces"]->getData());
+
+        // Assert chaining
+        $this->assertSame($this->resource, $this->resource->forceSetFundingInterfaces($val));
+
+        // AddFundingInterface
+        $fundingInterface = new FundingInterface($this->datasource);
+        $this->resource->addFundingInterface($fundingInterface);
+        $this->assertFalse($this->resource->hasErrors("fundingInterfaces"));
+        $this->assertEquals(1, count($this->resource->getFundingInterfaces()));
+
+        // HasFundingInterface
+        $this->assertTrue($this->resource->hasFundingInterface($fundingInterface));
+
+        // RemoveFundingInterface
+        $this->resource->removeFundingInterface($fundingInterface);
+        $this->assertFalse($this->resource->hasErrors("fundingInterfaces"));
+        $this->assertEquals(0, count($this->resource->getFundingInterfaces()));
+    }
+
 }
 
