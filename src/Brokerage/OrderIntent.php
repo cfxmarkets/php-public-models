@@ -299,8 +299,13 @@ class OrderIntent extends \CFX\JsonApi\AbstractResource implements OrderIntentIn
 
     public function setInvestmentAccountUri($val)
     {
+        $field = "investmentAccountUri";
         $val = $this->cleanStringValue($val);
-        $this->validateType('investmentAccountUri', $val, 'string', false);
+        if ($val !== null) {
+            if ($this->validateType($field, $val, "string", false)) {
+                $this->validateType($field, $val, "uri", false);
+            }
+        }
         return $this->_setAttribute('investmentAccountUri', $val);
     }
 
