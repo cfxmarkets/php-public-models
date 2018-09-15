@@ -36,7 +36,7 @@ class FundingSource extends \CFX\JsonApi\AbstractResource implements FundingSour
 
  	public function getFundingInterfaces()
     {
-        return $this->_getRelationshipValue("fundingInterfaces");
+        return $this->get2MRel("fundingInterfaces");
     }
 
 

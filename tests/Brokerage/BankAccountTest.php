@@ -3,7 +3,7 @@ namespace CFX\Brokerage;
 
 class BankAccountTest extends FundingSourceTest
 {
-    protected $className = "\\CFX\\Brokerage\\BankAccount";
+    protected $className = "\\CFX\\Brokerage\\Test\\BankAccount";
 
     public function testResourceType()
     {
