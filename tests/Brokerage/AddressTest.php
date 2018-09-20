@@ -77,7 +77,7 @@ class AddressTest extends \PHPUnit\Framework\TestCase
             $this->assertEquals($expected, $actual, "Expecting value `".json_encode($expected)."`, but got `".json_encode($actual)."`");
         };
 
-        $field = "meta";
+        $field = "metaData";
         $this->assertInstantiatesValidly($field);
         $this->assertValid($field, [ null, "", ["extra" => "some extra data"], '{"extra":"some extra data"}' ], $assertSame);
         $this->assertInvalid($field, [ "some extra data", '{"extra":some extra data"}' ]);
@@ -96,13 +96,13 @@ class AddressTest extends \PHPUnit\Framework\TestCase
                 "state" => "IL",
                 "zip" => "6622Z88",
                 "country" => "US",
-                "meta" => '{"extra":"some extra data"}',
+                "metaData" => '{"extra":"some extra data"}',
             ],
         ];
 
         $address = new Address($this->datasource, $data);
         $this->assertFalse($address->hasErrors());
-        $this->assertEquals(["extra" => "some extra data"], $address->getMeta());
+        $this->assertEquals(["extra" => "some extra data"], $address->getMetaData());
         $this->assertEquals($data, $address->getChanges());
     }
 }

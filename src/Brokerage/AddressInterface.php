@@ -56,7 +56,7 @@ interface AddressInterface extends \CFX\JsonApi\ResourceInterface {
      *
      * @return array
      */
-    public function getMeta();
+    public function getMetaData();
 
 
 
@@ -133,6 +133,6 @@ interface AddressInterface extends \CFX\JsonApi\ResourceInterface {
      * @param array|string $val May be either an inflated (array) or serialized (string) json object
      * @return static
      */
-    public function setMeta($val);
+    public function setMetaData($val);
 
 }

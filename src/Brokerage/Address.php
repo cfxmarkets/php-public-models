@@ -13,7 +13,7 @@ class Address extends \CFX\JsonApi\AbstractResource implements AddressInterface 
         'state' => null,
         'zip' => null,
         'country' => null,
-        'meta' => null,
+        'metaData' => null,
     ];
 
 
@@ -26,7 +26,7 @@ class Address extends \CFX\JsonApi\AbstractResource implements AddressInterface 
     public function getState() { return $this->_getAttributeValue('state'); }
     public function getZip() { return $this->_getAttributeValue('zip'); }
     public function getCountry() { return $this->_getAttributeValue('country'); }
-    public function getMeta() { return $this->_getAttributeValue('meta'); }
+    public function getMetaData() { return $this->_getAttributeValue('metaData'); }
 
 
 
@@ -103,7 +103,7 @@ class Address extends \CFX\JsonApi\AbstractResource implements AddressInterface 
         return $this->_setAttribute('country', $val);
     }
 
-    public function setMeta($val)
+    public function setMetaData($val)
     {
         $valid = false;
         if (is_string($val)) {
@@ -121,16 +121,16 @@ class Address extends \CFX\JsonApi\AbstractResource implements AddressInterface 
             $valid = true;
         }
 
-        $this->_setAttribute('meta', $val);
+        $this->_setAttribute('metaData', $val);
 
         if (!$valid) {
-            $this->setError('meta', 'format', [
-                'title' => 'Invalid Format for `meta`',
-                'detail' => "The `meta` field is meant for miscellaneous data stored in json format. It ".
+            $this->setError('metaData', 'format', [
+                'title' => 'Invalid Format for `metaData`',
+                'detail' => "The `metaData` field is meant for miscellaneous data stored in json format. It ".
                 "should be something intelligible to the PHP `json_decode` function."
             ]);
         } else {
-            $this->clearError('meta', 'format');
+            $this->clearError('metaData', 'format');
         }
 
         return $this;
@@ -138,7 +138,7 @@ class Address extends \CFX\JsonApi\AbstractResource implements AddressInterface 
 
     protected function serializeAttribute($name)
     {
-        if ($name === 'meta' && $this->attributes[$name] !== null) {
+        if ($name === 'metaData' && $this->attributes[$name] !== null) {
             return json_encode($this->attributes[$name]);
         }
         return parent::serializeAttribute($name);
