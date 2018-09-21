@@ -10,6 +10,7 @@ class FundsTransfer extends \CFX\JsonApi\AbstractResource implements FundsTransf
         "type" => null,
         "amount" => null,
         "idpKey" => null,
+        "memo" => null,
         "status" => 1,
         "createdOn" => null,
     ];
@@ -39,6 +40,11 @@ class FundsTransfer extends \CFX\JsonApi\AbstractResource implements FundsTransf
     public function getIdpKey()
     {
         return $this->_getAttributeValue("idpKey");
+    }
+
+    public function getMemo()
+    {
+        return $this->_getAttributeValue("memo");
     }
 
     public function getStatus()
@@ -75,10 +81,10 @@ class FundsTransfer extends \CFX\JsonApi\AbstractResource implements FundsTransf
     {
         $val = $this->cleanNumberValue($val);
         if ($this->validateType("amount", $val, "non-string numeric", true)) {
-            if ($val < 5) {
+            if ($val*100 < 1) {
                 $this->setError("amount", "range", [
                     "title" => "Invalid value for field `amount`",
-                    "detail" => "Sorry, we can't do transfers of less than $5 USD"
+                    "detail" => "Sorry, we can't do transfers of less than $0.01 USD"
                 ]);
             } else {
                 $this->clearError("amount", "range");
@@ -105,6 +111,16 @@ class FundsTransfer extends \CFX\JsonApi\AbstractResource implements FundsTransf
             $this->clearError("idpKey", "range");
         }
         return $this->_setAttribute("idpKey", $val);
+    }
+
+    public function setMemo($val)
+    {
+        $field = "memo";
+        $val = $this->cleanStringValue($val);
+        if ($this->validateType($field, $val, "string", false)) {
+            $this->validateStrlen($field, $val, 0, 1000, false);
+        }
+        return $this->_setAttribute($field, $val);
     }
 
     public function setStatus($val)

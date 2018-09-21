@@ -24,8 +24,8 @@ class FundsTransferTest extends \PHPUnit\Framework\TestCase
     public function testAmount()
     {
         $field = 'amount';
-        $this->assertValid($field, [ "5", "50000", 34000 ]);
-        $this->assertInvalid($field, [ null, '', 'bunk', -1000, 0, 4, false, true, [ "array of values" ], new \DateTime() ]);
+        $this->assertValid($field, [ "5", "50000", 34000, .01 ]);
+        $this->assertInvalid($field, [ null, '', 'bunk', -1000, 0, 0.005, false, true, [ "array of values" ], new \DateTime() ]);
         $this->assertChanged($field, 12345, 'attributes');
         $this->assertChains($field);
     }
@@ -71,6 +71,16 @@ class FundsTransferTest extends \PHPUnit\Framework\TestCase
         $this->assertValid($field, [ "11112222333344445555", "abcdefghijklmnopqrstuv", "111122223333444455556666777788889999" ]);
         $this->assertInvalid($field, [ "abcde", "aaaabbbbccccdddd111", "1111222233334444555566667777888899990000" ]);
         $this->assertChanged($field, "kdkkd3j3j383iekkdkdkdkdkddkdkdkdk", "attributes");
+        $this->assertChains($field);
+    }
+
+    public function testMemo()
+    {
+        $field = "memo";
+        $this->assertInstantiatesValidly($field);
+        $this->assertValid($field, [ null, "", "11112222333344445555", "Transfer to account xxxxx-3823" ]);
+        $this->assertInvalid($field, [ true, false, new \DateTime(), [ "array of values" ] ]);
+        $this->assertChanged($field, "My new transfer", "attributes");
         $this->assertChains($field);
     }
 

@@ -157,6 +157,36 @@ trait ResourceValidationsTrait {
     }
 
     /**
+     * Validates that the given value conforms to the given length specifications
+     *
+     * @param string $field The name of the field being validated
+     * @param string|null $val The value being evaluated
+     * @param int $min The minimum length of the string (defaults to 0)
+     * @param int $max The maximum length of the string
+     * @param bool $required Whether or not the value is required
+     * @return bool Whether or not the validation has passed
+     */
+    protected function validateStrlen(string $field, ?string $val, int $min, int $max, bool $required = true)
+    {
+        if ($val !== null) {
+            $strlen = strlen($val);
+            $result = !($strlen < $min || $strlen > $max);
+        } else {
+            $result = !$required;
+        }
+
+        if ($result) {
+            $this->clearError($field, "length");
+        } else {
+            $this->setError($field, "length", [
+                "title" => "Length of `$field` Out of Bounds",
+                "detail" => "Field `$field` must be between $min and $max characters long."
+            ]);
+        }
+        return $result;
+    }
+
+    /**
      * Validates that the given resource actually exists in the database
      *
      * @param string $field The name of the field (attribute or relationship) being validated

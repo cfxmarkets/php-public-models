@@ -26,6 +26,13 @@ interface FundsTransferInterface extends \CFX\JsonApi\ResourceInterface
     public function getIdpKey();
 
     /**
+     * Returns the "memo" field for the transfer
+     *
+     * @return string|null
+     */
+    public function getMemo();
+
+    /**
      * Returns the status of this request (read-only).
      *
      * @return 'pending'|'cleared'|'rejected'
@@ -81,6 +88,15 @@ interface FundsTransferInterface extends \CFX\JsonApi\ResourceInterface
      * @return static
      */
     public function setIdpKey($val);
+
+    /**
+     * Sets the "memo" field for the transfer. This should be some easily identifiable field
+     * that reminds the user why this transfer happened.
+     *
+     * @param string
+     * @return static
+     */
+    public function setMemo($val);
 
     /**
      * Sets the LegalEntity whose wallet account is the source or target of this transfer.
