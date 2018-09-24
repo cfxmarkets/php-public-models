@@ -48,6 +48,13 @@ class FillTest extends \PHPUnit\Framework\TestCase
         $this->assertChains($field);
     }
 
+    public function testStatus()
+    {
+        $field = "status";
+        $this->assertReadOnly($field);
+        $this->assertChains($field);
+    }
+
     public function testTimestamp()
     {
         $field = "timestamp";

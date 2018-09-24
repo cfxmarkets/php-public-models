@@ -36,6 +36,13 @@ interface FillInterface extends \CFX\JsonApi\ResourceInterface {
     public function getFees();
 
     /**
+     * Get the status for the fill
+     *
+     * @return string
+     */
+    public function getStatus();
+
+    /**
      * Get the timestamp of the fill
      *
      * @return float

@@ -10,6 +10,7 @@ class Fill extends \CFX\JsonApi\AbstractResource implements FillInterface {
         "lotSize" => null,
         "price" => null,
         "fees" => null,
+        "status" => 0,
         "timestamp" => null,
     ];
     protected $relationships = [
@@ -40,6 +41,11 @@ class Fill extends \CFX\JsonApi\AbstractResource implements FillInterface {
     public function getFees()
     {
         return $this->_getAttributeValue('fees');
+    }
+
+    public function getStatus()
+    {
+        return $this->_getAttributeValue("status");
     }
 
     public function getTimestamp()
@@ -102,6 +108,15 @@ class Fill extends \CFX\JsonApi\AbstractResource implements FillInterface {
 
     public function setFees($val) {
         $field = "fees";
+        if ($this->validateReadOnly($field, $val)) {
+            $this->_setAttribute($field, $val);
+        }
+        return $this;
+    }
+
+
+    public function setStatus($val) {
+        $field = "status";
         if ($this->validateReadOnly($field, $val)) {
             $this->_setAttribute($field, $val);
         }
