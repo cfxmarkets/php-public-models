@@ -10,6 +10,14 @@ class Fill extends \CFX\JsonApi\AbstractResource implements FillInterface {
         "lotSize" => null,
         "price" => null,
         "fees" => null,
+        /**
+         * Currently available statuses:
+         *
+         * 0 = created
+         * 8 = cleared
+         * 32 = settled
+         * 128 = complete
+         */
         "status" => 0,
         "timestamp" => null,
     ];
