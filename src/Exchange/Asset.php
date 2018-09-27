@@ -205,5 +205,27 @@ class Asset extends \CFX\JsonApi\AbstractResource implements AssetInterface {
         return $this->_setAttribute($field, $val);
     }
 
+
+
+    /**
+     * Serialize issuanceCloseDate field to a value that SQL understands
+     *
+     * We have to do this here because when order intents are serialized that already have a issuanceCloseDate date
+     * set, they end up sending malformed data to the API. This is because \DateTime actually does implement
+     * jsonSerialize, but in a way that breaks our implementation.
+     */
+    public function serializeAttribute($name)
+    {
+        if ($name === 'issuanceCloseDate') {
+            $val = $this->getIssuanceCloseDate();
+            if ($val instanceof \DateTimeInterface) {
+                $val = $val->format(\DateTime::RFC3339);
+            }
+            return (string)$val;
+        }
+        return parent::serializeAttribute($name);
+    }
+
+
 }
 
