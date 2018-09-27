@@ -95,5 +95,59 @@ class AssetTest extends \PHPUnit\Framework\TestCase
         $this->assertChanged($field, "p2p://bitcoin/200300", "attributes");
         $this->assertChains($field);
     }
+
+    public function testExemptionType()
+    {
+        $field = 'exemptionType';
+        $this->assertInstantiatesValidly($field);
+        $this->assertReadOnly($field);
+        $this->assertChains($field);
+    }
+
+    public function testIssuanceCloseDate()
+    {
+        $field = 'issuanceCloseDate';
+        $this->assertChains($field, null);
+
+        $mock= new \CFX\JsonApi\Test\MockDatasource();
+
+        // Test that it can be successfully created without errors
+        $asset = $mock
+            ->addClassToCreate("\\CFX\\Exchange\\Asset")
+            ->create();
+
+        $this->assertFalse($asset->hasErrors($field));
+        $this->assertNull($asset->getIssuanceCloseDate());
+
+        // Test that it can be successfully inflated with null value without errors
+        $asset = $mock
+            ->addClassToCreate("\\CFX\\Exchange\\Asset")
+            ->setCurrentData([
+                'id' => "BCAP",
+                'type' => 'assets',
+            ])
+            ->get("id=BCAP")
+        ;
+
+        $this->assertFalse($asset->hasErrors($field));
+        $this->assertNull($asset->getIssuanceCloseDate());
+
+        // Test that it can be successfully inflated with non-null value without errors
+        $asset = $mock
+            ->addClassToCreate("\\CFX\\Exchange\\Asset")
+            ->setCurrentData([
+                'id' => "BCAP",
+                'type' => 'assets',
+                'attributes' => [
+                    $field => '2018-01-01 00:00:00',
+                ],
+            ])
+            ->get("id=BCAP")
+        ;
+
+        $this->assertFalse($asset->hasErrors($field));
+        $this->assertInstanceOf("\\DateTimeInterface", $asset->getIssuanceCloseDate());
+        $this->assertEquals('2018-01-01 00:00:00', $asset->getIssuanceCloseDate()->format('Y-m-d H:i:s'));
+    }
 }
 

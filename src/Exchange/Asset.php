@@ -15,6 +15,8 @@ class Asset extends \CFX\JsonApi\AbstractResource implements AssetInterface {
         "platform" => null,
         "platformVersion" => null,
         "resolutionUri" => null,
+        "exemptionType" => null,
+        "issuanceCloseDate" => null,
     ];
     protected $relationships = [];
 
@@ -36,6 +38,18 @@ class Asset extends \CFX\JsonApi\AbstractResource implements AssetInterface {
         return [
             0 => "closed",
             1 => "open",
+        ];
+    }
+
+    public static function getValidExemptionTypes()
+    {
+        return [
+            "regd",
+            "regds",
+            "rega",
+            "rega+",
+            "regcf",
+            "regs",
         ];
     }
 
@@ -74,6 +88,14 @@ class Asset extends \CFX\JsonApi\AbstractResource implements AssetInterface {
     public function getResolutionUri()
     {
         return $this->_getAttributeValue("resolutionUri");
+    }
+    public function getExemptionType()
+    {
+        return $this->_getAttributeValue("exemptionType");
+    }
+    public function getIssuanceCloseDate()
+    {
+        return $this->_getAttributeValue("issuanceCloseDate");
     }
 
 
@@ -165,5 +187,23 @@ class Asset extends \CFX\JsonApi\AbstractResource implements AssetInterface {
 
         return $this->_setAttribute("resolutionUri", $val);
     }
+
+    public function setExemptionType($val) {
+        $field = "exemptionType";
+        $val = $this->cleanStringValue($val);
+        if ($this->validateReadOnly($field, $val)) {
+            return $this->_setAttribute($field, $val);
+        }
+        return $this;
+    }
+
+    public function setIssuanceCloseDate($val)
+    {
+        $field = "issuanceCloseDate";
+        $val = $this->cleanDateTimeValue($val);
+        $this->validateReadOnly($field, $val);
+        return $this->_setAttribute($field, $val);
+    }
+
 }
 

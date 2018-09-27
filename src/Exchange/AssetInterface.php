@@ -8,6 +8,29 @@ namespace CFX\Exchange;
  */
 interface AssetInterface extends \CFX\JsonApi\ResourceInterface {
     /**
+     * Get the types that an asset may be
+     *
+     * @return string[]
+     */
+    public static function getValidTypes();
+
+    /**
+     * Get the statuses that an asset may be
+     *
+     * @return string[]
+     */
+    public static function getValidStatuses();
+
+    /**
+     * Get the exemption types that an asset may be
+     *
+     * @return string[]
+     */
+    public static function getValidExemptionTypes();
+
+
+
+    /**
      * Get the asset's issuer
      *
      * @return string
@@ -69,6 +92,20 @@ interface AssetInterface extends \CFX\JsonApi\ResourceInterface {
      * @return string|null
      */
     public function getResolutionUri();
+
+    /**
+     * Get the asset's exemption type
+     *
+     * @return string
+     */
+    public function getExemptionType();
+
+    /**
+     * Get the assets issuance close date
+     *
+     * @return DateTime
+     */
+    public function getIssuanceCloseDate();
 
 
 
@@ -144,6 +181,22 @@ interface AssetInterface extends \CFX\JsonApi\ResourceInterface {
      * @return static
      */
     public function setResolutionUri($val);
+
+    /**
+     * Set the asset's exemption type
+     *
+     * @param mixed $val
+     * @return static
+     */
+    public function setExemptionType($val);
+
+    /**
+     * Set the asset's issuance close date
+     *
+     * @param mixed $val
+     * @return static
+     */
+    public function setIssuanceCloseDate($val);
 }
 
 
