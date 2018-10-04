@@ -261,6 +261,16 @@ class LegalEntityTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals(2, $serialized["attributes"][$field], "Should have serialized to integer but didn't");
     }
 
+    public function testPrimaryEmail()
+    {
+        $field = 'primaryEmail';
+        $this->assertInstantiatesInvalidly($field, "required");
+        $this->assertValid($field, [ 'test@testerson.com', 't@v.co.uk', 't@v.us' ]);
+        $this->assertInvalid($field, [ null, '', 'not an email' ]);
+        $this->assertChanged($field, 'tester@email.com', "attributes");
+        $this->assertChains($field);
+    }
+
     public function testWalletAccount()
     {
         $field = "walletAccount";
@@ -402,6 +412,7 @@ class LegalEntityTest extends \PHPUnit\Framework\TestCase
                 "legalId" => "111223333",
                 "legalName" => "My Person",
                 "accreditationStatus" => 0,
+                "primaryEmail" => "my.person@humans.org",
             ],
             "relationships" => [
                 "primaryAddress" => [
