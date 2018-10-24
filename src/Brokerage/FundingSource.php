@@ -9,6 +9,7 @@ class FundingSource extends \CFX\JsonApi\AbstractResource implements FundingSour
     protected $resourceType = 'funding-sources';
 
     protected $attributes = [
+        "status" => 0,
         'availableBalance' => null,
         'pendingBalance' => null,
     ];
@@ -18,6 +19,10 @@ class FundingSource extends \CFX\JsonApi\AbstractResource implements FundingSour
         "fundingInterfaces" => null,
     ];
 
+    public function getStatus()
+    {
+        return $this->_getAttributeValue("status");
+    }
 
  	public function getAvailableBalance()
     {
@@ -40,6 +45,15 @@ class FundingSource extends \CFX\JsonApi\AbstractResource implements FundingSour
     }
 
 
+
+    public function setStatus($val)
+    {
+        $field = "status";
+        if ($this->validateReadOnly($field, $val)) {
+            $this->_setAttribute($field, $val);
+        }
+        return $this;
+    }
 
     public function setAvailableBalance($val = null)
     {

@@ -12,6 +12,13 @@ class FundingSourceTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals('funding-sources', $this->resource->getResourceType());
     }
 
+    public function testStatus()
+    {
+        $field = "status";
+        $this->assertInstantiatesValidly($field);
+        $this->assertReadOnly($field, 2);
+    }
+
     public function testAvailableBalance()
     {
         $field = 'availableBalance';

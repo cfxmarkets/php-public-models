@@ -3,6 +3,12 @@ namespace CFX\Brokerage;
 
 interface FundingSourceInterface  extends \CFX\JsonApi\ResourceInterface
 {
+    /**
+     * Get this source's status
+     *
+     * @return int
+     */
+    public function getStatus();
 
     /**
      * Get the available balance
@@ -34,6 +40,14 @@ interface FundingSourceInterface  extends \CFX\JsonApi\ResourceInterface
 
 
 
+
+    /**
+     * Set this source's status
+     *
+     * @param int
+     * @return static
+     */
+    public function setStatus($val);
 
     /**
      * Set the legal entity that owns this funding source
