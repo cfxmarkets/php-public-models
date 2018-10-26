@@ -22,7 +22,6 @@ interface LegalEntityInterface extends \CFX\JsonApi\ResourceInterface {
     public function getFinraStatusText();
     public function getNetWorth();
     public function getAnnualIncome();
-    public function getAccreditationStatus();
     public function getDateOfBirth();
     public function getPlaceOfOrigin();
     public function getCorporateStatus();
@@ -31,6 +30,10 @@ interface LegalEntityInterface extends \CFX\JsonApi\ResourceInterface {
     public function getCustodianAccountNum();
     public function getInvestmentAccountUri();
     public function getVerificationStatus();
+    public function getProcessingStatus();
+    public function getResidencyStatus();
+    public function getAccreditationStatus();
+    public function getIdentityStatus();
     public function getPrimaryEmail();
     public function getPrimaryAddress();
     public function getIdDocs();
@@ -46,7 +49,6 @@ interface LegalEntityInterface extends \CFX\JsonApi\ResourceInterface {
     public function setFinraStatusText($val);
     public function setNetWorth($val);
     public function setAnnualIncome($val);
-    public function setAccreditationStatus($val);
     public function setDateOfBirth($val);
     public function setPlaceOfOrigin($val);
     public function setCorporateStatus($val);
@@ -55,6 +57,10 @@ interface LegalEntityInterface extends \CFX\JsonApi\ResourceInterface {
     public function setCustodianAccountNum($val);
     public function setInvestmentAccountUri($val);
     public function setVerificationStatus($val);
+    public function setProcessingStatus($val);
+    public function setResidencyStatus($val);
+    public function setAccreditationStatus($val);
+    public function setIdentityStatus($val);
     public function setPrimaryEmail($val);
     public function setPrimaryAddress(AddressInterface $val = null);
     public function setWalletAccount(WalletAccountInterface $val = null);

@@ -16,7 +16,6 @@ class LegalEntity extends \CFX\JsonApi\AbstractResource implements LegalEntityIn
         'finraStatusText' => null,
         'netWorth' => null,
         'annualIncome' => null,
-        'accreditationStatus' => 0, 
         'dateOfBirth' => null,
         'placeOfOrigin' => null,
         'corporateStatus' => null,
@@ -25,6 +24,10 @@ class LegalEntity extends \CFX\JsonApi\AbstractResource implements LegalEntityIn
         'custodianAccountNum' => null,
         "investmentAccountUri" => null,
         "verificationStatus" => 0,
+        "processingStatus" => 0,
+        "residencyStatus" => 0,
+        "accreditationStatus" => 0, 
+        "identityStatus" => 0,
         "primaryEmail" => null,
     ];
 
@@ -118,11 +121,6 @@ class LegalEntity extends \CFX\JsonApi\AbstractResource implements LegalEntityIn
         return $this->_getAttributeValue("annualIncome");
     }
 
-    public function getAccreditationStatus()
-    {
-        return $this->_getAttributeValue("accreditationStatus");
-    }
-
     public function getDateOfBirth()
     {
         return $this->_getAttributeValue('dateOfBirth');
@@ -166,6 +164,26 @@ class LegalEntity extends \CFX\JsonApi\AbstractResource implements LegalEntityIn
     public function getVerificationStatus()
     {
         return $this->_getAttributeValue("verificationStatus");
+    }
+
+    public function getProcessingStatus()
+    {
+        return $this->_getAttributeValue("processingStatus");
+    }
+
+    public function getResidencyStatus()
+    {
+        return $this->_getAttributeValue("residencyStatus");
+    }
+
+    public function getAccreditationStatus()
+    {
+        return $this->_getAttributeValue("accreditationStatus");
+    }
+
+    public function getIdentityStatus()
+    {
+        return $this->_getAttributeValue("identityStatus");
     }
 
     public function getPrimaryEmail()
@@ -322,17 +340,6 @@ class LegalEntity extends \CFX\JsonApi\AbstractResource implements LegalEntityIn
         return $this->_setAttribute("annualIncome", $val);
     }
 
-    public function setAccreditationStatus($val)
-    {
-        $val = $this->cleanNumberValue($val);
-        $field = "accreditationStatus";
-        if ($this->validateReadOnly($field, $val)) {
-            $this->validateAmong($field, $val, static::getValidAccreditationStatuses(), true);
-            $this->_setAttribute($field, $val);
-        }
-        return $this;
-    }
-
     public function setDateOfBirth($val)
     {
         $val = $this->cleanDateTimeValue($val);
@@ -477,6 +484,46 @@ class LegalEntity extends \CFX\JsonApi\AbstractResource implements LegalEntityIn
         $field = "verificationStatus";
         if ($this->validateReadOnly($field, $val)) {
             $this->validateAmong($field, $val, static::getValidVerificationStatuses(), true);
+            $this->_setAttribute($field, $val);
+        }
+        return $this;
+    }
+
+    public function setProcessingStatus($val)
+    {
+        $val = $this->cleanNumberValue($val);
+        $field = "processingStatus";
+        if ($this->validateReadOnly($field, $val)) {
+            $this->_setAttribute($field, $val);
+        }
+        return $this;
+    }
+
+    public function setResidencyStatus($val)
+    {
+        $val = $this->cleanNumberValue($val);
+        $field = "residencyStatus";
+        if ($this->validateReadOnly($field, $val)) {
+            $this->_setAttribute($field, $val);
+        }
+        return $this;
+    }
+
+    public function setAccreditationStatus($val)
+    {
+        $val = $this->cleanNumberValue($val);
+        $field = "accreditationStatus";
+        if ($this->validateReadOnly($field, $val)) {
+            $this->_setAttribute($field, $val);
+        }
+        return $this;
+    }
+
+    public function setIdentityStatus($val)
+    {
+        $val = $this->cleanNumberValue($val);
+        $field = "identityStatus";
+        if ($this->validateReadOnly($field, $val)) {
             $this->_setAttribute($field, $val);
         }
         return $this;

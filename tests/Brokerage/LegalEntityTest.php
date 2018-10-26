@@ -112,34 +112,6 @@ class LegalEntityTest extends \PHPUnit\Framework\TestCase
         $this->assertChains($field);
     }
 
-    public function testAccreditationStatus()
-    {
-        $field = "accreditationStatus";
-        $this->assertFalse($this->resource->hasErrors($field), "Should instantiate cleanly");
-        $this->assertReadOnly($field, 2);
-        $this->assertEquals(LegalEntity::getValidAccreditationStatuses()[0], $this->resource->getAccreditationStatus());
-    }
-
-    public function testAccreditationStatusExtended(LegalEntityInterface $resource = null)
-    {
-        if ($resource) {
-            $this->resource = $resource;
-        } else {
-            $this->resource = new Test\LegalEntity($this->datasource);
-        }
-
-        $field = "accreditationStatus";
-        $this->assertValid($field, array_merge(LegalEntity::getValidAccreditationStatuses(), [ "-2", "-1", "0", "1", "2" ]));
-        $this->assertInvalid($field, [ "cool", "true", "false", [ "array-of-things" ], new \DateTime(), 3, -3 ]);
-        $this->assertChanged($field, 1, "attributes");
-        $this->assertChains($field);
-
-        // Test serialization
-        $this->resource->setAccreditationStatus(2);
-        $serialized = json_decode(json_encode($this->resource), true);
-        $this->assertEquals(2, $serialized["attributes"][$field], "Should have serialized to integer but didn't");
-    }
-
     public function testFinraStatusText()
     {
         $field = 'finraStatusText';
@@ -238,7 +210,34 @@ class LegalEntityTest extends \PHPUnit\Framework\TestCase
         $field = "verificationStatus";
         $this->assertFalse($this->resource->hasErrors($field), "Should instantiate cleanly");
         $this->assertReadOnly($field, 2);
-        $this->assertEquals(LegalEntity::getValidVerificationStatuses()[0], $this->resource->getVerificationStatus());
+    }
+
+    public function testProcessingStatus()
+    {
+        $field = "processingStatus";
+        $this->assertFalse($this->resource->hasErrors($field), "Should instantiate cleanly");
+        $this->assertReadOnly($field, 2);
+    }
+
+    public function testResidencyStatus()
+    {
+        $field = "residencyStatus";
+        $this->assertFalse($this->resource->hasErrors($field), "Should instantiate cleanly");
+        $this->assertReadOnly($field, 2);
+    }
+
+    public function testAccreditationStatus()
+    {
+        $field = "accreditationStatus";
+        $this->assertFalse($this->resource->hasErrors($field), "Should instantiate cleanly");
+        $this->assertReadOnly($field, 2);
+    }
+
+    public function testIdentityStatus()
+    {
+        $field = "identityStatus";
+        $this->assertFalse($this->resource->hasErrors($field), "Should instantiate cleanly");
+        $this->assertReadOnly($field, 2);
     }
 
     public function testVerificationStatusExtended(LegalEntityInterface $resource = null)
@@ -413,6 +412,9 @@ class LegalEntityTest extends \PHPUnit\Framework\TestCase
                 "legalName" => "My Person",
                 "accreditationStatus" => 0,
                 "primaryEmail" => "my.person@humans.org",
+                "processingStatus" => 0,
+                "identityStatus" => 0,
+                "residencyStatus" => 0,
             ],
             "relationships" => [
                 "primaryAddress" => [
