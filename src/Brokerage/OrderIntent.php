@@ -176,7 +176,7 @@ class OrderIntent extends \CFX\JsonApi\AbstractResource implements OrderIntentIn
                     if ($val <= 0) {
                         $this->setError('numShares', 'qty', [
                             "title" => "Invalid Attribute Value for `numShares`",
-                            "detail" => "You can't enter orders for less than a single share on our system."
+                            "detail" => "Number of shares must be greater than 0."
                         ]);
                     } else {
                         $this->clearError('numShares', 'qty');

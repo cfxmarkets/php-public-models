@@ -139,10 +139,10 @@ class Order extends \CFX\JsonApi\AbstractResource implements OrderInterface {
 
             if ($this->validateRequired('lotSize', $val)) {
                 if ($this->validateNumeric('lotSize', $val)) {
-                    if ($val < 1) {
+                    if ($val <= 0) {
                         $this->setError('lotSize', 'qty', [
                             "title" => "Invalid Attribute Value for `lotSize`",
-                            "detail" => "You can't enter orders for less than a single share on our system."
+                            "detail" => "Lot size must be greater than 0."
                         ]);
                     } else {
                         $this->clearError('lotSize', 'qty');
