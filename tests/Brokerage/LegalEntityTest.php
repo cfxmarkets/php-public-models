@@ -240,26 +240,6 @@ class LegalEntityTest extends \PHPUnit\Framework\TestCase
         $this->assertReadOnly($field, 2);
     }
 
-    public function testVerificationStatusExtended(LegalEntityInterface $resource = null)
-    {
-        if ($resource) {
-            $this->resource = $resource;
-        } else {
-            $this->resource = new Test\LegalEntity($this->datasource);
-        }
-
-        $field = "verificationStatus";
-        $this->assertValid($field, array_merge(LegalEntity::getValidVerificationStatuses(), [ "-2", "-1", "0", "1", "2" ]));
-        $this->assertInvalid($field, [ "cool", "true", "false", [ "array-of-things" ], new \DateTime(), 3, -3 ]);
-        $this->assertChanged($field, 1, "attributes");
-        $this->assertChains($field);
-
-        // Test serialization
-        $this->resource->setVerificationStatus(2);
-        $serialized = json_decode(json_encode($this->resource), true);
-        $this->assertEquals(2, $serialized["attributes"][$field], "Should have serialized to integer but didn't");
-    }
-
     public function testPrimaryEmail()
     {
         $field = 'primaryEmail';
@@ -412,7 +392,7 @@ class LegalEntityTest extends \PHPUnit\Framework\TestCase
                 "legalName" => "My Person",
                 "accreditationStatus" => 0,
                 "primaryEmail" => "my.person@humans.org",
-                "processingStatus" => 0,
+                "processingStatus" => 1,
                 "identityStatus" => 0,
                 "residencyStatus" => 0,
             ],

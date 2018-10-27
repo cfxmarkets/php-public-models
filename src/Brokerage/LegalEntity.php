@@ -24,7 +24,7 @@ class LegalEntity extends \CFX\JsonApi\AbstractResource implements LegalEntityIn
         'custodianAccountNum' => null,
         "investmentAccountUri" => null,
         "verificationStatus" => 0,
-        "processingStatus" => 0,
+        "processingStatus" => 1,
         "residencyStatus" => 0,
         "accreditationStatus" => 0, 
         "identityStatus" => 0,
