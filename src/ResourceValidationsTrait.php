@@ -349,7 +349,7 @@ trait ResourceValidationsTrait {
     protected function getKnownFormat(string $formatName)
     {
         $knownFormats = [
-            "email" => "/^([a-z0-9\+_\-]+)(\.[a-z0-9\+_\-]+)*@([a-z0-9\-]+\.)+[a-z]{2,6}$/ix",
+            "email" => "/^([a-z0-9\+_\-]+)(\.[a-z0-9\+_\-]+)*@([a-z0-9\-]+\.)+[a-z]{2,}$/ix",
             "swiftCode" => "/^[A-Za-z]{6}[A-Za-z0-9]{2}[0-9A-Za-z]{0,3}$/",
             "uri" => "/^\w+:(\/\/)?[^\s]+$/",
             "url" => "/^\w+:\/\/[^\s\/]+(\/[^\s]+)*\/?$/",

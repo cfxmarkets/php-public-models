@@ -163,31 +163,15 @@ class User extends \CFX\JsonApi\AbstractResource implements UserInterface {
     // Setters
 
     public function setEmail($val) {
-        $this->_setAttribute('email', $val);
+        $val = $this->cleanStringValue($val);
 
         // Validate
 
-        if (!$this->getEmail()) {
-            $this->setError('email', 'required', $this->getFactory()->newError([
-                "status" => 400,
-                "title" => "Required Attribute `email` Missing",
-                "detail" => "No email found. New users require a valid email to be passed via the `email` field."
-            ]));
-        } else {
-            $this->clearError('email','required');
-
-            if (!preg_match("/^([a-z0-9\+_\-]+)(\.[a-z0-9\+_\-]+)*@([a-z0-9\-]+\.)+[a-z]{2,}$/ix", $this->getEmail())) {
-                $this->setError('email', "valid", $this->getFactory()->newError([
-                    "status" => 400,
-                    "title" => "Invalid Attribute Value for `email`",
-                    "detail" => "The email address you've entered doesn't appear to be valid."
-                ]));
-            } else {
-                $this->clearError('email', "valid");
-            }
+        if ($this->validateRequired("email", $val)) {
+            $this->validateType("email", $val, "email");
         }
 
-        return $this;
+        return $this->_setAttribute("email", $val);
     }
 
     public function setPhoneNumber($val) {

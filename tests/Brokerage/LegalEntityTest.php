@@ -265,7 +265,7 @@ class LegalEntityTest extends \PHPUnit\Framework\TestCase
     {
         $field = 'primaryEmail';
         $this->assertInstantiatesInvalidly($field, "required");
-        $this->assertValid($field, [ 'test@testerson.com', 't@v.co.uk', 't@v.us' ]);
+        $this->assertValid($field, [ 'test@testerson.com', 't@v.co.uk', 't@v.us', "bill@sundance.capital" ]);
         $this->assertInvalid($field, [ null, '', 'not an email' ]);
         $this->assertChanged($field, 'tester@email.com', "attributes");
         $this->assertChains($field);
