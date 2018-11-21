@@ -176,7 +176,7 @@ class User extends \CFX\JsonApi\AbstractResource implements UserInterface {
         } else {
             $this->clearError('email','required');
 
-            if (!preg_match("/^([a-z0-9\+_\-]+)(\.[a-z0-9\+_\-]+)*@([a-z0-9\-]+\.)+[a-z]{2,6}$/ix", $this->getEmail())) {
+            if (!preg_match("/^([a-z0-9\+_\-]+)(\.[a-z0-9\+_\-]+)*@([a-z0-9\-]+\.)+[a-z]{2,}$/ix", $this->getEmail())) {
                 $this->setError('email', "valid", $this->getFactory()->newError([
                     "status" => 400,
                     "title" => "Invalid Attribute Value for `email`",
