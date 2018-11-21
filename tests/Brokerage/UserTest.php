@@ -10,7 +10,7 @@ class UserTest extends \PHPUnit\Framework\TestCase
     public function testEmail()
     {
         $field = 'email';
-        $this->assertValid($field, [ 'test@testerson.com', 't@v.co.uk', 't@v.us' ]);
+        $this->assertValid($field, [ 'test@testerson.com', 't@v.co.uk', 't@v.us', "somebody@blockchain.capital" ]);
         $this->assertInvalid($field, [ null, '', 'not an email' ]);
         $this->assertChanged($field, 'tester@email.com', "attributes");
         $this->assertChains($field);
