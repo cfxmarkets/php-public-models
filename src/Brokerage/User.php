@@ -34,6 +34,7 @@ class User extends \CFX\JsonApi\AbstractResource implements UserInterface {
     protected $relationships = [
         'oAuthTokens' => null,
         'personEntity' => null,
+        "otherEntities" => null,
     ];
 
 
@@ -155,6 +156,11 @@ class User extends \CFX\JsonApi\AbstractResource implements UserInterface {
     public function getPersonEntity()
     {
         return $this->_getRelationshipValue('personEntity');
+    }
+
+    public function getOtherEntities()
+    {
+        return $this->get2MRel("otherEntities");
     }
 
 
@@ -402,6 +408,15 @@ class User extends \CFX\JsonApi\AbstractResource implements UserInterface {
             }
         }
         return $this->_setAttribute($field, $val);
+    }
+
+    public function setOtherEntities(?\CFX\JsonApi\ResourceCollectionInterface $val)
+    {
+        $field = "otherEntities";
+        if ($this->validateReadOnly($field, $val)) {
+            $this->_setRelationship($field, $val);
+        }
+        return $this;
     }
 }
 

@@ -253,6 +253,16 @@ class UserTest extends \PHPUnit\Framework\TestCase
     {
         $field = 'personEntity';
         $this->assertReadOnly($field, new LegalEntity($this->datasource, ['id'=>'12345']));
+        $this->assertChains($field, null);
+    }
+
+    public function testOtherEntities()
+    {
+        $field = 'otherEntities';
+        $this->assertInstantiatesValidly($field);
+        //$this->assertEquals([], json_decode(json_encode($this->resource->getOtherEntities()), true));
+        $this->assertReadOnly($field, new \CFX\JsonApi\ResourceCollection([ new LegalEntity($this->datasource, ['id'=>'12345']) ]));
+        $this->assertChains($field, null);
     }
 }
 

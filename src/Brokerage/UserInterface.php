@@ -29,6 +29,7 @@ interface UserInterface extends \CFX\JsonApi\ResourceInterface {
     public function getRiskTolerance();
     public function getOauthTokens();
     public function getPersonEntity();
+    public function getOtherEntities();
 
     // Setters
 
@@ -55,7 +56,8 @@ interface UserInterface extends \CFX\JsonApi\ResourceInterface {
     public function setAgreedDTAArbitration($val);
     public function setInvestmentProfile($val);
     public function setRiskTolerance($val);
-    public function setOAuthTokens(\CFX\JsonApi\ResourceCollectionInterface $tokens=null);
-    public function setPersonEntity(LegalEntityInterface $val = null);
+    public function setOAuthTokens(?\CFX\JsonApi\ResourceCollectionInterface $tokens);
+    public function setPersonEntity(?LegalEntityInterface $val);
+    public function setOtherEntities(?\CFX\JsonApi\ResourceCollectionInterface $val);
 }
 
