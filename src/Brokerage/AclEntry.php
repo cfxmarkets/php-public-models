@@ -45,30 +45,6 @@ class AclEntry extends \CFX\JsonApi\AbstractResource implements AclEntryInterfac
         return $this;
     }
 
-    public function addPermissions($bitmask)
-    {
-        if (!is_int($bitmask)) {
-            throw new \InvalidArgumentException("`Permissions` must be an integer bitmask corresponding to 1 or more of the defined permissions for this acl.");
-        }
-        $this->getPermissions() | $bitmask;
-        if ($this->validateReadOnly($field, $bitmask)) {
-            $this->_setAttribute('permissions', $bitmask);
-        }
-        return $this;
-    }
-
-    public function removePermissions($bitmask)
-    {
-        if (!is_int($bitmask)) {
-            throw new \InvalidArgumentException("`Permissions` must be an integer bitmask corresponding to 1 or more of the defined permissions for this acl.");
-        }
-        $bitmask = $this->getPermissions() & ~$bitmask;
-        if ($this->validateReadOnly($field, $bitmask)) {
-            $this->_setAttribute('permissions', $bitmask);
-        }
-        return $this;
-    }
-
     public function hasPermissions($bitmask)
     {
         if (!is_int($bitmask)) {

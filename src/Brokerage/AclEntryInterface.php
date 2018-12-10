@@ -7,8 +7,7 @@ interface AclEntryInterface {
     public function getTarget();
 
     public function setPermissions($bitmask);
-    public function addPermissions($bitmask);
-    public function removePermissions($bitmask);
+    public function hasPermissions($bitmask);
     public function setActor(?\CFX\JsonApi\ResourceInterface $r);
     public function setTarget(?\CFX\JsonApi\ResourceInterface $r);
 }
