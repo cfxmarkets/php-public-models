@@ -40,12 +40,15 @@ class Document extends \CFX\JsonApi\AbstractResource implements DocumentInterfac
         'agreement' => "Signed Contract",
         "accreditation" => "Proof of Accreditation",
         "residency" => "Proof of Residency",
+        "genesis" => "Certificate of Incorporation, Trust Agreement, Birth Certificate, etc.",
+        "other" => "Uncategorized Document",
     ];
 
     /**
      * @var string[] A list of valid statuses
      */
     protected static $validStatuses = [
+        -1 => "rejected",
         0 => 'not-submitted',
         1 => 'reviewing',
         2 => 'approved',
@@ -170,7 +173,7 @@ class Document extends \CFX\JsonApi\AbstractResource implements DocumentInterfac
             if ($val) {
                 $this->clearError('legalEntity', 'required');
 
-                if (!in_array($this->getType(), [ 'id', "accreditation", "residency" ], true)) {
+                if (!in_array($this->getType(), [ 'id', "accreditation", "residency", "genesis", "other" ], true)) {
                     $this->setError("legalEntity", "invalidForType", [
                         "title" => "Illegal Entity",
                         "detail" => "Documents of type `{$this->getType()}` cannot have LegalEntities associated with them."
@@ -179,13 +182,14 @@ class Document extends \CFX\JsonApi\AbstractResource implements DocumentInterfac
                     $this->clearError('legalEntity', "invalidForType");
                 }
             } else {
-                if (in_array($this->getType(), [ 'id', "accreditation", "residency" ], true)) {
+                if (in_array($this->getType(), [ 'id', "accreditation", "residency", "genesis", "other" ], true)) {
                     $this->setError("legalEntity", "required", [
                         "title" => "Field `legalEntity` Required",
                         "detail" => "Field `legalEntity` is required for documents of type `{$this->getType()}`",
                     ]);
                 } else {
                     $this->clearError("legalEntity", "required");
+                    $this->clearError("legalEntity", "invalidForType");
                 }
             }
         } else {
@@ -217,6 +221,7 @@ class Document extends \CFX\JsonApi\AbstractResource implements DocumentInterfac
                     ]);
                 } else {
                     $this->clearError("orderIntent", "required");
+                    $this->clearError("orderIntent", "invalidForType");
                 }
             }
         } else {
