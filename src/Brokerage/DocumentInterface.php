@@ -17,14 +17,14 @@ interface DocumentInterface extends \CFX\JsonApi\ResourceInterface
      *
      * @return string|null
      */
-	public function getType();
+    public function getType();
 
     /**
      * Get the document's URL
      *
      * @return string|null
      */
-	public function getUrl();
+    public function getUrl();
 
     /**
      * Get the document's status
@@ -85,7 +85,7 @@ interface DocumentInterface extends \CFX\JsonApi\ResourceInterface
      * @param string|null $val
      * @return static
      */
-	public function setType($val);
+    public function setType($val);
 
     /**
      * Set the document's URL
@@ -93,7 +93,7 @@ interface DocumentInterface extends \CFX\JsonApi\ResourceInterface
      * @param string|null $val
      * @return static
      */
-	public function setUrl($val);
+    public function setUrl($val);
 
     /**
      * Set the document's status

@@ -7,7 +7,7 @@ interface AddressInterface extends \CFX\JsonApi\ResourceInterface {
      *
      * @return string
      */
- 	public function getLabel();
+     public function getLabel();
 
     /**
      * Get the main street address
@@ -69,7 +69,7 @@ interface AddressInterface extends \CFX\JsonApi\ResourceInterface {
      * @param string $val
      * @return static
      */
- 	public function setLabel($val);
+     public function setLabel($val);
 
     /**
      * Set the main street address

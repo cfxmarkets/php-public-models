@@ -24,22 +24,22 @@ class FundingSource extends \CFX\JsonApi\AbstractResource implements FundingSour
         return $this->_getAttributeValue("status");
     }
 
- 	public function getAvailableBalance()
+     public function getAvailableBalance()
     {
         return $this->_getAttributeValue("availableBalance");
     }
 
- 	public function getPendingBalance()
+     public function getPendingBalance()
     {
         return $this->_getAttributeValue("pendingBalance");
     }
 
- 	public function getOwner()
+     public function getOwner()
     {
         return $this->_getRelationshipValue("owner");
     }
 
- 	public function getFundingInterfaces()
+     public function getFundingInterfaces()
     {
         return $this->get2MRel("fundingInterfaces");
     }

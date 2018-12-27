@@ -7,15 +7,15 @@ class Document extends \CFX\JsonApi\AbstractResource implements DocumentInterfac
 {
     use \CFX\ResourceValidationsTrait;
 
-	protected $resourceType = 'documents';
+    protected $resourceType = 'documents';
 
-	protected $attributes = [
+    protected $attributes = [
         'label' => null,
-		'type' => null,
-		'url' => null,
+        'type' => null,
+        'url' => null,
         'status' => 'not-submitted',
         'notes' => null,
-	];
+    ];
 
     protected $relationships = [
         'legalEntity' => null,
@@ -124,7 +124,7 @@ class Document extends \CFX\JsonApi\AbstractResource implements DocumentInterfac
         $this->setOrderIntent($this->getOrderIntent());
 
         return $this;
-	}
+    }
 
     public function setUrl($val)
     {
@@ -132,14 +132,14 @@ class Document extends \CFX\JsonApi\AbstractResource implements DocumentInterfac
 
         if ($this->validateRequired('url', $val)) {
             if (!preg_match("/^(?:https?:\/\/[\w]+[\w._-]+)?\/.+$/", $val) && !preg_match("/^hellosign:.{20,}$/", $val)) {
-				$this->setError('url', 'valid', [
-					'title' => 'Invalid `url',
-					'detail' => 'You must send a valid value for attribute `url`. It should be in the following format, ex: [`http://www.url.com`] or [`https://www.url.com`].'
-				]);
-			} else{
-				$this->clearError('url', 'valid');
-			}
-		}
+                $this->setError('url', 'valid', [
+                    'title' => 'Invalid `url',
+                    'detail' => 'You must send a valid value for attribute `url`. It should be in the following format, ex: [`http://www.url.com`] or [`https://www.url.com`].'
+                ]);
+            } else{
+                $this->clearError('url', 'valid');
+            }
+        }
 
         return $this->_setAttribute('url', $val);
     }

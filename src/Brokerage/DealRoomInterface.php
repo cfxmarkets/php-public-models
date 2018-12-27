@@ -8,98 +8,98 @@ interface DealRoomInterface extends \CFX\JsonApi\ResourceInterface
      *
      * @return string
      */
- 	public function getTitle();
+     public function getTitle();
 
     /**
      * Get the deal room slug
      *
      * @return string
      */
- 	public function getSlug();
+     public function getSlug();
 
     /**
      * Get the deal room summary
      *
      * @return string
      */
- 	public function getSummary();
+     public function getSummary();
 
     /**
      * Get the deal room body text
      *
      * @return string
      */
- 	public function getBodyText();
+     public function getBodyText();
 
     /**
      * Get the deal room restriction (whether this is an open room, a buy-only room, or a sell-only room)
      *
      * @return string
      */
- 	public function getRestriction();
+     public function getRestriction();
 
     /**
      * Get the deal room open date
      *
      * @return DateTime
      */
- 	public function getOpenDate();
+     public function getOpenDate();
 
     /**
      * Get the deal room close date
      *
      * @return DateTime
      */
- 	public function getCloseDate();
+     public function getCloseDate();
 
     /**
      * Get the deal room access level (public or private)
      *
      * @return string
      */
- 	public function getAccess();
+     public function getAccess();
 
     /**
      * Get the deal room Access Key
      *
      * @return string
      */
- 	public function getAccessKey();
+     public function getAccessKey();
 
     /**
      * Get the deal room Admins collection
      *
      * @return \CFX\JsonApi\ResourceCollectionInterface<UserInterface>
      */
- 	public function getAdmins();
+     public function getAdmins();
 
     /**
      * Get the deal room partners collection
      *
      * @return \CFX\JsonApi\ResourceCollectionInterface<PartnerInterface>
      */
- 	public function getPartners();
+     public function getPartners();
 
     /**
      * Get the deal room participants collection
      *
      * @return \CFX\JsonApi\ResourceCollectionInterface<UserInterface>
      */
- 	public function getParticipants();
+     public function getParticipants();
 
     /**
      * Get the deal room orders collection
      *
      * @return \CFX\JsonApi\ResourceCollectionInterface<OrderIntentInterface>
      */
- 	public function getOrders();
+     public function getOrders();
 
     /**
      * Get the exchange this deal room uses (not yet implemented)
      *
      * @return null
      */
- 	public function getExchange();
+     public function getExchange();
 
 
 
@@ -113,7 +113,7 @@ interface DealRoomInterface extends \CFX\JsonApi\ResourceInterface
      * @param string $val
      * @return static
      */
- 	public function setTitle($val);
+     public function setTitle($val);
 
     /**
      * Set the deal room slug
@@ -121,7 +121,7 @@ interface DealRoomInterface extends \CFX\JsonApi\ResourceInterface
      * @param string $val
      * @return static
      */
- 	public function setSlug($val);
+     public function setSlug($val);
 
     /**
      * Set the deal room summary
@@ -129,7 +129,7 @@ interface DealRoomInterface extends \CFX\JsonApi\ResourceInterface
      * @param string $val
      * @return static
      */
- 	public function setSummary($val);
+     public function setSummary($val);
 
     /**
      * Set the deal room body text
@@ -137,7 +137,7 @@ interface DealRoomInterface extends \CFX\JsonApi\ResourceInterface
      * @param string $val
      * @return static
      */
- 	public function setBodyText($val);
+     public function setBodyText($val);
 
     /**
      * Set the deal room restriction (whether this is an open room, a buy-only room, or a sell-only room)
@@ -145,7 +145,7 @@ interface DealRoomInterface extends \CFX\JsonApi\ResourceInterface
      * @param string $val
      * @return static
      */
- 	public function setRestriction($val);
+     public function setRestriction($val);
 
     /**
      * Set the deal room open date
@@ -153,7 +153,7 @@ interface DealRoomInterface extends \CFX\JsonApi\ResourceInterface
      * @param DateTime $val
      * @return static
      */
- 	public function setOpenDate($val);
+     public function setOpenDate($val);
 
     /**
      * Set the deal room close date
@@ -161,7 +161,7 @@ interface DealRoomInterface extends \CFX\JsonApi\ResourceInterface
      * @param DateTime $val
      * @return static
      */
- 	public function setCloseDate($val);
+     public function setCloseDate($val);
 
     /**
      * Set the deal room access level (public or private)
@@ -169,7 +169,7 @@ interface DealRoomInterface extends \CFX\JsonApi\ResourceInterface
      * @param string $val
      * @return static
      */
- 	public function setAccess($val);
+     public function setAccess($val);
 
     /**
      * Set the deal room Access Key
@@ -177,7 +177,7 @@ interface DealRoomInterface extends \CFX\JsonApi\ResourceInterface
      * @param string $val
      * @return static
      */
- 	public function setAccessKey($val);
+     public function setAccessKey($val);
 
     /**
      * Set the deal room Admins collection
@@ -185,7 +185,7 @@ interface DealRoomInterface extends \CFX\JsonApi\ResourceInterface
      * @param \CFX\JsonApi\ResourceCollectionInterface<UserInterface> $val
      * @return static
      */
- 	public function setAdmins(\CFX\JsonApi\ResourceCollectionInterface $val = null);
+     public function setAdmins(\CFX\JsonApi\ResourceCollectionInterface $val = null);
 
     /**
      * Set the deal room partners collection
@@ -193,7 +193,7 @@ interface DealRoomInterface extends \CFX\JsonApi\ResourceInterface
      * @param \CFX\JsonApi\ResourceCollectionInterface<PartnerInterface> $val
      * @return static
      */
- 	public function setPartners(\CFX\JsonApi\ResourceCollectionInterface $val = null);
+     public function setPartners(\CFX\JsonApi\ResourceCollectionInterface $val = null);
 
     /**
      * Set the deal room participants collection
@@ -201,7 +201,7 @@ interface DealRoomInterface extends \CFX\JsonApi\ResourceInterface
      * @param \CFX\JsonApi\ResourceCollectionInterface<UserInterface> $val
      * @return static
      */
- 	public function setParticipants(\CFX\JsonApi\ResourceCollectionInterface $val = null);
+     public function setParticipants(\CFX\JsonApi\ResourceCollectionInterface $val = null);
 
     /**
      * Set the deal room orders collection
@@ -209,7 +209,7 @@ interface DealRoomInterface extends \CFX\JsonApi\ResourceInterface
      * @param \CFX\JsonApi\ResourceCollectionInterface<OrderIntentInterface> $val
      * @return static
      */
- 	public function setOrders(\CFX\JsonApi\ResourceCollectionInterface $val = null);
+     public function setOrders(\CFX\JsonApi\ResourceCollectionInterface $val = null);
 
     /**
      * Set the exchange this deal room uses (not yet implemented)
@@ -217,6 +217,6 @@ interface DealRoomInterface extends \CFX\JsonApi\ResourceInterface
      * @param null $val
      * @return static
      */
- 	public function setExchange($val);
+     public function setExchange($val);
 }
 

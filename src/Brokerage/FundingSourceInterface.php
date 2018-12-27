@@ -15,28 +15,28 @@ interface FundingSourceInterface  extends \CFX\JsonApi\ResourceInterface
      *
      * @return int | null
      */
- 	public function getAvailableBalance();
+     public function getAvailableBalance();
 
     /**
      * Get the pending balance
      *
      * @return int | null
      */
- 	public function getPendingBalance();
+     public function getPendingBalance();
 
     /**
      * Get the legal entity that owns this funding source
      *
      * @return \CFX\Brokerage\LegalEntityInterface
      */
- 	public function getOwner();
+     public function getOwner();
 
     /**
      * Get the collection of funding interfaces for this funding source
      *
      * @return \CFX\JsonApi\ResourceCollectionInterface
      */
- 	public function getFundingInterfaces();
+     public function getFundingInterfaces();
 
 
 
@@ -55,7 +55,7 @@ interface FundingSourceInterface  extends \CFX\JsonApi\ResourceInterface
      * @param \CFX\Brokerage\LegalEntityInterface $val
      * @return static
      */
- 	public function setOwner(?LegalEntityInterface $val);
+     public function setOwner(?LegalEntityInterface $val);
 
     /**
      * Add a funding interface

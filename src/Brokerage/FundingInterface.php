@@ -19,7 +19,7 @@ class FundingInterface extends \CFX\JsonApi\AbstractResource implements FundingI
     /**
      * @inheritDoc
      */
- 	public function getLabel()
+     public function getLabel()
     {
         return $this->_getAttributeValue("label");
     }
