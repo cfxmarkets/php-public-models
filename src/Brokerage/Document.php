@@ -13,7 +13,7 @@ class Document extends \CFX\JsonApi\AbstractResource implements DocumentInterfac
         'label' => null,
 		'type' => null,
 		'url' => null,
-        'status' => 'not-submitted',
+        'status' => 'reviewing',
         'notes' => null,
 	];
 
