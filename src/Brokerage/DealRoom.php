@@ -46,72 +46,72 @@ class DealRoom extends \CFX\JsonApi\AbstractResource implements DealRoomInterfac
 
 
 
- 	public function getTitle()
+     public function getTitle()
     {
         return $this->_getAttributeValue('title');
     }
 
- 	public function getSlug()
+     public function getSlug()
     {
         return $this->_getAttributeValue('slug');
     }
 
- 	public function getSummary()
+     public function getSummary()
     {
         return $this->_getAttributeValue('summary');
     }
 
- 	public function getBodyText()
+     public function getBodyText()
     {
         return $this->_getAttributeValue('bodyText');
     }
 
- 	public function getRestriction()
+     public function getRestriction()
     {
         return $this->_getAttributeValue('restriction');
     }
 
- 	public function getOpenDate()
+     public function getOpenDate()
     {
         return $this->_getAttributeValue('openDate');
     }
 
- 	public function getCloseDate()
+     public function getCloseDate()
     {
         return $this->_getAttributeValue('closeDate');
     }
 
- 	public function getAccess()
+     public function getAccess()
     {
         return $this->_getAttributeValue('access');
     }
 
- 	public function getAccessKey()
+     public function getAccessKey()
     {
         return $this->_getAttributeValue('accessKey');
     }
 
- 	public function getAdmins()
+     public function getAdmins()
     {
         return $this->_getRelationshipValue('admins');
     }
 
- 	public function getPartners()
+     public function getPartners()
     {
         return $this->_getRelationshipValue('partners');
     }
 
- 	public function getParticipants()
+     public function getParticipants()
     {
         return $this->_getRelationshipValue('participants');
     }
 
- 	public function getOrders()
+     public function getOrders()
     {
         return $this->_getRelationshipValue('orders');
     }
 
- 	public function getExchange()
+     public function getExchange()
     {
         return $this->_getRelationshipValue('exchange');
     }
@@ -122,7 +122,7 @@ class DealRoom extends \CFX\JsonApi\AbstractResource implements DealRoomInterfac
 
 
 
- 	public function setTitle($val)
+     public function setTitle($val)
     {
         $val = $this->cleanStringValue($val);
         if ($this->validateRequired('title', $val)) {
@@ -131,7 +131,7 @@ class DealRoom extends \CFX\JsonApi\AbstractResource implements DealRoomInterfac
         return $this->_setAttribute('title', $val);
     }
 
- 	public function setSlug($val)
+     public function setSlug($val)
     {
         $val = $this->cleanStringValue($val);
         if ($this->validateRequired('slug', $val)) {
@@ -140,7 +140,7 @@ class DealRoom extends \CFX\JsonApi\AbstractResource implements DealRoomInterfac
         return $this->_setAttribute('slug', $val);
     }
 
- 	public function setSummary($val)
+     public function setSummary($val)
     {
         $val = $this->cleanStringValue($val);
         if ($this->validateRequired('summary', $val)) {
@@ -149,7 +149,7 @@ class DealRoom extends \CFX\JsonApi\AbstractResource implements DealRoomInterfac
         return $this->_setAttribute('summary', $val);
     }
 
- 	public function setBodyText($val)
+     public function setBodyText($val)
     {
         $val = $this->cleanStringValue($val);
         if ($this->validateRequired('bodyText', $val)) {
@@ -158,14 +158,14 @@ class DealRoom extends \CFX\JsonApi\AbstractResource implements DealRoomInterfac
         return $this->_setAttribute('bodyText', $val);
     }
 
- 	public function setRestriction($val)
+     public function setRestriction($val)
     {
         $val = $this->cleanStringValue($val);
         $this->validateAmong('restriction', $val, static::getValidRestrictionTypes(), false);
         return $this->_setAttribute('restriction', $val);
     }
 
- 	public function setOpenDate($val)
+     public function setOpenDate($val)
     {
         $val = $this->cleanDateTimeValue($val);
         if ($this->validateRequired('openDate', $val)) {
@@ -174,7 +174,7 @@ class DealRoom extends \CFX\JsonApi\AbstractResource implements DealRoomInterfac
         return $this->_setAttribute('openDate', $val);
     }
 
- 	public function setCloseDate($val)
+     public function setCloseDate($val)
     {
         $val = $this->cleanDateTimeValue($val);
         if ($this->validateRequired('closeDate', $val)) {
@@ -183,7 +183,7 @@ class DealRoom extends \CFX\JsonApi\AbstractResource implements DealRoomInterfac
         return $this->_setAttribute('closeDate', $val);
     }
 
- 	public function setAccess($val)
+     public function setAccess($val)
     {
         $val = $this->cleanStringValue($val);
         if ($this->validateRequired('access', $val)) {
@@ -192,7 +192,7 @@ class DealRoom extends \CFX\JsonApi\AbstractResource implements DealRoomInterfac
         return $this->_setAttribute('access', $val);
     }
 
- 	public function setAccessKey($val)
+     public function setAccessKey($val)
     {
         if ($this->validateReadOnly('accessKey', $val)) {
             $this->_setAttribute('accessKey', $val);
@@ -200,27 +200,27 @@ class DealRoom extends \CFX\JsonApi\AbstractResource implements DealRoomInterfac
         return $this;
     }
 
- 	public function setAdmins(\CFX\JsonApi\ResourceCollectionInterface $val = null)
+     public function setAdmins(\CFX\JsonApi\ResourceCollectionInterface $val = null)
     {
         return $this->_setRelationship('admins', $val);
     }
 
- 	public function setPartners(\CFX\JsonApi\ResourceCollectionInterface $val = null)
+     public function setPartners(\CFX\JsonApi\ResourceCollectionInterface $val = null)
     {
         return $this->_setRelationship('partners', $val);
     }
 
- 	public function setParticipants(\CFX\JsonApi\ResourceCollectionInterface $val = null)
+     public function setParticipants(\CFX\JsonApi\ResourceCollectionInterface $val = null)
     {
         return $this->_setRelationship('participants', $val);
     }
 
- 	public function setOrders(\CFX\JsonApi\ResourceCollectionInterface $val = null)
+     public function setOrders(\CFX\JsonApi\ResourceCollectionInterface $val = null)
     {
         return $this->_setRelationship('orders', $val);
     }
 
- 	public function setExchange($val)
+     public function setExchange($val)
     {
         return $this->_setRelationship('exchange', $val);
     }

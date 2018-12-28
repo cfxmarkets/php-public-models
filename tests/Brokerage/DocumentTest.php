@@ -22,7 +22,9 @@ class DocumentTest extends \PHPUnit\Framework\TestCase
             'ownership' => "Proof of Ownership",
             'agreement' => "Signed Contract",
             "accreditation" => "Proof of Accreditation",
-            "residency" => "Proof of Residency"
+            "residency" => "Proof of Residency",
+            "genesis" => "Certificate of Incorporation, Trust Agreement, Birth Certificate, etc.",
+            "other" => "Uncategorized Document",
         ];
 
         $appTypes = Document::getValidTypes();
@@ -44,6 +46,7 @@ class DocumentTest extends \PHPUnit\Framework\TestCase
     public function testValidStatuses()
     {
         $statuses = [
+            -1 => "rejected",
             0 => 'not-submitted',
             1 => 'reviewing',
             2 => 'approved',
@@ -113,8 +116,8 @@ class DocumentTest extends \PHPUnit\Framework\TestCase
         $this->assertTrue($this->resource->hasErrors('legalEntity'));
         $this->assertContains("invalidForType", array_keys($this->resource->getErrors('legalEntity')));
 
-        // ID docs, Accreditation docs, and Residency docs MUST have LegalEntity
-        foreach ([ "id", "accreditation", "residency" ] as $type) {
+        // ID, Accreditation, Residency, Genesis and Other docs MUST have LegalEntity
+        foreach ([ "id", "accreditation", "residency", "genesis", "other" ] as $type) {
             $this->resource->setLegalEntity($entity);
             $this->resource->setType($type);
             $this->assertFalse($this->resource->hasErrors('legalEntity'), "$type documents should be valid with LegalEntities");
@@ -136,11 +139,6 @@ class DocumentTest extends \PHPUnit\Framework\TestCase
         $this->assertFalse($this->resource->hasErrors("orderIntent"));
         $this->assertTrue($this->resource->hasErrors("type"));
 
-        // id docs can't have order intents
-        $this->resource->setType("id");
-        $this->assertTrue($this->resource->hasErrors('orderIntent'));
-        $this->assertContains("invalidForType", array_keys($this->resource->getErrors('orderIntent')));
-
         // agreement docs must have order intents
         $this->resource->setType('agreement');
         $this->assertFalse($this->resource->hasErrors('orderIntent'));
@@ -155,6 +153,18 @@ class DocumentTest extends \PHPUnit\Framework\TestCase
             $this->resource->setType($type);
             $this->assertTrue($this->resource->hasErrors('orderIntent'));
             $this->assertContains("required", array_keys($this->resource->getErrors('orderIntent')), "$type documents should require an OrderIntent");
+        }
+
+        // ID, Accreditation, Residency, Genesis and Other docs can't have orderIntent
+        foreach ([ "id", "accreditation", "residency", "genesis", "other" ] as $type) {
+            $this->resource->setOrderIntent($intent);
+
+            $this->resource->setType($type);
+            $this->assertTrue($this->resource->hasErrors('orderIntent'), "$type documents MUST NOT have OrderIntents");
+            $this->assertContains("invalidForType", array_keys($this->resource->getErrors('orderIntent')), "$type documents should register and orderIntent error indicating invalid for type.");
+
+            $this->resource->setOrderIntent(null);
+            $this->assertFalse($this->resource->hasErrors('orderIntent'), "$type documents should be valid without an OrderIntent");
         }
     }
 

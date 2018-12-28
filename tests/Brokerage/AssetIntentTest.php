@@ -10,43 +10,43 @@ class AssetIntentTest extends \PHPUnit\Framework\TestCase {
 
 
 
-	public function setupBeforeTest(){
+    public function setupBeforeTest(){
 
-	}
+    }
 
 
 // Set Name
 
-	public function testAssetIntentSetNameSetsErrorOnNullValue(){
-		$this->markTestIncomplete();		
-	}
+    public function testAssetIntentSetNameSetsErrorOnNullValue(){
+        $this->markTestIncomplete();        
+    }
 
-	public function testAssetIntentSetNameSuccessWithValue(){
-		$this->markTestIncomplete();		
-	}
+    public function testAssetIntentSetNameSuccessWithValue(){
+        $this->markTestIncomplete();        
+    }
 
 
 // Set SharesOutStanding
 
-	public function testAssetIntentSetSharesOutstandingSetsErrorOnNonIntegerValue(){
-		$this->markTestIncomplete();		
-	}
+    public function testAssetIntentSetSharesOutstandingSetsErrorOnNonIntegerValue(){
+        $this->markTestIncomplete();        
+    }
 
-	public function testAssetIntentSetSharesOutstandingSuccessOnIntegerValue(){
-		$this->markTestIncomplete();		
-	}
+    public function testAssetIntentSetSharesOutstandingSuccessOnIntegerValue(){
+        $this->markTestIncomplete();        
+    }
 
 
 
 // Set OfferAmount
 
-	public function testAssetIntentSetOfferAmountSetsErrorOnNonIntegerValue(){
-		$this->markTestIncomplete();		
-	}
+    public function testAssetIntentSetOfferAmountSetsErrorOnNonIntegerValue(){
+        $this->markTestIncomplete();        
+    }
 
-	public function testAssetIntentSetOfferAmountSuccessOnIntegerValue(){
-		$this->markTestIncomplete();		
-	}
+    public function testAssetIntentSetOfferAmountSuccessOnIntegerValue(){
+        $this->markTestIncomplete();        
+    }
 
 
 // Set DateOpened
@@ -58,49 +58,49 @@ class AssetIntentTest extends \PHPUnit\Framework\TestCase {
      * back to unix timestamp integer via the `serializeAttribute` method, which
      * you'll have to override and should test.
      */
-	public function testAssetIntentSetDateOpenedSetsErrorOnNonIntegerValue(){
-		$this->markTestIncomplete();		
-	}
+    public function testAssetIntentSetDateOpenedSetsErrorOnNonIntegerValue(){
+        $this->markTestIncomplete();        
+    }
 
     /**
      * This data validation should be lax, since we don't have a reason to be really
      * strict right now.
      */
-	public function testAssetIntentSetDateOpenedSetsErrorOnNonCurrentDateValue(){
-		$this->markTestIncomplete();		
-	}
+    public function testAssetIntentSetDateOpenedSetsErrorOnNonCurrentDateValue(){
+        $this->markTestIncomplete();        
+    }
 
-	public function testAssetIntentSetDateOpenedSuccessOnIntegerValue(){
-		$this->markTestIncomplete();		
-	}
-
-
-
-	/**
-	 * Same as DateOpened
-	 */
-	public function testAssetIntentSetDateClosedSetsErrorOnNonIntegerValue(){
-		$this->markTestIncomplete();		
-	}
-
-	public function testAssetIntentSetDateClosedSetsErrorOnNonCurrentDateValue(){
-		$this->markTestIncomplete();		
-	}
-
-	public function testAssetIntentSetDateClosedSuccessOnIntegerValueAndCurrentDate(){
-		$this->markTestIncomplete();		
-	}
+    public function testAssetIntentSetDateOpenedSuccessOnIntegerValue(){
+        $this->markTestIncomplete();        
+    }
 
 
 
+    /**
+     * Same as DateOpened
+     */
+    public function testAssetIntentSetDateClosedSetsErrorOnNonIntegerValue(){
+        $this->markTestIncomplete();        
+    }
 
-	public function testAssetIntentSetInitialSharePriceSetsErrorOnNonFloatValue(){
-		$this->markTestIncomplete();		
-	}
+    public function testAssetIntentSetDateClosedSetsErrorOnNonCurrentDateValue(){
+        $this->markTestIncomplete();        
+    }
 
-	public function testAssetIntentSetInitialSharePriceSuccessOnFloatValue(){
-		$this->markTestIncomplete();		
-	}
+    public function testAssetIntentSetDateClosedSuccessOnIntegerValueAndCurrentDate(){
+        $this->markTestIncomplete();        
+    }
+
+
+
+
+    public function testAssetIntentSetInitialSharePriceSetsErrorOnNonFloatValue(){
+        $this->markTestIncomplete();        
+    }
+
+    public function testAssetIntentSetInitialSharePriceSuccessOnFloatValue(){
+        $this->markTestIncomplete();        
+    }
 
 
 
@@ -112,13 +112,13 @@ class AssetIntentTest extends \PHPUnit\Framework\TestCase {
      * `asset`, specifically, is a read-only field.
      */
 
-	public function testAssetIntentSetAssetFailsOnValueOfTypeNonAsset(){
-		$this->markTestIncomplete();
-	}
+    public function testAssetIntentSetAssetFailsOnValueOfTypeNonAsset(){
+        $this->markTestIncomplete();
+    }
 
-	public function testAssetIntentSetAssetSucceedsOnValueOfTypeAsset(){
-		$this->markTestIncomplete();
-	}
+    public function testAssetIntentSetAssetSucceedsOnValueOfTypeAsset(){
+        $this->markTestIncomplete();
+    }
 
 
 }

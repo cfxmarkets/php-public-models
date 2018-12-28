@@ -9,21 +9,21 @@ interface FundingInterfaceInterface  extends \CFX\JsonApi\ResourceInterface
      *
      * @return string | null
      */
- 	public function getLabel();
+     public function getLabel();
 
     /**
      * Get the URI describing the interface
      *
      * @return string | null
      */
- 	public function getUri();
+     public function getUri();
 
     /**
      * Get the Funding Source to which this interface is attached
      *
      * @return \CFX\Brokerage\FundingSource
      */
- 	public function getFundingSource();
+     public function getFundingSource();
 
 
 
@@ -34,7 +34,7 @@ interface FundingInterfaceInterface  extends \CFX\JsonApi\ResourceInterface
      * @param string | null $val
      * @return static
      */
- 	public function setLabel($val);
+     public function setLabel($val);
 
     /**
      * Set the URI describing this interface
@@ -42,7 +42,7 @@ interface FundingInterfaceInterface  extends \CFX\JsonApi\ResourceInterface
      * @param string | null $val
      * @return static
      */
- 	public function setUri($val);
+     public function setUri($val);
 
     /**
      * Set the Funding Source to which this interface is attached
@@ -50,7 +50,7 @@ interface FundingInterfaceInterface  extends \CFX\JsonApi\ResourceInterface
      * @param \CFX\Brokerage\FundingSource $val
      * @return static
      */
- 	public function setFundingSource(?FundingSource $val);
+     public function setFundingSource(?FundingSource $val);
 }
 
 
