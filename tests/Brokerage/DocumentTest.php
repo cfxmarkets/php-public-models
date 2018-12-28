@@ -191,7 +191,7 @@ class DocumentTest extends \PHPUnit\Framework\TestCase
         $document = new Document($this->datasource, $data);
         $this->assertFalse($document->hasErrors());
 
-        $data['attributes']['status'] = 0;
+        $data['attributes']['status'] = 1;
         $this->assertEquals($data, json_decode(json_encode($document->getChanges()), true));
     }
 }
