@@ -5,4 +5,5 @@ config.local.php
 vendor
 error_log
 docs
+composer.lock
 
