@@ -29,6 +29,7 @@ class LegalEntity extends \CFX\JsonApi\AbstractResource implements LegalEntityIn
         "accreditationStatus" => 0, 
         "identityStatus" => 0,
         "primaryEmail" => null,
+        "createdOn" => null,
     ];
 
     protected $relationships = [
@@ -189,6 +190,11 @@ class LegalEntity extends \CFX\JsonApi\AbstractResource implements LegalEntityIn
     public function getPrimaryEmail()
     {
         return $this->_getAttributeValue("primaryEmail");
+    }
+
+    public function getCreatedOn()
+    {
+        return $this->_getAttributeValue('createdOn');
     }
 
     public function getWalletAccount()
@@ -539,6 +545,13 @@ class LegalEntity extends \CFX\JsonApi\AbstractResource implements LegalEntityIn
         }
 
         return $this->_setAttribute($field, $val);
+    }
+
+    public function setCreatedOn($val)
+    {
+        $val = $this->cleanDateTimeValue($val);
+        $this->validateReadOnly('createdOn', $val);
+        return $this->_setAttribute('createdOn', $val);
     }
 
 

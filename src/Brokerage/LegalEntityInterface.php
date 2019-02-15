@@ -35,6 +35,7 @@ interface LegalEntityInterface extends \CFX\JsonApi\ResourceInterface {
     public function getAccreditationStatus();
     public function getIdentityStatus();
     public function getPrimaryEmail();
+    public function getCreatedOn();
     public function getPrimaryAddress();
     public function getIdDocs();
     public function getAccreditationDocs();

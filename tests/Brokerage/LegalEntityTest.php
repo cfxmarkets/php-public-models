@@ -250,6 +250,53 @@ class LegalEntityTest extends \PHPUnit\Framework\TestCase
         $this->assertChains($field);
     }
 
+    public function testCreatedOn()
+    {
+        $field = 'createdOn';
+        $this->assertReadOnly($field);
+        $this->assertChains($field, null);
+
+        $mock= new \CFX\JsonApi\Test\MockDatasource();
+
+        // Test that it can be successfully created without errors
+        $intent = $mock
+            ->addClassToCreate("\\CFX\\Brokerage\\LegalEntity")
+            ->create();
+
+        $this->assertFalse($intent->hasErrors('createdOn'));
+        $this->assertNull($intent->getCreatedOn());
+
+        // Test that it can be successfully inflated with null value without errors
+        $intent = $mock
+            ->addClassToCreate("\\CFX\\Brokerage\\LegalEntity")
+            ->setCurrentData([
+                'id' => 12345,
+                'type' => 'legal-entities',
+            ])
+            ->get("id=12345")
+        ;
+
+        $this->assertFalse($intent->hasErrors('createdOn'));
+        $this->assertNull($intent->getCreatedOn());
+
+        // Test that it can be successfully inflated with non-null value without errors
+        $intent = $mock
+            ->addClassToCreate("\\CFX\\Brokerage\\LegalEntity")
+            ->setCurrentData([
+                'id' => 12345,
+                'type' => 'legal-entities',
+                'attributes' => [
+                    'createdOn' => '2018-01-01 00:00:00',
+                ],
+            ])
+            ->get("id=12345")
+        ;
+
+        $this->assertFalse($intent->hasErrors('createdOn'));
+        $this->assertInstanceOf("\\DateTimeInterface", $intent->getCreatedOn());
+        $this->assertEquals('2018-01-01 00:00:00', $intent->getCreatedOn()->format('Y-m-d H:i:s'));
+    }
+
     public function testWalletAccount()
     {
         $field = "walletAccount";
