@@ -671,6 +671,13 @@ class LegalEntity extends \CFX\JsonApi\AbstractResource implements LegalEntityIn
                 return $val;
             }
         }
+        if ($name === 'createdOn') {
+            $val = $this->getCreatedOn();
+            if ($val instanceof \DateTimeInterface) {
+                $val = $val->format("Y-m-d H:i:s");
+            }
+            return (string)$val;
+        }
 
         return parent::serializeAttribute($name);
     }
