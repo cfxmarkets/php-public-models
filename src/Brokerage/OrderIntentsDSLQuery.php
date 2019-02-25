@@ -95,8 +95,8 @@ class OrderIntentsDSLQuery extends \CFX\Persistence\GenericDSLQuery {
                 $val = $values;
                 $operator = "in";
 
-            // If it's 'in' or 'not in', just parse out the value
-            } elseif ($operator === "in" || $operator === "not in") {
+            // If it's 'in' or 'not in', just parse out the value (if it hasn't already been done)
+            } elseif (($operator === "in" || $operator === "not in") && !is_array($val)) {
                 $val = array_map(
                     function($v) { return trim($v, "'\""); },
                     preg_split(
