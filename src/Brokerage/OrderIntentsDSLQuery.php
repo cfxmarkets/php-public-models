@@ -3,7 +3,7 @@ namespace CFX\Brokerage;
 
 class OrderIntentsDSLQuery extends \CFX\Persistence\GenericDSLQuery {
     protected static function getAcceptableFields() {
-        return array_merge(parent::getAcceptableFields(), [ 'userId', "status" ]);
+        return array_merge(parent::getAcceptableFields(), [ 'userId', "status", "assetOwnerId" ]);
     }
 
     protected static function getComparisonOperators() {
@@ -30,6 +30,26 @@ class OrderIntentsDSLQuery extends \CFX\Persistence\GenericDSLQuery {
 
     public function getUserId() {
         return $this->getExpressionValue('userId');
+    }
+
+    public function setAssetOwnerId($operator, $val)
+    {
+        $this->setExpressionValue("assetOwnerId", [
+            "field" => "assetOwner",
+            "operator" => $operator,
+            "value" => $val,
+        ]);
+        return $this;
+    }
+
+    public function unsetAssetOwnerId()
+    {
+        $this->setExpressionValue("assetOwnerId", null);
+    }
+
+    public function getAssetOwnerId()
+    {
+        return $this->getExpressionValue("assetOwnerId");
     }
 
     public function setStatus($operator, $val) {
