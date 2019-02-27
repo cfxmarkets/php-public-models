@@ -28,6 +28,8 @@ class LegalEntity extends \CFX\JsonApi\AbstractResource implements LegalEntityIn
         "residencyStatus" => 0,
         "accreditationStatus" => 0, 
         "identityStatus" => 0,
+        "genesisStatus" => 0,
+        "genesisStatusDate" => null,
         "primaryEmail" => null,
         "createdOn" => null,
     ];
@@ -185,6 +187,16 @@ class LegalEntity extends \CFX\JsonApi\AbstractResource implements LegalEntityIn
     public function getIdentityStatus()
     {
         return $this->_getAttributeValue("identityStatus");
+    }
+
+    public function getGenesisStatus()
+    {
+        return $this->_getAttributeValue("genesisStatus");
+    }
+
+    public function getGenesisStatusDate()
+    {
+        return $this->_getAttributeValue("genesisStatusDate");
     }
 
     public function getPrimaryEmail()
@@ -535,6 +547,26 @@ class LegalEntity extends \CFX\JsonApi\AbstractResource implements LegalEntityIn
         return $this;
     }
 
+    public function setGenesisStatus($val)
+    {
+        $val = $this->cleanNumberValue($val);
+        $field = "genesisStatus";
+        if ($this->validateReadOnly($field, $val)) {
+            $this->_setAttribute($field, $val);
+        }
+        return $this;
+    }
+
+    /** 
+     * Note: this is not public because it's only meant to be set by the data layer, never manually
+     **/
+    protected function setGenesisStatusDate($val)
+    {
+        $val = $this->cleanDateTimeValue($val);
+        $this->validateReadOnly('genesisStatusDate', $val);
+        return $this->_setAttribute('genesisStatusDate', $val);
+    }
+
     public function setPrimaryEmail($val) {
         $field = "primaryEmail";
 
@@ -673,6 +705,13 @@ class LegalEntity extends \CFX\JsonApi\AbstractResource implements LegalEntityIn
         }
         if ($name === 'createdOn') {
             $val = $this->getCreatedOn();
+            if ($val instanceof \DateTimeInterface) {
+                $val = $val->format("Y-m-d H:i:s");
+            }
+            return (string)$val;
+        }
+        if ($name === 'genesisStatusDate') {
+            $val = $this->getGenesisStatusDate();
             if ($val instanceof \DateTimeInterface) {
                 $val = $val->format("Y-m-d H:i:s");
             }

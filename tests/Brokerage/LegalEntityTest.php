@@ -240,6 +240,20 @@ class LegalEntityTest extends \PHPUnit\Framework\TestCase
         $this->assertReadOnly($field, 2);
     }
 
+    public function testGenesisStatus()
+    {
+        $field = "genesisStatus";
+        $this->assertFalse($this->resource->hasErrors($field), "Should instantiate cleanly");
+        $this->assertReadOnly($field, 2);
+    }
+
+    public function genesisStatusDate()
+    {
+        $field = "genesisStatusDate";
+        $this->assertFalse($this->resource->hasErrors($field), "Should instantiate cleanly");
+        $this->assertReadOnly($field, new \DateTime());
+    }
+
     public function testPrimaryEmail()
     {
         $field = 'primaryEmail';
@@ -442,6 +456,7 @@ class LegalEntityTest extends \PHPUnit\Framework\TestCase
                 "processingStatus" => 1,
                 "identityStatus" => 0,
                 "residencyStatus" => 0,
+                "genesisStatus" => 0,
             ],
             "relationships" => [
                 "primaryAddress" => [

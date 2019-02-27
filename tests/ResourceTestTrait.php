@@ -152,9 +152,12 @@ trait ResourceTestTrait {
      */
     public function assertSerializesDateForSql($field)
     {
-        $set = "set".ucfirst($field);
-        $date = new \DateTime();
-        $this->resource->$set($date);
+        $get = "get".ucfirst($field);
+        if (!$this->resource->$get()) {
+            $set = "set".ucfirst($field);
+            $date = new \DateTime();
+            $this->resource->$set($date);
+        }
         $changes = $this->resource->getChanges();
         $this->assertContains('attributes', array_keys($changes));
         $this->assertContains($field, array_keys($changes['attributes']));
