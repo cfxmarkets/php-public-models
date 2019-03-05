@@ -5,6 +5,4 @@ interface ReleaseInterface {
     public function getBetaStartDate();
     public function getReleaseDate();
     public function getCurrentUserOptIn();
-
-    public function setCurrentUserOptIn($val);
 }

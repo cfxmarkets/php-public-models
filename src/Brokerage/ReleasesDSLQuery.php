@@ -11,10 +11,20 @@ class ReleasesDSLQuery extends \CFX\Persistence\GenericDSLQuery
 
 
     public function setBetaStartDate($operator, $val) {
+        if (is_numeric($val)) {
+            $val = new \DateTime("@$val");
+        } else {
+            try {
+                $val = new \DateTime($val);
+            } catch (\Exception $e) {
+                throw new \CFX\Persistence\BadQueryException("You must pass a date-time value that is compatible with PHP's DateTime constructor.");
+            }
+        }
+
         $this->setExpressionValue("betaStartDate", [
             "field" => "betaStartDate",
             "operator" => $operator,
-            "value" => $val
+            "value" => $val->format("Y-m-d H:i:s")
         ]);
         return $this;
     }
@@ -33,10 +43,20 @@ class ReleasesDSLQuery extends \CFX\Persistence\GenericDSLQuery
 
 
     public function setReleaseDate($operator, $val) {
+        if (is_numeric($val)) {
+            $val = new \DateTime("@$val");
+        } else {
+            try {
+                $val = new \DateTime($val);
+            } catch (\Exception $e) {
+                throw new \CFX\Persistence\BadQueryException("You must pass a date-time value that is compatible with PHP's DateTime constructor.");
+            }
+        }
+
         $this->setExpressionValue("releaseDate", [
             "field" => "releaseDate",
             "operator" => $operator,
-            "value" => $val
+            "value" => $val->format("Y-m-d H:i:s")
         ]);
         return $this;
     }
