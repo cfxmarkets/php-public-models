@@ -708,14 +708,14 @@ class LegalEntity extends \CFX\JsonApi\AbstractResource implements LegalEntityIn
             if ($val instanceof \DateTimeInterface) {
                 $val = $val->format("Y-m-d H:i:s");
             }
-            return (string)$val;
+            return $val === null ? null : (string)$val;
         }
         if ($name === 'genesisStatusDate') {
             $val = $this->getGenesisStatusDate();
             if ($val instanceof \DateTimeInterface) {
                 $val = $val->format("Y-m-d H:i:s");
             }
-            return (string)$val;
+            return $val === null ? null : (string)$val;
         }
 
         return parent::serializeAttribute($name);
