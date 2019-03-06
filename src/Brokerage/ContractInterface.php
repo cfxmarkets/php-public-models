@@ -10,10 +10,4 @@ interface ContractInterface {
     public function getContractType();
     public function getUrl();
     public function getChangeLog();
-
-    public function setAudience($val);
-    public function setEffectiveDate($val);
-    public function setContractType($val);
-    public function setUrl($val);
-    public function setChangeLog($val);
 }

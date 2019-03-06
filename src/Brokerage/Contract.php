@@ -65,96 +65,50 @@ class Contract extends \CFX\JsonApi\AbstractResource implements ContractInterfac
     public function setAudience($val)
     {
         $field = "audience";
-        $val = $this->cleanNumberValue($val);
-        if ($this->validateRequired($field, $val)) {
-            if ($this->validateType($field, $val, "integer")) {
-                $maxAud = 0;
-                $audOptions = [];
-                foreach(self::getAvailableAudiences() as $name => $aud) {
-                    $maxAud += $aud;
-                    $audOptions[] = "$aud: $name";
-                }
-                if ($val <= 0 || $val > $maxAud) {
-                    $this->setError($field, "range", [
-                        "title" => "Unacceptable Value",
-                        "detail" => "Audience is a bitmask that must be greater than 0 ".
-                            "and less than $maxAud. Available options are the following:\n\n * ".implode("\n * ", $audOptions),
-                    ]);
-                } else {
-                    $this->clearError($field, "range");
-                }
-            }
+        if ($this->validateReadOnly($field, $val)) {
+            $this->validateRequired($field, $val);
+            $this->_setAttribute($field, $val);
         }
-        return $this->_setAttribute($field, $val);
+        return $this;
     }
 
     public function setEffectiveDate($val)
     {
         $field = "effectiveDate";
-        $val = $this->cleanDateTimeValue($val);
-        if ($this->validateRequired($field, $val)) {
-            $this->validateType($field, $val, "datetime");
+        if ($this->validateReadOnly($field, $val)) {
+            $this->validateRequired($field, $val);
+            $this->_setAttribute($field, $val);
         }
-        return $this->_setAttribute($field, $val);
+        return $this;
     }
 
     public function setContractType($val)
     {
         $field = "contractType";
-        $val = $this->cleanStringValue($val);
-        if ($this->validateRequired($field, $val)) {
-            $this->validateAmong($field, $val, self::getAvailableContractTypes());
+        if ($this->validateReadOnly($field, $val)) {
+            $this->validateRequired($field, $val);
+            $this->_setAttribute($field, $val);
         }
-        return $this->_setAttribute($field, $val);
+        return $this;
     }
 
     public function setUrl($val)
     {
         $field = "url";
-        $val = $this->cleanStringValue($val);
-        if ($this->validateRequired($field, $val)) {
-            $this->validateType($field, $val, "url");
+        if ($this->validateReadOnly($field, $val)) {
+            $this->validateRequired($field, $val);
+            $this->_setAttribute($field, $val);
         }
-        return $this->_setAttribute($field, $val);
+        return $this;
     }
 
     public function setChangelog($val)
     {
         $field = "changelog";
-        if ($val === "") {
-            $val = null;
+        if ($this->validateReadOnly($field, $val)) {
+            $this->_setAttribute($field, $val);
         }
-
-        if ($val === null) {
-            $this->clearError($field, "json-object");
-        } else {
-            $err = false;
-            if (is_string($val)) {
-                $decoded = json_decode($val, true);
-                if ($decoded === null) {
-                    $err = true;
-                    $this->setError($field, "json-object", [
-                        "title" => "Invalid JSON",
-                        "detail" => "The object you've passed is not valid JSON"
-                    ]);
-                } else {
-                    $val = $decoded;
-                    $this->clearError($field, "json-object");
-                }
-            }
-
-            if (!$err) {
-                if (!is_array($val)) {
-                    $this->setError($field, "json-object", [
-                        "title" => "Invalid Object",
-                        "detail" => "Changelog must be a JSON string or an array that serializes to JSON"
-                    ]);
-                } else {
-                    $this->clearError($field, "json-object");
-                }
-            }
-        }
-        return $this->_setAttribute($field, $val);
+        return $this;
     }
 
 
