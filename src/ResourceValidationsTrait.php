@@ -39,7 +39,7 @@ trait ResourceValidationsTrait {
             } elseif ($type === 'uri') {
                 $result = is_string($val) && preg_match($this->getKnownFormat("uri"), $val);
             } elseif ($type === 'url') {
-                $result = is_string($val) && preg_match($this->getKnownFormat("url"), $val);
+                $result = is_string($val) && preg_match($this->getKnownFormat("url"), $val) && $val !== "";
             } else {
                 throw new \RuntimeException("Programmer: Don't know how to validate for type `$type`!");
             }
@@ -352,7 +352,7 @@ trait ResourceValidationsTrait {
             "email" => "/^([a-z0-9\+_\-]+)(\.[a-z0-9\+_\-]+)*@([a-z0-9\-]+\.)+[a-z]{2,}$/ix",
             "swiftCode" => "/^[A-Za-z]{6}[A-Za-z0-9]{2}[0-9A-Za-z]{0,3}$/",
             "uri" => "/^\w+:(\/\/)?[^\s]+$/",
-            "url" => "/^\w+:\/\/[^\s\/]+(\/[^\s]+)*\/?$/",
+            "url" => "/^((\w+:)?\/\/[^\s\/]+)?(\/[^\s]+)*\/?$/",
         ];
 
         if (array_key_exists($formatName, $knownFormats)) {
