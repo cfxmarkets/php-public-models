@@ -25,9 +25,9 @@ class User extends \CFX\JsonApi\AbstractResource implements UserInterface {
         "employerName" => null,
         "consultsAdvisor" => null,
         "consultsAccountant" => null,
-        "agreedTOS" => false,
-        "agreedDTA" => false,
-        "agreedDTAArbitration" => false,
+        "agreedTOS" => null,
+        "agreedDTA" => null,
+        "agreedDTAArbitration" => null,
         "investmentProfile" => null,
         "riskTolerance" => null,
     ];
@@ -323,7 +323,18 @@ class User extends \CFX\JsonApi\AbstractResource implements UserInterface {
     {
         $field = "agreedTOS";
         $val = $this->cleanBooleanValue($val);
-        $this->validateType($field, $val, "boolean", false);
+        if ($this->validateType($field, $val, "boolean", false)) {
+            if ($this->validateImmutable($field, $val, false)) {
+                if ($val === false) {
+                    $this->setError($field, "agreement-rejection", [
+                        "title" => "Agreement Required",
+                        "detail" => "Sorry, you can't explicitly NOT agree to our terms.",
+                    ]);
+                } else {
+                    $this->clearError($field, "agreement-rejection");
+                }
+            }
+        }
         return $this->_setAttribute($field, $val);
     }
 
@@ -331,7 +342,18 @@ class User extends \CFX\JsonApi\AbstractResource implements UserInterface {
     {
         $field = "agreedDTA";
         $val = $this->cleanBooleanValue($val);
-        $this->validateType($field, $val, "boolean", false);
+        if ($this->validateType($field, $val, "boolean", false)) {
+            if ($this->validateImmutable($field, $val, false)) {
+                if ($val === false) {
+                    $this->setError($field, "agreement-rejection", [
+                        "title" => "Agreement Required",
+                        "detail" => "Sorry, you can't explicitly NOT agree to our terms.",
+                    ]);
+                } else {
+                    $this->clearError($field, "agreement-rejection");
+                }
+            }
+        }
         return $this->_setAttribute($field, $val);
     }
 
@@ -339,7 +361,18 @@ class User extends \CFX\JsonApi\AbstractResource implements UserInterface {
     {
         $field = "agreedDTAArbitration";
         $val = $this->cleanBooleanValue($val);
-        $this->validateType($field, $val, "boolean", false);
+        if ($this->validateType($field, $val, "boolean", false)) {
+            if ($this->validateImmutable($field, $val, false)) {
+                if ($val === false) {
+                    $this->setError($field, "agreement-rejection", [
+                        "title" => "Agreement Required",
+                        "detail" => "Sorry, you can't explicitly NOT agree to our terms.",
+                    ]);
+                } else {
+                    $this->clearError($field, "agreement-rejection");
+                }
+            }
+        }
         return $this->_setAttribute($field, $val);
     }
 

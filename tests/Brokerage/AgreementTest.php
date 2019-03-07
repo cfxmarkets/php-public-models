@@ -27,7 +27,7 @@ class AgreementTest extends \PHPUnit\Framework\TestCase
         $this->assertChanged($field, (new Contract($this->datasource))->setId("abcde12345"), "relationships");
         $this->assertChains($field);
 
-        $this->assertImmutableRelationship(
+        $this->assertImmutable(
             $field,
             $this->getFakeExistingResource(),
             (new Contract($this->datasource))->setId("aaaaaaaa")
@@ -43,10 +43,10 @@ class AgreementTest extends \PHPUnit\Framework\TestCase
         $this->assertChanged($field, (new LegalEntity($this->datasource))->setId("abcde12345"), "relationships");
         $this->assertChains($field);
 
-        $this->assertImmutableRelationship(
+        $this->assertImmutable(
             $field,
             $this->getFakeExistingResource(),
-            (new Contract($this->datasource))->setId("aaaaaaaa")
+            (new LegalEntity($this->datasource))->setId("aaaaaaaa")
         );
     }
 
@@ -59,10 +59,10 @@ class AgreementTest extends \PHPUnit\Framework\TestCase
         $this->assertChanged($field, (new User($this->datasource))->setId("abcde12345"), "relationships");
         $this->assertChains($field);
 
-        $this->assertImmutableRelationship(
+        $this->assertImmutable(
             $field,
             $this->getFakeExistingResource(),
-            (new Contract($this->datasource))->setId("aaaaaaaa")
+            (new User($this->datasource))->setId("aaaaaaaa")
         );
     }
 
