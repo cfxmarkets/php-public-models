@@ -46,7 +46,7 @@ trait ResourceTestTrait {
         }
     }
 
-    protected function assertImmutable($field, $testVal1="12345", $testVal2="67890")
+    protected function assertImmutableAttribute($field, $testVal1="12345", $testVal2="67890")
     {
         if ($testVal1 === $testVal2) {
             throw new \RuntimeException("Cannot assert immutability because the test values are the same ('$testVal1' and '$testVal2').");
@@ -62,6 +62,10 @@ trait ResourceTestTrait {
         $errors = $this->resource->getErrors($field);
         $this->assertTrue(count($errors) > 0, "Setting a new value on an immutable field should have produced an error, but didn't.");
         $this->assertContains("immutable", array_keys($errors), "Setting a new value on an immutable field should have produced an error, but it didn't.");
+    }
+
+    protected function assertImmutableRelationship(string $field, \CFX\JsonApi\ResourceInterface $existingResource, \CFX\JsonApi\DataInterface $newVal)
+    {
     }
 
     protected function assertErrors($field, $val, $has, $assertSame = null)

@@ -54,21 +54,27 @@ class Agreement extends \CFX\JsonApi\AbstractResource implements AgreementInterf
     public function setContract(?ContractInterface $val)
     {
         $field = "contract";
-        $this->validateRequired($field, $val);
+        if ($this->validateRequired($field, $val)) {
+            $this->validateImmutable($field, $val);
+        }
         return $this->_setRelationship($field, $val);
     }
 
     public function setEntity(?LegalEntityInterface $val)
     {
         $field = "entity";
-        $this->validateRequired($field, $val);
+        if ($this->validateRequired($field, $val)) {
+            $this->validateImmutable($field, $val);
+        }
         return $this->_setRelationship($field, $val);
     }
 
     public function setSigner(?UserInterface $val)
     {
         $field = "signer";
-        $this->validateRequired($field, $val);
+        if ($this->validateRequired($field, $val)) {
+            $this->validateImmutable($field, $val);
+        }
         return $this->_setRelationship($field, $val);
     }
 
