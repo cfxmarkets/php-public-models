@@ -40,6 +40,18 @@ class ContractsDSLQueryTest extends \PHPUnit\Framework\TestCase
         $q = ContractsDSLQuery::parse("id=aaaabbbbccccdddd");
         $this->assertFalse($q->requestingCollection());
     }
+
+    public function testLatest()
+    {
+        $q = ContractsDSLQuery::parse("contractType=ofn-tos and effectiveDate = latest");
+        $this->assertFalse($q->requestingCollection());
+
+        $q = ContractsDSLQuery::parse("audience & 1 and effectiveDate = latest");
+        $this->assertTrue($q->requestingCollection());
+
+        $q = ContractsDSLQuery::parse("effectiveDate = latest");
+        $this->assertTrue($q->requestingCollection());
+    }
 }
 
 

@@ -3,6 +3,8 @@ namespace CFX\Brokerage;
 
 class ContractsDSLQuery extends \CFX\Persistence\GenericDSLQuery
 {
+    protected $gettingLatest = false;
+
     protected static function getAcceptableFields() {
         return array_merge(parent::getAcceptableFields(), [ "contractType", "audience", "effectiveDate" ]);
     }
@@ -17,6 +19,16 @@ class ContractsDSLQuery extends \CFX\Persistence\GenericDSLQuery
             array_key_exists($name, $this->expressions) &&
             in_array($this->expressions[$name]['operator'], [ '=', "&", "in", "like", ">", ">=", "<", "<=" ], true);
     }
+
+    public function requestingCollection()
+    {
+        return parent::requestingCollection() && !($this->gettingLatest && $this->includes("contractType"));
+    }
+
+
+
+
+
 
     public function setContractType($operator, $val) {
         $acceptableOperators = [ "=", "!=", "like", "not like", "in", "not in" ];
@@ -81,11 +93,21 @@ class ContractsDSLQuery extends \CFX\Persistence\GenericDSLQuery
             throw new \CFX\Persistence\BadQueryException("You cannot use the '$operator' operator with field 'contractType'. This field only accepts operators '".implode("', '", $acceptableOperators)."'");
         }
 
-        $this->setExpressionValue('effectiveDate', [
-            'field' => 'effectiveDate',
-            'operator' => $operator,
-            'value' => $val
-        ]);
+        if ($val === "latest" && $operator !== "=") {
+            throw new \CFX\Persistence\BadInputException("When specifying 'latest' as effectiveDate, you MUST use the '=' operator. (You passed '$operator'.)");
+        }
+
+        if ($val === "latest") {
+            $this->gettingLatest = true;
+        } else {
+            $this->gettingLatest = false;
+            $this->setExpressionValue('effectiveDate', [
+                'field' => 'effectiveDate',
+                'operator' => $operator,
+                'value' => $val
+            ]);
+        }
+
         return $this;
     }
 
