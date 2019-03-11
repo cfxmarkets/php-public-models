@@ -197,30 +197,33 @@ class UserTest extends \PHPUnit\Framework\TestCase
     {
         $field = "agreedTOS";
         $this->assertInstantiatesValidly($field);
-        $this->assertValid($field, [ null, "", true, false ]);
-        $this->assertInvalid($field, [ "true", "false", '12345', 12345, new \DateTime(), [ "array of values" ] ]);
+        $this->assertValid($field, [ null, "", true ]);
+        $this->assertInvalid($field, [ false, "true", "false", '12345', 12345, new \DateTime(), [ "array of values" ] ]);
         $this->assertChanged($field, true, "attributes");
         $this->assertChains($field);
+        $this->assertImmutable($field, $this->getFakeExistingResource(["attributes" => [ $field => true ] ]), null);
     }
 
     public function testAgreedDTA()
     {
         $field = "agreedDTA";
         $this->assertInstantiatesValidly($field);
-        $this->assertValid($field, [ null, "", true, false ]);
-        $this->assertInvalid($field, [ "true", "false", '12345', 12345, new \DateTime(), [ "array of values" ] ]);
+        $this->assertValid($field, [ null, "", true ]);
+        $this->assertInvalid($field, [ false, "true", "false", '12345', 12345, new \DateTime(), [ "array of values" ] ]);
         $this->assertChanged($field, true, "attributes");
         $this->assertChains($field);
+        $this->assertImmutable($field, $this->getFakeExistingResource(["attributes" => [ $field => true ] ]), null);
     }
 
     public function testAgreedDTAArbitration()
     {
         $field = "agreedDTAArbitration";
         $this->assertInstantiatesValidly($field);
-        $this->assertValid($field, [ null, "", true, false ]);
-        $this->assertInvalid($field, [ "true", "false", '12345', 12345, new \DateTime(), [ "array of values" ] ]);
+        $this->assertValid($field, [ null, "", true ]);
+        $this->assertInvalid($field, [ false, "true", "false", '12345', 12345, new \DateTime(), [ "array of values" ] ]);
         $this->assertChanged($field, true, "attributes");
         $this->assertChains($field);
+        $this->assertImmutable($field, $this->getFakeExistingResource(["attributes" => [ $field => true ] ]), null);
     }
 
     public function testInvestmentProfile()
@@ -263,6 +266,24 @@ class UserTest extends \PHPUnit\Framework\TestCase
         //$this->assertEquals([], json_decode(json_encode($this->resource->getOtherEntities()), true));
         $this->assertReadOnly($field, new \CFX\JsonApi\ResourceCollection([ new LegalEntity($this->datasource, ['id'=>'12345']) ]));
         $this->assertChains($field, null);
+    }
+
+    protected function getFakeExistingResource(array $data = [])
+    {
+        $data = array_replace_recursive([
+            "id" => "abcde12345",
+            "type" => "users",
+            "attributes" => [
+                "displayName" => "Test User",
+                "email" => "test@testisimo.com",
+            ],
+        ], $data);
+
+        return $this->datasource
+            ->addClassToCreate("\\CFX\\Brokerage\\User")
+            ->setCurrentData($data)
+            ->get("id=abcde12345")
+        ;
     }
 }
 
