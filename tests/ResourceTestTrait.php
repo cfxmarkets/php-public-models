@@ -144,7 +144,8 @@ trait ResourceTestTrait {
     public function assertSerializesDateForSql($field)
     {
         $get = "get".ucfirst($field);
-        if (!$this->resource->$get()) {
+        $date = $this->resource->$get();
+        if (!$date) {
             $set = "set".ucfirst($field);
             $date = new \DateTime();
             $this->resource->$set($date);
