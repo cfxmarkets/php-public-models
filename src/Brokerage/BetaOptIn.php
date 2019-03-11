@@ -50,11 +50,14 @@ class BetaOptIn extends \CFX\JsonApi\AbstractResource implements BetaOptInInterf
         return $this->_setAttribute($field, $val);
     }
 
-    protected function setUpdatedOn($val)
+    public function setUpdatedOn($val)
     {
         $field = "updatedOn";
         $val = $this->cleanDateTimeValue($val);
-        return $this->_setAttribute($field, $val);
+        if ($this->validateReadOnly($field, $val)) {
+            $this->_setAttribute($field, $val);
+        }
+        return $this;
     }
 
     public function setUser(?UserInterface $val)

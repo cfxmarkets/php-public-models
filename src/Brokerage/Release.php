@@ -55,9 +55,10 @@ class Release extends \CFX\JsonApi\AbstractResource implements ReleaseInterface
     public function setCurrentUserOptIn($val)
     {
         $field = "currentUserOptIn";
-        $val = $this->cleanBooleanValue($val);
-        $this->validateType($field, $val, "boolean", false);
-        return $this->_setAttribute($field, $val);
+        if ($this->validateReadOnly($field, $val)) {
+            $this->_setAttribute($field, $val);
+        }
+        return $this;
     }
 
 
@@ -73,7 +74,7 @@ class Release extends \CFX\JsonApi\AbstractResource implements ReleaseInterface
             if ($val instanceof \DateTimeInterface) {
                 $val = $val->format("Y-m-d H:i:s");
             }
-            return (string)$val;
+            return $val === null ? null : (string)$val;
         }
         return parent::serializeAttribute($name);
     }

@@ -25,6 +25,7 @@ class BetaOptInTest extends \PHPUnit\Framework\TestCase
     {
         $field = "updatedOn";
         $this->assertInstantiatesValidly($field);
+        $this->assertReadOnly($field);
     }
 
     public function testUser()

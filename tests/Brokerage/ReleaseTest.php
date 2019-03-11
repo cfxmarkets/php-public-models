@@ -30,9 +30,7 @@ class ReleaseTest extends \PHPUnit\Framework\TestCase
     {
         $field = "currentUserOptIn";
         $this->assertInstantiatesValidly($field);
-        $this->assertValid($field, [ true, false, null, "", 1, 0 ]);
-        $this->assertInvalid($field, [ new \DateTime(), 111423, [] ]);
-        $this->assertChains($field);
+        $this->assertReadOnly($field);
     }
 }
 

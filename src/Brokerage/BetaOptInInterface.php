@@ -8,5 +8,6 @@ interface BetaOptInInterface {
     public function getRelease();
 
     public function setOptIn($val);
+    public function setRelease(?ReleaseInterface $val);
 }
 
