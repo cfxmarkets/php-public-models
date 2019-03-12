@@ -58,6 +58,10 @@ class AgreementsDSLQuery extends \CFX\Persistence\GenericDSLQuery
 
 
     public function setSignerId($operator, $val) {
+        if ($operator !== "=") {
+            throw new \CFX\Persistence\BadQueryException("When querying for signerId, you must use the '=' operator. You used '$operator'.");
+        }
+
         $this->setExpressionValue('signerId', [
             'field' => 'signerId',
             'operator' => $operator,

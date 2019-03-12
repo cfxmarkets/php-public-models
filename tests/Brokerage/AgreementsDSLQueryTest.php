@@ -38,5 +38,15 @@ class AgreementsDSLQueryTest extends \PHPUnit\Framework\TestCase
         $q = AgreementsDSLQuery::parse("entityId=abcde12345 and signerId=aaaaaaa and contractId=aaaaaaaa");
         $this->assertFalse($q->requestingCollection());
     }
+
+    public function testThrowsForInvalidQueries()
+    {
+        try {
+            AgreementsDSLQuery::parse("signerId != abcde12345");
+            $this->fail("Should have thrown");
+        } catch (\CFX\Persistence\BadQueryException $e) {
+            $this->assertTrue(true, "expected behavior");
+        }
+    }
 }
 
