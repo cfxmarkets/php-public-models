@@ -43,6 +43,7 @@ interface LegalEntityInterface extends \CFX\JsonApi\ResourceInterface {
     public function getAccreditationDocs();
     public function getResidencyDocs();
     public function getWalletAccount();
+    public function getAgreements();
 
 
     public function setType($val);
@@ -79,6 +80,10 @@ interface LegalEntityInterface extends \CFX\JsonApi\ResourceInterface {
     public function addResidencyDoc(DocumentInterface $val);
     public function hasResidencyDoc(DocumentInterface $val);
     public function removeResidencyDoc(DocumentInterface $val);
+    public function setAgreements(?\CFX\JsonApi\ResourceCollectionInterface $val = null);
+    public function addAgreement(AgreementInterface $val);
+    public function hasAgreement(AgreementInterface $val);
+    public function removeAgreement(AgreementInterface $val);
 
     /**
      * getPermissionsCode -- Gets an integer representing a bitmask of the requested permissions

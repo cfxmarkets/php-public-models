@@ -40,6 +40,7 @@ class LegalEntity extends \CFX\JsonApi\AbstractResource implements LegalEntityIn
         'accreditationDocs' => null,
         'residencyDocs' => null,
         'walletAccount' => null,
+        "agreements" => null,
     ];
 
 
@@ -232,6 +233,11 @@ class LegalEntity extends \CFX\JsonApi\AbstractResource implements LegalEntityIn
     public function getResidencyDocs()
     {
         return $this->get2MRel('residencyDocs');
+    }
+
+    public function getAgreements()
+    {
+        return $this->get2MRel('agreements');
     }
 
 
@@ -658,6 +664,26 @@ class LegalEntity extends \CFX\JsonApi\AbstractResource implements LegalEntityIn
     public function removeResidencyDoc(DocumentInterface $val)
     {
         return $this->remove2MRel('residencyDocs', $val);
+    }
+
+    public function setAgreements(\CFX\JsonApi\ResourceCollectionInterface $val = null)
+    {
+        return $this->_setRelationship('agreements', $val);
+    }
+
+    public function addAgreement(AgreementInterface $val)
+    {
+        return $this->add2MRel('agreements', $val);
+    }
+
+    public function hasAgreement(AgreementInterface $val)
+    {
+        return $this->has2MRel('agreements', $val);
+    }
+
+    public function removeAgreement(AgreementInterface $val)
+    {
+        return $this->remove2MRel('agreements', $val);
     }
 
 

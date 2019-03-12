@@ -443,6 +443,40 @@ class LegalEntityTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals(0, count($this->resource->getResidencyDocs()));
     }
 
+    public function testAgreements() {
+        $field = "agreements";
+        $this->assertInstantiatesValidly($field);
+
+        $val = new \CFX\JsonApi\ResourceCollection();
+        $this->datasource->setRelated('agreements', $val);
+
+        $this->resource->setAgreements($val);
+        $this->assertFalse($this->resource->hasErrors('agreements'));
+        $this->assertEquals($val, $this->resource->getAgreements());
+
+        // Assert changed
+        $changes = $this->resource->getChanges();
+        $this->assertContains('agreements', array_keys($changes['relationships']));
+        $this->assertSame($val, $changes['relationships']['agreements']->getData());
+
+        // Assert chaining
+        $this->assertSame($this->resource, $this->resource->setAgreements($val));
+
+        // AddAgreement
+        $agreement = new Agreement($this->datasource);
+        $this->resource->addAgreement($agreement);
+        $this->assertFalse($this->resource->hasErrors('agreements'));
+        $this->assertEquals(1, count($this->resource->getAgreements()));
+
+        // HasAgreement
+        $this->assertTrue($this->resource->hasAgreement($agreement));
+
+        // RemoveIdDoc
+        $this->resource->removeAgreement($agreement);
+        $this->assertFalse($this->resource->hasErrors("agreements"));
+        $this->assertEquals(0, count($this->resource->getAgreements()));
+    }
+
 
     public function testIntegration() {
         $data = [
@@ -473,6 +507,18 @@ class LegalEntityTest extends \PHPUnit\Framework\TestCase
                         ],
                     ],
                 ],
+                "agreements" => [
+                    "data" => [
+                        [
+                            "type" => "agreements",
+                            "id" => "abcde",
+                        ],
+                        [
+                            "type" => "agreements",
+                            "id" => "edcba",
+                        ],
+                    ]
+                ]
             ],
         ];
 
@@ -483,6 +529,8 @@ class LegalEntityTest extends \PHPUnit\Framework\TestCase
             ->addClassToCreate("\\CFX\\Brokerage\\LegalEntity")
             ->addClassToCreate("\\CFX\\Brokerage\\Address")
             ->addClassToCreate("\\CFX\\Brokerage\\Document")
+            ->addClassToCreate("\\CFX\\Brokerage\\Agreement")
+            ->addClassToCreate("\\CFX\\Brokerage\\Agreement")
             ->create($data)
         ;
 
@@ -500,6 +548,8 @@ class LegalEntityTest extends \PHPUnit\Framework\TestCase
             ->addClassToCreate("\\CFX\\Brokerage\\LegalEntity")
             ->addClassToCreate("\\CFX\\Brokerage\\Address")
             ->addClassToCreate("\\CFX\\Brokerage\\Document")
+            ->addClassToCreate("\\CFX\\Brokerage\\Agreement")
+            ->addClassToCreate("\\CFX\\Brokerage\\Agreement")
             ->setCurrentData($data)
             ->get("id=abcde12345")
         ;
