@@ -35,7 +35,7 @@ class OrderIntentsDSLQuery extends \CFX\Persistence\GenericDSLQuery {
     public function setAssetOwnerId($operator, $val)
     {
         $this->setExpressionValue("assetOwnerId", [
-            "field" => "assetOwner",
+            "field" => "account_key",
             "operator" => $operator,
             "value" => $val,
         ]);
