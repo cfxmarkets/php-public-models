@@ -24,6 +24,7 @@ class DocumentTest extends \PHPUnit\Framework\TestCase
             "accreditation" => "Proof of Accreditation",
             "residency" => "Proof of Residency",
             "genesis" => "Certificate of Incorporation, Trust Agreement, Birth Certificate, etc.",
+            "operating-agreement" => "The operating agreement and/or bylaws for a non-person entity",
             "other" => "Uncategorized Document",
         ];
 
@@ -116,8 +117,8 @@ class DocumentTest extends \PHPUnit\Framework\TestCase
         $this->assertTrue($this->resource->hasErrors('legalEntity'));
         $this->assertContains("invalidForType", array_keys($this->resource->getErrors('legalEntity')));
 
-        // ID, Accreditation, Residency, Genesis and Other docs MUST have LegalEntity
-        foreach ([ "id", "accreditation", "residency", "genesis", "other" ] as $type) {
+        // ID, Accreditation, Residency, Genesis, Operating Agreement and Other docs MUST have LegalEntity
+        foreach ([ "id", "accreditation", "residency", "genesis", "operating-agreement", "other" ] as $type) {
             $this->resource->setLegalEntity($entity);
             $this->resource->setType($type);
             $this->assertFalse($this->resource->hasErrors('legalEntity'), "$type documents should be valid with LegalEntities");

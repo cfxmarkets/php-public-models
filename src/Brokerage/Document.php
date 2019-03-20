@@ -41,6 +41,7 @@ class Document extends \CFX\JsonApi\AbstractResource implements DocumentInterfac
         "accreditation" => "Proof of Accreditation",
         "residency" => "Proof of Residency",
         "genesis" => "Certificate of Incorporation, Trust Agreement, Birth Certificate, etc.",
+        "operating-agreement" => "The operating agreement and/or bylaws for a non-person entity",
         "other" => "Uncategorized Document",
     ];
 
@@ -173,7 +174,7 @@ class Document extends \CFX\JsonApi\AbstractResource implements DocumentInterfac
             if ($val) {
                 $this->clearError('legalEntity', 'required');
 
-                if (!in_array($this->getType(), [ 'id', "accreditation", "residency", "genesis", "other" ], true)) {
+                if (!in_array($this->getType(), [ 'id', "accreditation", "residency", "genesis", "operating-agreement", "other" ], true)) {
                     $this->setError("legalEntity", "invalidForType", [
                         "title" => "Illegal Entity",
                         "detail" => "Documents of type `{$this->getType()}` cannot have LegalEntities associated with them."
@@ -182,7 +183,7 @@ class Document extends \CFX\JsonApi\AbstractResource implements DocumentInterfac
                     $this->clearError('legalEntity', "invalidForType");
                 }
             } else {
-                if (in_array($this->getType(), [ 'id', "accreditation", "residency", "genesis", "other" ], true)) {
+                if (in_array($this->getType(), [ 'id', "accreditation", "residency", "genesis", "operating-agreement", "other" ], true)) {
                     $this->setError("legalEntity", "required", [
                         "title" => "Field `legalEntity` Required",
                         "detail" => "Field `legalEntity` is required for documents of type `{$this->getType()}`",
