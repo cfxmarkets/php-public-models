@@ -16,7 +16,10 @@ class Asset extends \CFX\JsonApi\AbstractResource implements AssetInterface {
         "platformVersion" => null,
         "resolutionUri" => null,
         "exemptionType" => null,
+        "isFund" => false,
         "issuanceCloseDate" => null,
+        "commonName" => null,
+        "infoUrl" => null,
     ];
     protected $relationships = [];
 
@@ -93,9 +96,21 @@ class Asset extends \CFX\JsonApi\AbstractResource implements AssetInterface {
     {
         return $this->_getAttributeValue("exemptionType");
     }
+    public function getIsFund()
+    {
+        return $this->_getAttributeValue("isFund");
+    }
     public function getIssuanceCloseDate()
     {
         return $this->_getAttributeValue("issuanceCloseDate");
+    }
+    public function getCommonName()
+    {
+        return $this->_getAttributeValue("commonName");
+    }
+    public function getInfoUrl()
+    {
+        return $this->_getAttributeValue("infoUrl");
     }
 
 
@@ -197,12 +212,39 @@ class Asset extends \CFX\JsonApi\AbstractResource implements AssetInterface {
         return $this;
     }
 
+    public function setIsFund($val) {
+        $field = "isFund";
+        $val = $this->cleanBooleanValue($val);
+        if ($this->validateReadOnly($field, $val)) {
+            return $this->_setAttribute($field, $val);
+        }
+        return $this;
+    }
+
     public function setIssuanceCloseDate($val)
     {
         $field = "issuanceCloseDate";
         $val = $this->cleanDateTimeValue($val);
         $this->validateReadOnly($field, $val);
         return $this->_setAttribute($field, $val);
+    }
+
+    public function setCommonName($val) {
+        $field = "commonName";
+        $val = $this->cleanStringValue($val);
+        if ($this->validateReadOnly($field, $val)) {
+            return $this->_setAttribute($field, $val);
+        }
+        return $this;
+    }
+
+    public function setInfoUrl($val) {
+        $field = "infoUrl";
+        $val = $this->cleanStringValue($val);
+        if ($this->validateReadOnly($field, $val)) {
+            return $this->_setAttribute($field, $val);
+        }
+        return $this;
     }
 
 
@@ -222,6 +264,12 @@ class Asset extends \CFX\JsonApi\AbstractResource implements AssetInterface {
                 $val = $val->format(\DateTime::RFC3339);
             }
             return (string)$val;
+        } elseif ($name === "isFund") {
+            $val = $this->getIsFund();
+            if (is_bool($val)) {
+                return (int)$val;
+            }
+            return $val;
         }
         return parent::serializeAttribute($name);
     }

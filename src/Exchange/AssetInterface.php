@@ -101,11 +101,32 @@ interface AssetInterface extends \CFX\JsonApi\ResourceInterface {
     public function getExemptionType();
 
     /**
-     * Get the assets issuance close date
+     * Get whether or not the asset is a fund
+     *
+     * @return boolean
+     */
+    public function getIsFund();
+
+    /**
+     * Get the asset's issuance close date
      *
      * @return DateTime
      */
     public function getIssuanceCloseDate();
+
+    /**
+     * Get the asset's Common Name
+     *
+     * @return string|null
+     */
+    public function getCommonName();
+
+    /**
+     * Get the asset's Info URL
+     *
+     * @return string|null
+     */
+    public function getInfoUrl();
 
 
 
@@ -191,12 +212,36 @@ interface AssetInterface extends \CFX\JsonApi\ResourceInterface {
     public function setExemptionType($val);
 
     /**
+     * Set whether or not the asset is a fund
+     *
+     * @param mixed $val
+     * @return static
+     */
+    public function setIsFund($val);
+
+    /**
      * Set the asset's issuance close date
      *
      * @param mixed $val
      * @return static
      */
     public function setIssuanceCloseDate($val);
+
+    /**
+     * Set the asset's Common Name
+     *
+     * @param mixed $val
+     * @return static
+     */
+    public function setCommonName($val);
+
+    /**
+     * Set the asset's Info URL
+     *
+     * @param mixed $val
+     * @return static
+     */
+    public function setInfoUrl($val);
 }
 
 

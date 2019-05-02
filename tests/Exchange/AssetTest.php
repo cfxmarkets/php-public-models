@@ -104,6 +104,14 @@ class AssetTest extends \PHPUnit\Framework\TestCase
         $this->assertChains($field);
     }
 
+    public function testIsFund()
+    {
+        $field = 'isFund';
+        $this->assertInstantiatesValidly($field);
+        $this->assertReadOnly($field);
+        $this->assertChains($field);
+    }
+
     public function testIssuanceCloseDate()
     {
         $field = 'issuanceCloseDate';
@@ -148,6 +156,22 @@ class AssetTest extends \PHPUnit\Framework\TestCase
         $this->assertFalse($asset->hasErrors($field));
         $this->assertInstanceOf("\\DateTimeInterface", $asset->getIssuanceCloseDate());
         $this->assertEquals('2018-01-01 00:00:00', $asset->getIssuanceCloseDate()->format('Y-m-d H:i:s'));
+    }
+
+    public function testCommonName()
+    {
+        $field = 'commonName';
+        $this->assertInstantiatesValidly($field);
+        $this->assertReadOnly($field);
+        $this->assertChains($field);
+    }
+
+    public function testInfoUrl()
+    {
+        $field = 'infoUrl';
+        $this->assertInstantiatesValidly($field);
+        $this->assertReadOnly($field);
+        $this->assertChains($field);
     }
 }
 
