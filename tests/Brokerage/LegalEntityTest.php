@@ -460,7 +460,7 @@ class LegalEntityTest extends \PHPUnit\Framework\TestCase
                 "legalName" => "My Person",
                 "accreditationStatus" => 0,
                 "primaryEmail" => "my.person@humans.org",
-                "processingStatus" => 1,
+                "processingStatus" => "new",
                 "identityStatus" => 0,
                 "residencyStatus" => 0,
                 "genesisStatus" => 0,
