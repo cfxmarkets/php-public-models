@@ -11,8 +11,8 @@ class Document extends \CFX\JsonApi\AbstractResource implements DocumentInterfac
 
     protected $attributes = [
         'label' => null,
-		'type' => null,
-		'url' => null,
+        'type' => null,
+        'url' => null,
         'status' => 'reviewing',
         'notes' => null,
     ];
