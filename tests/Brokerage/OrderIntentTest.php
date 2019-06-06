@@ -226,6 +226,8 @@ class OrderIntentTest extends \PHPUnit\Framework\TestCase
                 'numShares' => '12345',
                 'priceHigh' => 2.50,
                 'status' => 'listed',
+                "feesTotal" => "123",
+                "feesDetail" => null,
             ],
             'relationships' => [
                 'user' => [
@@ -344,6 +346,24 @@ class OrderIntentTest extends \PHPUnit\Framework\TestCase
         $this->assertChanged($field, "p2p://new/address", "attributes");
         $this->assertChains($field);
         $this->markTestIncomplete("Should validate for well-formed uri");
+    }
+
+    public function testFeesTotal()
+    {
+        $field = "feesTotal";
+        $this->assertInstantiatesValidly($field);
+        $this->assertReadOnly($field, 523.43);
+        $this->assertChains($field, null);
+    }
+
+    public function testFeesDetail()
+    {
+        $field = "feesDetail";
+        $this->assertInstantiatesValidly($field);
+        $this->assertReadOnly($field, [
+            [ "id" => "some-fee", "type" => "fees", "attributes" => [] ]
+        ]);
+        $this->assertChains($field, null);
     }
 }
 

@@ -20,6 +20,8 @@ class OrderIntent extends \CFX\JsonApi\AbstractResource implements OrderIntentIn
         'status' => 'new',
         'createdOn' => null,
         'investmentAccountUri' => null,
+        "feesTotal" => null,
+        "feesDetail" => null,
     ];
     protected $relationships = [
         'user' => null,
@@ -113,6 +115,17 @@ class OrderIntent extends \CFX\JsonApi\AbstractResource implements OrderIntentIn
     }
 
     public function getStatus() { return $this->_getAttributeValue('status'); }
+
+    public function getFeesTotal()
+    {
+        return $this->_getAttributeValue("feesTotal");
+    }
+
+    public function getFeesDetail()
+    {
+        return $this->_getAttributeValue("feesDetail");
+    }
+
     public function getUser() { return $this->_getRelationshipValue('user'); }
     public function getAsset() { return $this->_getRelationshipValue('asset'); }
     public function getAssetIntent() { return $this->_getRelationshipValue('assetIntent'); }
@@ -309,6 +322,19 @@ class OrderIntent extends \CFX\JsonApi\AbstractResource implements OrderIntentIn
         return $this->_setAttribute('investmentAccountUri', $val);
     }
 
+    public function setFeesTotal($val)
+    {
+        $field = "feesTotal";
+        $this->validateReadOnly($field, $val);
+        return $this->_setAttribute($field, $val);
+    }
+
+    public function setFeesDetail($val)
+    {
+        $field = "feesDetail";
+        $this->validateReadOnly($field, $val);
+        return $this->_setAttribute($field, $val);
+    }
 
     public function setUser(UserInterface $user=null) {
         if ($this->validateStatusActive('user')) {

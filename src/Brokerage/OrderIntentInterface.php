@@ -23,6 +23,8 @@ interface OrderIntentInterface extends \CFX\JsonApi\ResourceInterface {
     public function getAgreement();
     public function getOwnershipDoc();
     public function getTender();
+    public function getFeesTotal();
+    public function getFeesDetail();
 
     // Setters
     public function setType($val);
