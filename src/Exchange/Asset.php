@@ -20,6 +20,8 @@ class Asset extends \CFX\JsonApi\AbstractResource implements AssetInterface {
         "issuanceCloseDate" => null,
         "commonName" => null,
         "infoUrl" => null,
+        "usTradable" => false,
+        "accreditedOnly" => true,
     ];
     protected $relationships = [];
 
@@ -111,6 +113,14 @@ class Asset extends \CFX\JsonApi\AbstractResource implements AssetInterface {
     public function getInfoUrl()
     {
         return $this->_getAttributeValue("infoUrl");
+    }
+    public function getUSTradable()
+    {
+        return $this->_getAttributeValue("usTradable");
+    }
+    public function getAccreditedOnly()
+    {
+        return $this->_getAttributeValue("accreditedOnly");
     }
 
 
@@ -247,6 +257,24 @@ class Asset extends \CFX\JsonApi\AbstractResource implements AssetInterface {
         return $this;
     }
 
+    public function setUSTradable($val) {
+        $field = "usTradable";
+        $val = $this->cleanBooleanValue($val);
+        if ($this->validateReadOnly($field, $val)) {
+            return $this->_setAttribute($field, $val);
+        }
+        return $this;
+    }
+
+    public function setAccreditedOnly($val) {
+        $field = "accreditedOnly";
+        $val = $this->cleanBooleanValue($val);
+        if ($this->validateReadOnly($field, $val)) {
+            return $this->_setAttribute($field, $val);
+        }
+        return $this;
+    }
+
 
 
     /**
@@ -270,10 +298,20 @@ class Asset extends \CFX\JsonApi\AbstractResource implements AssetInterface {
                 return (int)$val;
             }
             return $val;
+        } elseif ($name === "usTradable") {
+            $val = $this->getUSTradable();
+            if (is_bool($val)) {
+                return (int)$val;
+            }
+            return $val;
+        } elseif ($name === "accreditedOnly") {
+            $val = $this->getAccreditedOnly();
+            if (is_bool($val)) {
+                return (int)$val;
+            }
+            return $val;
         }
         return parent::serializeAttribute($name);
     }
-
-
 }
 

@@ -128,6 +128,20 @@ interface AssetInterface extends \CFX\JsonApi\ResourceInterface {
      */
     public function getInfoUrl();
 
+    /**
+     * Get the asset's US Trading status
+     *
+     * @return boolean
+     */
+    public function getUSTradable();
+
+    /**
+     * Get whether or not the asset is open to non-accredited investors
+     *
+     * @return boolean
+     */
+    public function getAccreditedOnly();
+
 
 
 
