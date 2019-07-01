@@ -35,6 +35,7 @@ class Asset extends \CFX\JsonApi\AbstractResource implements AssetInterface {
             "venture",
             "reit",
             "crypto",
+            "hedgefund",
         ];
     }
 
