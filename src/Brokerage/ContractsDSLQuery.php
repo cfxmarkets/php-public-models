@@ -61,7 +61,7 @@ class ContractsDSLQuery extends \CFX\Persistence\GenericDSLQuery
     public function setAudience($operator, $val) {
         $acceptableOperators = [ "=", "!=", "&", "|", "<", ">", "<=", ">=" ];
         if (!in_array($operator, $acceptableOperators)) {
-            throw new \CFX\Persistence\BadQueryException("You cannot use the '$operator' operator with field 'contractType'. This field only accepts operators '".implode("', '", $acceptableOperators)."'");
+            throw new \CFX\Persistence\BadQueryException("You cannot use the '$operator' operator with field 'audience'. This field only accepts operators '".implode("', '", $acceptableOperators)."'");
         }
 
         $this->setExpressionValue('audience', [
@@ -90,7 +90,7 @@ class ContractsDSLQuery extends \CFX\Persistence\GenericDSLQuery
     public function setEffectiveDate($operator, $val) {
         $acceptableOperators = [ "=", "!=", "<", ">", "<=", ">=", "in", "not in", "between" ];
         if (!in_array($operator, $acceptableOperators)) {
-            throw new \CFX\Persistence\BadQueryException("You cannot use the '$operator' operator with field 'contractType'. This field only accepts operators '".implode("', '", $acceptableOperators)."'");
+            throw new \CFX\Persistence\BadQueryException("You cannot use the '$operator' operator with field 'effectiveDate'. This field only accepts operators '".implode("', '", $acceptableOperators)."'");
         }
 
         if ($val === "latest" && $operator !== "=") {
