@@ -39,6 +39,8 @@ class LegalEntity extends \CFX\JsonApi\AbstractResource implements LegalEntityIn
         'idDocs' => null,
         'accreditationDocs' => null,
         'residencyDocs' => null,
+        'proofOfFundsDocs' => null,
+        'proofOfAccountDocs' => null,
         'walletAccount' => null,
         "agreements" => null,
     ];
@@ -233,6 +235,16 @@ class LegalEntity extends \CFX\JsonApi\AbstractResource implements LegalEntityIn
     public function getResidencyDocs()
     {
         return $this->get2MRel('residencyDocs');
+    }
+
+    public function getProofOfFundsDocs()
+    {
+        return $this->get2MRel('proofOfFundsDocs');
+    }
+
+    public function getProofOfAccountDocs()
+    {
+        return $this->get2MRel('proofOfAccountDocs');
     }
 
     public function getAgreements()
@@ -662,6 +674,46 @@ class LegalEntity extends \CFX\JsonApi\AbstractResource implements LegalEntityIn
     public function removeResidencyDoc(DocumentInterface $val)
     {
         return $this->remove2MRel('residencyDocs', $val);
+    }
+
+    public function setProofOfFundsDocs(\CFX\JsonApi\ResourceCollectionInterface $val = null)
+    {
+        return $this->_setRelationship('proofOfFundsDocs', $val);
+    }
+
+    public function addProofOfFundsDoc(DocumentInterface $val)
+    {
+        return $this->add2MRel('proofOfFundsDocs', $val);
+    }
+
+    public function hasProofOfFundsDoc(DocumentInterface $val)
+    {
+        return $this->has2MRel('proofOfFundsDocs', $val);
+    }
+
+    public function removeProofOfFundsDoc(DocumentInterface $val)
+    {
+        return $this->remove2MRel('proofOfFundsDocs', $val);
+    }
+
+    public function setProofOfAccountDocs(\CFX\JsonApi\ResourceCollectionInterface $val = null)
+    {
+        return $this->_setRelationship('proofOfAccountDocs', $val);
+    }
+
+    public function addProofOfAccountDoc(DocumentInterface $val)
+    {
+        return $this->add2MRel('proofOfAccountDocs', $val);
+    }
+
+    public function hasProofOfAccountDoc(DocumentInterface $val)
+    {
+        return $this->has2MRel('proofOfAccountDocs', $val);
+    }
+
+    public function removeProofOfAccountDoc(DocumentInterface $val)
+    {
+        return $this->remove2MRel('proofOfAccountDocs', $val);
     }
 
     public function setAgreements(\CFX\JsonApi\ResourceCollectionInterface $val = null)

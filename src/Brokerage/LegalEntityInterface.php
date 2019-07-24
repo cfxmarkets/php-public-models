@@ -42,6 +42,8 @@ interface LegalEntityInterface extends \CFX\JsonApi\ResourceInterface {
     public function getIdDocs();
     public function getAccreditationDocs();
     public function getResidencyDocs();
+    public function getProofOfFundsDocs();
+    public function getProofOfAccountDocs();
     public function getWalletAccount();
     public function getAgreements();
 
@@ -80,6 +82,14 @@ interface LegalEntityInterface extends \CFX\JsonApi\ResourceInterface {
     public function addResidencyDoc(DocumentInterface $val);
     public function hasResidencyDoc(DocumentInterface $val);
     public function removeResidencyDoc(DocumentInterface $val);
+    public function setProofOfFundsDocs(\CFX\JsonApi\ResourceCollectionInterface $val = null);
+    public function addProofOfFundsDoc(DocumentInterface $val);
+    public function hasProofOfFundsDoc(DocumentInterface $val);
+    public function removeProofOfFundsDoc(DocumentInterface $val);
+    public function setProofOfAccountDocs(\CFX\JsonApi\ResourceCollectionInterface $val = null);
+    public function addProofOfAccountDoc(DocumentInterface $val);
+    public function hasProofOfAccountDoc(DocumentInterface $val);
+    public function removeProofOfAccountDoc(DocumentInterface $val);
     public function setAgreements(?\CFX\JsonApi\ResourceCollectionInterface $val = null);
     public function addAgreement(AgreementInterface $val);
     public function hasAgreement(AgreementInterface $val);
