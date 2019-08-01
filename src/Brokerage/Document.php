@@ -33,6 +33,7 @@ class Document extends \CFX\JsonApi\AbstractResource implements DocumentInterfac
 
     /**
      * @var string[] A list of valid document types
+     * @deprecated Use getValidTypes() instead
      */
     protected static $validTypes = [
         'id' => "Proof of Identity",
@@ -66,6 +67,24 @@ class Document extends \CFX\JsonApi\AbstractResource implements DocumentInterfac
     public static function getValidStatuses()
     {
         return static::$validStatuses;
+    }
+
+    /**
+     * Returns a list of the doctypes that are specific to legal entities,
+     * rather than to OrderIntents or other
+     */
+    public static function getLegalEntityDocTypes()
+    {
+      return [
+        'id',
+        "accreditation",
+        "residency",
+        "genesis",
+        "operating-agreement",
+        "proof-of-funds",
+        "proof-of-account",
+        "other"
+      ];
     }
 
 
@@ -119,7 +138,7 @@ class Document extends \CFX\JsonApi\AbstractResource implements DocumentInterfac
         $val = $this->cleanStringValue($val);
         if ($this->validateRequired('type', $val)) {
             if ($this->validateType('type', $val, 'string')) {
-                $this->validateAmong('type', $val, array_keys(static::$validTypes));
+                $this->validateAmong('type', $val, array_keys(static::getValidTypes()));
             }
         }
 
@@ -176,7 +195,7 @@ class Document extends \CFX\JsonApi\AbstractResource implements DocumentInterfac
             if ($val) {
                 $this->clearError('legalEntity', 'required');
 
-                if (!in_array($this->getType(), [ 'id', "accreditation", "residency", "genesis", "operating-agreement", "proof-of-funds", "proof-of-account", "other" ], true)) {
+                if (!in_array($this->getType(), static::getLegalEntityDocTypes(), true)) {
                     $this->setError("legalEntity", "invalidForType", [
                         "title" => "Illegal Entity",
                         "detail" => "Documents of type `{$this->getType()}` cannot have LegalEntities associated with them."
@@ -185,7 +204,7 @@ class Document extends \CFX\JsonApi\AbstractResource implements DocumentInterfac
                     $this->clearError('legalEntity', "invalidForType");
                 }
             } else {
-                if (in_array($this->getType(), [ 'id', "accreditation", "residency", "genesis", "operating-agreement", "proof-of-funds", "proof-of-account", "other" ], true)) {
+                if (in_array($this->getType(), static::getLegalEntityDocTypes(), true)) {
                     $this->setError("legalEntity", "required", [
                         "title" => "Field `legalEntity` Required",
                         "detail" => "Field `legalEntity` is required for documents of type `{$this->getType()}`",

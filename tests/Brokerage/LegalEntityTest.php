@@ -416,6 +416,78 @@ class LegalEntityTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals(0, count($this->resource->getResidencyDocs()));
     }
 
+    public function testProofOfFundsDocs() {
+        $field = "proofOfFundsDocs";
+
+        // Assert field NOT required
+        $this->assertFalse($this->resource->hasErrors($field));
+
+        $val = new \CFX\JsonApi\ResourceCollection();
+        $this->datasource->setRelated($field, $val);
+
+        $this->resource->setProofOfFundsDocs($val);
+        $this->assertFalse($this->resource->hasErrors($field));
+        $this->assertEquals($val, $this->resource->getProofOfFundsDocs());
+
+        // Assert changed
+        $changes = $this->resource->getChanges();
+        $this->assertContains($field, array_keys($changes['relationships']));
+        $this->assertSame($val, $changes['relationships'][$field]->getData());
+
+        // Assert chaining
+        $this->assertSame($this->resource, $this->resource->setProofOfFundsDocs($val));
+
+        // AddDoc
+        $doc = new Document($this->datasource);
+        $this->resource->addProofOfFundsDoc($doc);
+        $this->assertFalse($this->resource->hasErrors($field));
+        $this->assertEquals(1, count($this->resource->getProofOfFundsDocs()));
+
+        // HasDoc
+        $this->assertTrue($this->resource->hasProofOfFundsDoc($doc));
+
+        // RemoveDoc
+        $this->resource->removeProofOfFundsDoc($doc);
+        $this->assertFalse($this->resource->hasErrors($field));
+        $this->assertEquals(0, count($this->resource->getProofOfFundsDocs()));
+    }
+
+    public function testProofOfAccountDocs() {
+        $field = "proofOfAccountDocs";
+
+        // Assert field NOT required
+        $this->assertFalse($this->resource->hasErrors($field));
+
+        $val = new \CFX\JsonApi\ResourceCollection();
+        $this->datasource->setRelated($field, $val);
+
+        $this->resource->setProofOfAccountDocs($val);
+        $this->assertFalse($this->resource->hasErrors($field));
+        $this->assertEquals($val, $this->resource->getProofOfAccountDocs());
+
+        // Assert changed
+        $changes = $this->resource->getChanges();
+        $this->assertContains($field, array_keys($changes['relationships']));
+        $this->assertSame($val, $changes['relationships'][$field]->getData());
+
+        // Assert chaining
+        $this->assertSame($this->resource, $this->resource->setProofOfAccountDocs($val));
+
+        // AddDoc
+        $doc = new Document($this->datasource);
+        $this->resource->addProofOfAccountDoc($doc);
+        $this->assertFalse($this->resource->hasErrors($field));
+        $this->assertEquals(1, count($this->resource->getProofOfAccountDocs()));
+
+        // HasDoc
+        $this->assertTrue($this->resource->hasProofOfAccountDoc($doc));
+
+        // RemoveDoc
+        $this->resource->removeProofOfAccountDoc($doc);
+        $this->assertFalse($this->resource->hasErrors($field));
+        $this->assertEquals(0, count($this->resource->getProofOfAccountDocs()));
+    }
+
     public function testAgreements() {
         $field = "agreements";
         $this->assertInstantiatesValidly($field);
