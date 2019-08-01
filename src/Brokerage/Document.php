@@ -69,6 +69,10 @@ class Document extends \CFX\JsonApi\AbstractResource implements DocumentInterfac
         return static::$validStatuses;
     }
 
+    /**
+     * Returns a list of the doctypes that are specific to legal entities,
+     * rather than to OrderIntents or other
+     */
     public static function getLegalEntityDocTypes()
     {
       return [
