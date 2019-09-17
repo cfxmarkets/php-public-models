@@ -89,5 +89,13 @@ class FillTest extends \PHPUnit\Framework\TestCase
         $this->assertChanged($field, (new \CFX\Exchange\Asset($this->datasource))->setId("BCAP"), "relationships");
         $this->assertChains($field, null);
     }
+
+    public function testOwnerEntity()
+    {
+        $field = "ownerEntity";
+        $this->assertInstantiatesValidly($field);
+        $this->assertReadOnly($field, (new \CFX\Brokerage\LegalEntity($this->datasource))->setId("abcde"));
+        $this->assertChains($field, null);
+    }
 }
 

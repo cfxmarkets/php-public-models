@@ -63,6 +63,14 @@ interface FillInterface extends \CFX\JsonApi\ResourceInterface {
      */
     public function getSecurity();
 
+    /**
+     * Get the legalEntity associated with the fill
+     *
+     * @return \CFX\Brokerage\LegalEntityInterface
+     */
+    public function getOwnerEntity();
+
+
 
 
     /**
@@ -120,6 +128,14 @@ interface FillInterface extends \CFX\JsonApi\ResourceInterface {
      * @return static
      */
     public function setSecurity(?\CFX\Exchange\AssetInterface $val);
+
+    /**
+     * Set the legal entity associated with the fill
+     *
+     * @param \CFX\Brokerage\LegalEntityInterface $val
+     * @return static
+     */
+    public function setOwnerEntity(?\CFX\Brokerage\LegalEntityInterface $val);
 }
 
 
