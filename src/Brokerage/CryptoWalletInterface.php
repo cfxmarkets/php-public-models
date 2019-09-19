@@ -40,7 +40,7 @@ interface CryptoWalletInterface extends \CFX\JsonApi\ResourceInterface {
      *
      * @return \CFX\Brokerage\LegalEntityInterface
      */
-    public function getOwnerEntity();
+    public function getLegalEntity();
 
 
 
@@ -84,5 +84,5 @@ interface CryptoWalletInterface extends \CFX\JsonApi\ResourceInterface {
      * @param \CFX\Brokerage\LegalEntityInterface
      * @return static
      */
-    public function setOwnerEntity(?LegalEntityInterface $val);
+    public function setLegalEntity(?LegalEntityInterface $val);
 }
