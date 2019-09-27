@@ -229,7 +229,7 @@ trait ResourceValidationsTrait {
      */
     protected function validateImmutable($field, $val, $required = true)
     {
-        if ($this->getInitial($field) && $this->valueDiffersFromInitial($field, $val)) {
+        if ($this->getInitial($field) !== null && $this->valueDiffersFromInitial($field, $val)) {
             $this->setError($field, 'immutable', [
                 "title" => "`$field` is Immutable",
                 "detail" => "You can't change the `$field` field of this resource once it's been set.",

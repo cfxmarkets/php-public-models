@@ -25,6 +25,7 @@ class Fill extends \CFX\JsonApi\AbstractResource implements FillInterface {
     protected $relationships = [
         'order' => null,
         'security' => null,
+        "ownerEntity" => null,
     ];
 
     public function __construct(\CFX\JsonApi\DatasourceInterface $datasource, $data=null) {
@@ -70,6 +71,11 @@ class Fill extends \CFX\JsonApi\AbstractResource implements FillInterface {
     public function getSecurity()
     {
         return $this->_getRelationshipValue('security');
+    }
+
+    public function getOwnerEntity()
+    {
+        return $this->_getRelationshipValue("ownerEntity");
     }
 
 
@@ -176,6 +182,15 @@ class Fill extends \CFX\JsonApi\AbstractResource implements FillInterface {
         $field = "security";
         $this->validateRequired($field, $val);
         return $this->_setRelationship($field, $val);
+    }
+
+    public function setOwnerEntity(?\CFX\Brokerage\LegalEntityInterface $val)
+    {
+        $field = "ownerEntity";
+        if ($this->validateReadOnly($field, $val)) {
+            $this->_setRelationship($field, $val);
+        }
+        return $this;
     }
 
 
