@@ -36,6 +36,20 @@ interface FillInterface extends \CFX\JsonApi\ResourceInterface {
     public function getFees();
 
     /**
+     * Get the total dollar discount for a fill
+     *
+     * @return float
+     */
+    public function getDiscountTotal();
+
+    /**
+     * Get the JSON details for applied discounts
+     *
+     * @return string
+     */
+    public function getDiscountDetail();
+
+    /**
      * Get the status for the fill
      *
      * @return string
@@ -104,6 +118,22 @@ interface FillInterface extends \CFX\JsonApi\ResourceInterface {
      * @return static
      */
     public function setFees($val);
+
+    /**
+     * Set the total dollar discount for a fill
+     *
+     * @param float|int|null $val
+     * @return static
+     */
+    public function setDiscountTotal($val);
+
+    /**
+     * Set the JSON details for a fill's discounts
+     *
+     * @param string|null $val
+     * @return static
+     */
+    public function setDiscountDetail($val);
 
     /**
      * Set the timestamp for the fill

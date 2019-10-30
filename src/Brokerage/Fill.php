@@ -10,6 +10,8 @@ class Fill extends \CFX\JsonApi\AbstractResource implements FillInterface {
         "lotSize" => null,
         "price" => null,
         "fees" => null,
+        "discountTotal" => null,
+        "discountDetail" => null,
         /**
          * Currently available statuses:
          *
@@ -51,6 +53,16 @@ class Fill extends \CFX\JsonApi\AbstractResource implements FillInterface {
     public function getFees()
     {
         return $this->_getAttributeValue('fees');
+    }
+
+    public function getDiscountTotal()
+    {
+        return $this->_getAttributeValue('discountTotal');
+    }
+
+    public function getDiscountDetail()
+    {
+        return $this->_getAttributeValue('discountDetail');
     }
 
     public function getStatus()
@@ -123,6 +135,24 @@ class Fill extends \CFX\JsonApi\AbstractResource implements FillInterface {
 
     public function setFees($val) {
         $field = "fees";
+        if ($this->validateReadOnly($field, $val)) {
+            $this->_setAttribute($field, $val);
+        }
+        return $this;
+    }
+
+
+    public function setDiscountTotal($val) {
+        $field = "discountTotal";
+        if ($this->validateReadOnly($field, $val)) {
+            $this->_setAttribute($field, $val);
+        }
+        return $this;
+    }
+
+
+    public function setDiscountDetail($val) {
+        $field = "discountDetail";
         if ($this->validateReadOnly($field, $val)) {
             $this->_setAttribute($field, $val);
         }

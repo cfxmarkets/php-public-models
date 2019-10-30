@@ -48,6 +48,20 @@ class FillTest extends \PHPUnit\Framework\TestCase
         $this->assertChains($field);
     }
 
+    public function testDiscountTotal()
+    {
+        $field = "discountTotal";
+        $this->assertReadOnly($field);
+        $this->assertChains($field);
+    }
+
+    public function testDiscountDetail()
+    {
+        $field = "discountDetail";
+        $this->assertReadOnly($field);
+        $this->assertChains($field);
+    }
+
     public function testStatus()
     {
         $field = "status";
